@@ -1,7 +1,5 @@
 package com.ram.buspass.features.register.presentation
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -59,16 +57,17 @@ fun RegisterViewScreen(
 
     val context = LocalContext.current
     var role by remember { mutableStateOf("") }
+    var userName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
+    var isRoleEmpty by remember { mutableStateOf(false) }
     var isNameEmpty by remember { mutableStateOf(false) }
     var isEmailEmpty by remember { mutableStateOf(false) }
     var isPasswordEmpty by remember { mutableStateOf(false) }
 
     val onClick: () -> Unit = {
         MainScope().launch {
-            registerViewModel.getRegisterUser(email, password, role)
+            registerViewModel.getRegisterUser(email, userName, password, role)
         }
     }
 
@@ -82,13 +81,14 @@ fun RegisterViewScreen(
     LaunchedEffect(key1 = getRegister.isError, block = {
         if (getRegister.isError.isNotEmpty()) {
             showToast(context, getRegister.isError)
-            Log.e(TAG, "Error : ${getRegister.isError}")
         }
     })
 
     LaunchedEffect(key1 = getRegister.isData, block = {
         if (getRegister.isData?.isSuccess == true) {
             navHostController.navigate(ScreenList.LoginScreen.route)
+            showToast(context, "${getRegister.isData.message}")
+
         }
     })
 
@@ -96,21 +96,20 @@ fun RegisterViewScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(16.dp),
         ) {
             IconButton(onClick = { navHostController.navigate(ScreenList.LoginScreen.route) }) {
                 IconView(imageVector = Icons.Default.ArrowBack)
             }
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
 
                 ) {
                 PainterImageView(
                     painterResource(id = R.mipmap.ic_register),
-                    modifier = Modifier.height(300.dp)
+                    modifier = Modifier.height(250.dp)
 
                 )
                 Spacer(modifier = Modifier.padding(5.dp))
@@ -128,8 +127,23 @@ fun RegisterViewScreen(
                 label = "Role",
                 placeholder = "Enter Role",
                 textStyle = TextStyle(),
-                isError = isNameEmpty,
+                isError = isRoleEmpty,
                 invalidMessage = "Role Text field is Empty!",
+                errorColor = Color.Red,
+                leadingIcon = { IconView(imageVector = Icons.Default.Person) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            )
+
+            InputTextFieldView(
+                value = userName,
+                onValueChange = { userName = it },
+                label = "UserName",
+                placeholder = "Enter UserName",
+                textStyle = TextStyle(),
+                isError = isNameEmpty,
+                invalidMessage = "UserName Text field is Empty!",
                 errorColor = Color.Red,
                 leadingIcon = { IconView(imageVector = Icons.Default.Person) },
                 modifier = Modifier
@@ -176,7 +190,7 @@ fun RegisterViewScreen(
                         onClick.invoke()
                         navHostController.navigate(ScreenList.LoginScreen.route)
                     } else {
-                        showToast(context, "The field is empty!")
+                        showToast(context, "The above field is empty!")
                     }
                 },
                 btnColor = ButtonDefaults.buttonColors(Purple),

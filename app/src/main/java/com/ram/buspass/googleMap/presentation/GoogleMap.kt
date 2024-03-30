@@ -41,7 +41,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PointOfInterest
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -150,7 +149,6 @@ fun GoogleMapViewScreen(locationViewModel: LocationViewModel = hiltViewModel()) 
                 LaunchedEffect(key1 = currentLoc) {
                     cameraState.centerOnLocation(currentLoc)
                 }
-
                 MainScreen(
                     currentPosition = LatLng(
                         currentLoc.latitude,
@@ -160,7 +158,6 @@ fun GoogleMapViewScreen(locationViewModel: LocationViewModel = hiltViewModel()) 
                 )
             }
 
-            else -> {}
         }
     }
 }
@@ -182,9 +179,7 @@ fun MainScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
             mapType = MapType.HYBRID,
             isTrafficEnabled = true,
         ),
-        onPOIClick = { poi ->
-            handlePOIClick(poi)
-        }
+
     ) {
         Marker(
             state = MarkerState(position = marker),
@@ -238,8 +233,3 @@ private suspend fun CameraPositionState.centerOnLocation(
     durationMs = 1500
 )
 
-fun handlePOIClick(poi: PointOfInterest) {
-    // Handle point of interest click event
-    // For demonstration purposes, we'll just print the clicked POI's details
-    println("Clicked POI: ${poi.name}, Lat: ${poi.latLng.latitude}, Lng: ${poi.latLng.longitude}")
-}

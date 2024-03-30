@@ -8,14 +8,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ram.buspass.googleMap.presentation.MyApp
+import androidx.navigation.compose.rememberNavController
+import com.ram.buspass.features.userNavigationBar.UserBottomBarWithFabViewScreen
+import com.ram.buspass.googleMap.presentation.GoogleMapViewScreen
 import com.ram.buspass.ui.theme.BusPassTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val getSharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE)
+        val getUserDevice = getSharedPreferences.getString("login_screen", "")
         setContent {
             BusPassTheme {
                 // A surface container using the 'background' color from the theme
@@ -24,9 +31,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
 //                    color = Purple
                 ) {
-//                    MainNavigationScreen()
-//                    UserBottomBarWithFabViewScreen()
-                    Maps()
+                    val navController = rememberNavController()
+//                    MainNavigationScreen(navController)
+                    UserBottomBarWithFabViewScreen()
+//                      ConductorBottomBarWithFabViewScreen()
+//                    Maps()
                 }
             }
         }
@@ -35,12 +44,14 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Maps() {
-    MyApp()
-//    GoogleMapViewScreen()
+fun Maps(
+) {
+//    MyApp()
+    GoogleMapViewScreen()
 
 
 }
+
 
 
 

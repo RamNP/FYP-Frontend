@@ -1,6 +1,6 @@
 package com.ram.buspass.features.login.domain
 
-import com.ram.buspass.features.data.common.Resource
+import com.ram.buspass.features.helper.Resource
 import com.ram.buspass.features.helper.resource.remote.api.model.login.LoginPojo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

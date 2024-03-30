@@ -4,8 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.ram.buspass.features.ticketBook.presentation.TicketBookViewScreen
-import com.ram.buspass.googleMap.presentation.GoogleMapViewScreen
+import com.ram.buspass.features.conductorNavBarScreen.UpdateBusLocationScreen
 
 
 @Composable
@@ -13,10 +12,10 @@ fun ConductorMainScreenNavigation(navController: NavHostController) {
 
     NavHost(navController, startDestination = ConductorNavigation.VerifyTicket.route) {
         composable(ConductorNavigation.VerifyTicket.route) {
-            TicketBookViewScreen(navController)
+//            TicketBookViewScreen(navController)
         }
         composable(ConductorNavigation.UpdateLocation.route) {
-            GoogleMapViewScreen()
+            UpdateBusLocationScreen()
         }
         composable(ConductorNavigation.VerifyPass.route) {
         }

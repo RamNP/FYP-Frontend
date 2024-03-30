@@ -78,7 +78,7 @@ fun LoginViewScreen(
         }
     }
 
-    LaunchedEffect(key1 = result.isData, block = {
+    LaunchedEffect(key1 = result.isData) {
         if (result.isData?.isSuccess == true) {
             val authentication = AuthResponse(
                 accessToken = result.isData.authResponse?.accessToken,
@@ -108,7 +108,7 @@ fun LoginViewScreen(
 
         }
 
-    })
+    }
 
     Column(
         modifier = Modifier

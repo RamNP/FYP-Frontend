@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ram.buspass.features.data.common.Resource
+import com.ram.buspass.features.helper.Resource
 import com.ram.buspass.features.register.domain.RegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -18,8 +18,8 @@ class RegisterViewModel @Inject constructor(private val registerUseCase: Registe
     private var _register by mutableStateOf(RegisterState())
     val register: RegisterState get() = _register
 
-    fun getRegisterUser(email: String?, password: String?, role: String?) {
-        registerUseCase(email, password, role).onEach { resource ->
+    fun getRegisterUser(email: String?,username:String?, password: String?, role: String?) {
+        registerUseCase(email,username , password, role).onEach { resource ->
             _register = when(resource) {
                 is Resource.Loading -> {
                     RegisterState(isLoading = true)

@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class UserScreen(val route: String, val title: String?, val icon: ImageVector?) {
     object Book : UserScreen("book", "Book", Icons.Default.BookmarkAdd)
-    object View : UserScreen("view", "View", Icons.Default.AirplaneTicket)
+    object MyTikcet : UserScreen("myTikcet", "MyTikcet", Icons.Default.AirplaneTicket)
     object Location : UserScreen("location", null, null)
     object Payment : UserScreen("payment", "Payment", Icons.Default.Money)
     object Profile : UserScreen("profile", "Profile", Icons.Default.Person)
