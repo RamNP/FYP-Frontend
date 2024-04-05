@@ -1,6 +1,8 @@
 package com.ram.buspass.di
 
 
+import com.ram.buspass.features.bookingDetails.domain.BookingDetailsRepository
+import com.ram.buspass.features.bookingDetails.domain.BookingDetailsUseCase
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.login.domain.LoginUseCase
 import com.ram.buspass.features.register.domain.RegisterRepository
@@ -36,6 +38,12 @@ class AppComponent {
     @Singleton
     fun provideTicketBookUseCase(ticketBookRepository: TicketBookRepository): TicketBookUseCase {
         return TicketBookUseCase(ticketBookRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookingUseCase(bookingDetailsRepository: BookingDetailsRepository): BookingDetailsUseCase {
+        return BookingDetailsUseCase(bookingDetailsRepository)
     }
 
 

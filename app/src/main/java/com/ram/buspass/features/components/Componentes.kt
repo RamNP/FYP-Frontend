@@ -203,6 +203,8 @@ fun InputTextFieldView(
     enabled: Boolean = true,
     readOnly: Boolean = false,
     leadingIcon: @Composable() (() -> Unit)? = null,
+    trailingIcon: @Composable() (() -> Unit)? = null,
+
     modifier: Modifier ,
     placeholder: String,
     textStyle: TextStyle,
@@ -233,7 +235,7 @@ fun InputTextFieldView(
                     modifier = Modifier
                 )
             },
-            trailingIcon = null,
+            trailingIcon = trailingIcon,
             leadingIcon = leadingIcon,
             enabled = enabled,
             readOnly = readOnly,

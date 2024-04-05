@@ -1,21 +1,38 @@
 package com.ram.buspass.features.ticketBook.presentation
 
+import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BusAlert
+import androidx.compose.material.icons.filled.CandlestickChart
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Paid
+import androidx.compose.material.icons.filled.Route
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,40 +44,50 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.ram.buspass.features.components.ButtonView
+import com.ram.buspass.features.components.IconView
 import com.ram.buspass.features.components.TextView
+import com.ram.buspass.features.userNavigationBar.UserScreen
+import com.ram.buspass.helper.ClientInterceptor
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil
+import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
+import com.ram.buspass.ui.theme.Purple
+import com.ram.buspass.ui.theme.White
 
 
 @Composable
 fun TicketBookViewScreens(
+    navController: NavHostController,
     ticketBookViewModel: TicketBookViewModel = hiltViewModel(),
 ) {
+    val ticketResult = ticketBookViewModel.ticket
+    val bookingTicketResult = ticketBookViewModel.bookingTicket
 
-    val ticketResult = ticketBookViewModel.ticket.value
-    val bookTicketResult = ticketBookViewModel.bookTicket.value
-    // Declaring a boolean value to store
-    // the expanded state of the Text Field
     val context = LocalContext.current
     var busIdExpanded by remember { mutableStateOf(false) }
     var mExpanded by remember { mutableStateOf(false) }
-    var busNumberExpanded by remember { mutableStateOf(false) }
-    var busNameExpanded by remember { mutableStateOf(false) }
-    var fromToExpanded by remember { mutableStateOf(false) }
-    var busRouteExpanded by remember { mutableStateOf(false) }
-    var ticketNumExpanded by remember { mutableStateOf(false) }
-    var ticketDateExpanded by remember { mutableStateOf(false) }
-    var ticketTimeExpanded by remember { mutableStateOf(false) }
-    var ticketCostExpanded by remember { mutableStateOf(false) }
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
     // Up Icon when expanded and down icon when collapsed
     val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-    var selectedBusId by remember { mutableStateOf(0) }
+    var selectedBusName by remember { mutableStateOf("") }
+
+    val userId = ClientInterceptor(context).getUserId()
+    var butId by remember { mutableStateOf(0) }
+    var ticketId by remember { mutableStateOf(0) }
+
+
 
     LaunchedEffect(key1 = Unit, block = {
         ticketBookViewModel.getTicket()
@@ -72,15 +99,17 @@ fun TicketBookViewScreens(
             CircularProgressIndicator(1f)
         }
     }
-    if (ticketResult.isError.isNotBlank()) {
+    if (ticketResult.isError != null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             // error message
             TextView(text = ticketResult.isError)
         }
     }
-    ticketResult.isData?.let { result ->
-        val filteredData = result.filter {
-            it.bus_details?.id == selectedBusId
+
+    ticketResult.isData?.data.let { result ->
+
+        val filteredData = result?.filter {
+            it.bus_details?.name == selectedBusName
         }
 
         val bus_Id = mutableListOf<Int>()
@@ -88,11 +117,12 @@ fun TicketBookViewScreens(
         val busName = mutableListOf<String>()
         val fromTo = mutableListOf<String>()
         val busRoute = mutableListOf<String>()
+        val ticketIds = mutableListOf<Int>()
         val ticketNum = mutableListOf<Int>()
         val ticketDate = mutableListOf<String>()
         val ticketTime = mutableListOf<String>()
         val ticketCost = mutableListOf<Int>()
-        result.forEach { label ->
+        result?.forEach { label ->
             label.bus_details?.let { it ->
                 bus_Id.add(it.id ?: 0)
                 busNumber.add(it.bus_number ?: "")
@@ -102,46 +132,55 @@ fun TicketBookViewScreens(
 
             }
             label.ticket_details?.let { it ->
+                ticketIds.add(it.id ?: 0)
                 ticketNum.add(it.ticket_no ?: 0)
                 ticketDate.add(it.date ?: "")
                 ticketTime.add(it.time ?: "")
                 ticketCost.add(it.cost ?: 0)
             }
         }
-        var busIdText by remember { mutableStateOf(bus_Id.getOrNull(0).toString()) }
-        var busNumberText by remember { mutableStateOf(busNumber.getOrNull(0).toString()) }
         var busNameText by remember { mutableStateOf(busName.getOrNull(0).toString()) }
-        var fromText by remember { mutableStateOf(fromTo.getOrNull(0).toString()) }
-        var routeText by remember { mutableStateOf(busRoute.getOrNull(0).toString()) }
-        var ticketNumText by remember { mutableStateOf(ticketNum.getOrNull(0).toString()) }
-        var ticketDateText by remember { mutableStateOf(ticketDate.getOrNull(0).toString()) }
-        var ticketTimeText by remember { mutableStateOf(ticketTime.getOrNull(0).toString()) }
-        var ticketCostText by remember { mutableStateOf(ticketCost.getOrNull(0).toString()) }
         val scrollState = rememberScrollState()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(White)
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Ticket Booking",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier
+            )
+        }
+
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(20.dp)
                 .verticalScroll(scrollState)
         ) {
-            //busId
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 28.dp)
             ) {
 
-//                    Bus Number TextFiled
+//            Bus Name TextFiled
                 OutlinedTextField(
-                    value = busIdText,
-                    onValueChange = { busIdText = it },
+                    value = busNameText,
+                    onValueChange = { busNameText = it },
                     modifier = Modifier
-                        .width(150.dp)
+                        .fillMaxWidth()
                         .padding(top = 16.dp)
                         .onGloballyPositioned { coordinates ->
                             mTextFieldSize = coordinates.size.toSize()
                         },
-                    label = { Text(" Select Bus Id") },
+                    label = { Text(" Select Bus Name") },
                     trailingIcon = {
                         Icon(
                             icon,
@@ -159,26 +198,230 @@ fun TicketBookViewScreens(
                     modifier = Modifier
                         .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
                 ) {
-                    bus_Id.forEach { busId ->
+                    busName.forEach { busNames ->
                         DropdownMenuItem(
                             onClick = {
-                                busIdText = busId.toString()
-                                selectedBusId = busId
+                                busNameText = busNames
+                                selectedBusName = busNames
                                 busIdExpanded = false
-                                UserInterfaceUtil.showToast(context, "Bus ID : $selectedBusId")
+                                UserInterfaceUtil.showToast(context, "Bus ID : $selectedBusName")
 
                             }
                         ) {
-                            Text(text = busId.toString())
+                            Text(text = busNames)
                         }
                     }
                 }
             }
-        }
-        filteredData.forEach { item ->
-            Text(text = "Bus ID: ${item.bus_details?.bus_number}")
-            Text(text = "Ticket Number: ${item.ticket_details?.ticket_no}")
 
+            filteredData?.forEach { item ->
+                butId = item.bus_details?.id ?: 0
+                ticketId = item.ticket_details?.id ?: 0
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                ) {
+                    TicketCard(
+                        busNumber = "${item.bus_details?.bus_number}",
+                        busName = "${item.bus_details?.name}",
+                        fromTo = "${item.bus_details?.from_to}",
+                        route = "${item.bus_details?.route}",
+                        busSpeed = "${item.bus_details?.bus_speed}",
+                        ticketNo = "${item.ticket_details?.ticket_no}",
+                        date = "${item.ticket_details?.date}",
+                        time = "${item.ticket_details?.time}",
+                        cost = "${item.ticket_details?.cost}",
+                        navController = navController,
+                    )
+
+                }
+
+                ButtonView(
+                    onClick = {
+                        ticketBookViewModel.getTicketBook(bus = butId, ticket = ticketId, users = userId)
+                    },
+                    btnColor = ButtonDefaults.buttonColors(Purple),
+                    text = "Book Ticket",
+                    textStyle = TextStyle()
+                )
+            }
+        }
+        //TicketBooking details
+
+        if (bookingTicketResult.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                // indicator
+                CircularProgressIndicator(1f)
+            }
+        }
+        if (bookingTicketResult.isError != null) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                // error message
+                TextView(text = bookingTicketResult.isError)
+                Log.e("BookingMessage","${bookingTicketResult.isError}")
+            }
+        }
+        LaunchedEffect(key1 = bookingTicketResult, block = {
+            if (bookingTicketResult.isData?.isSuccess == true) {
+                navController.navigate(UserScreen.MyTikcet.route)
+                showToast(context, "${bookingTicketResult.isData.message}")
+            }
+        })
+    }
+}
+
+
+@Composable
+fun TicketCard(
+    busNumber: String?,
+    busName: String?,
+    fromTo: String?,
+    route: String?,
+    busSpeed: String?,
+    ticketNo: Any,
+    date: String?,
+    time: String?,
+    cost: Any,
+    navController: NavHostController
+
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = Color.Gray,
+                shape = RoundedCornerShape(10.dp)
+            ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp,
+
+            ),
+        colors = CardDefaults.cardColors(White)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            TextView(
+                text = "Bus No: ${busNumber.toString()}",
+                fontSize = 16.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp)
+            )
+            Row(modifier = Modifier.fillMaxSize()) {
+                IconView(imageVector = Icons.Default.BusAlert)
+
+                TextView(
+                    text = "Bus Name: ${busName.toString()}",
+                    fontSize = 16.sp, fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp)
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxSize()) {
+                IconView(imageVector = Icons.Default.LocationOn)
+
+                TextView(
+                    text = "FromTo:${fromTo.toString()}",
+                    fontSize = 16.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp)
+
+                )
+
+
+            }
+
+            Row(modifier = Modifier.fillMaxSize()) {
+                IconView(imageVector = Icons.Default.Route)
+
+                TextView(
+                    text = "Route: ${route.toString()}",
+                    fontSize = 16.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp)
+
+                )
+
+
+            }
+
+            Row(modifier = Modifier.fillMaxSize()) {
+
+                IconView(imageVector = Icons.Default.Speed)
+                TextView(
+                    text = "BusSpeed: $busSpeed",
+                    fontSize = 16.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
+
+                    )
+            }
+            Row(modifier = Modifier.fillMaxSize()) {
+
+                IconView(imageVector = Icons.Default.CandlestickChart)
+                TextView(
+                    text = "Ticket No: $ticketNo",
+                    fontSize = 16.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
+
+                    )
+            }
+            Row(modifier = Modifier.fillMaxSize()) {
+
+                IconView(imageVector = Icons.Default.DateRange)
+                TextView(
+                    text = "Date: $date",
+                    fontSize = 16.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
+
+                    )
+            }
+            Row(modifier = Modifier.fillMaxSize()) {
+
+                IconView(imageVector = Icons.Default.Timer)
+                TextView(
+                    text = "Time: $time",
+                    fontSize = 16.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
+
+                    )
+            }
+
+            Row(modifier = Modifier.fillMaxSize()) {
+
+                IconView(imageVector = Icons.Default.Paid)
+
+                TextView(
+                    text = "Cost: Rs$cost",
+                    fontSize = 16.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
+
+                    )
+            }
+//            ButtonView(
+//                onClick = { navController.navigate(UserScreen.MyTikcet.route) },
+//                btnColor = ButtonDefaults.buttonColors(Purple),
+//                text = "Book Ticket", textStyle = TextStyle(fontWeight = FontWeight.Bold)
+//            )
 
         }
     }

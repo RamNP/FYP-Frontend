@@ -1,7 +1,6 @@
 package com.ram.buspass.features.login.presentation
 
 import android.annotation.SuppressLint
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,13 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.gson.Gson
 import com.ram.buspass.R
 import com.ram.buspass.features.components.ButtonView
 import com.ram.buspass.features.components.ClickableTextView
@@ -44,7 +44,8 @@ import com.ram.buspass.features.components.InputTextFieldView
 import com.ram.buspass.features.components.PainterImageView
 import com.ram.buspass.features.components.PasswordTextFieldView
 import com.ram.buspass.features.components.TextView
-import com.ram.buspass.features.helper.resource.remote.api.model.login.AuthResponse
+import com.ram.buspass.helper.ClientInterceptor
+import com.ram.buspass.helper.resource.remote.api.model.login.AuthResponse
 import com.ram.buspass.features.userNavigationBar.ScreenList
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
@@ -56,18 +57,20 @@ fun LoginViewScreen(
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    var getSharedPreferences =
-        context.getSharedPreferences("my_preferences", ComponentActivity.MODE_PRIVATE)
+    val interceptor = ClientInterceptor(context)
+    val editor  = interceptor.getPreInstEditor()
+
     val result = loginViewModel.login
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val checked = remember { mutableStateOf(false) }
     var isEmailEmpty by remember { mutableStateOf(false) }
     var isPasswordEmpty by remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
 
     if (result.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(1f)
+                CircularProgressIndicator(1f)
         }
     }
 
@@ -78,21 +81,21 @@ fun LoginViewScreen(
         }
     }
 
-    LaunchedEffect(key1 = result.isData) {
+    LaunchedEffect(result.isData) {
         if (result.isData?.isSuccess == true) {
             val authentication = AuthResponse(
                 accessToken = result.isData.authResponse?.accessToken,
-                role = result.isData.authResponse?.role
+                role = result.isData.authResponse?.role ,
+                id= result.isData.authResponse?.id,
             )
             when (result.isData.authResponse?.role) {
-                "user" -> {
-                    navController.navigate(ScreenList.BottomNavMenuUser.route) {
-                        popUpTo(ScreenList.LoginScreen.route) {
-                            inclusive = true
+                    "user" -> {
+                        navController.navigate(ScreenList.BottomNavMenuUser.route) {
+                            popUpTo(ScreenList.LoginScreen.route) {
+                                inclusive = true
+                            }
                         }
                     }
-                }
-
                 else -> {
                     navController.navigate(ScreenList.BottomNavMenuConductor.route) {
                         popUpTo(ScreenList.LoginScreen.route) {
@@ -101,15 +104,12 @@ fun LoginViewScreen(
                     }
                 }
             }
-            val editSharedPreferences = getSharedPreferences.edit()
-            editSharedPreferences.putString("authentication", "$authentication")
-                .apply()
-            showToast(context, "${result.isData.message}")
+            editor.putString("authentication", Gson().toJson(authentication)).apply()
+            showToast(context ,"${result.isData.message}")
+
 
         }
-
     }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -168,7 +168,9 @@ fun LoginViewScreen(
                 .padding(5.dp)
         )
         Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -214,7 +216,9 @@ fun LoginViewScreen(
             ClickableTextView(
                 text = AnnotatedString("Register Now"),
                 style = TextStyle(color = Purple),
-                onClick = { navController.navigate(ScreenList.RegisterScreen.route) },
+                onClick = {
+                    navController.navigate(ScreenList.RegisterScreen.route)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
             )

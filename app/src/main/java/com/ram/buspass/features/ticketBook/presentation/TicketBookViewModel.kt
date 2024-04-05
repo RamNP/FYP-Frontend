@@ -1,11 +1,13 @@
 package com.ram.buspass.features.ticketBook.presentation
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ram.buspass.features.helper.Resource
+import com.ram.buspass.features.ticketBook.domain.BookDto
 import com.ram.buspass.features.ticketBook.domain.TicketBookUseCase
+import com.ram.buspass.helper.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -14,46 +16,49 @@ import javax.inject.Inject
 @HiltViewModel
 class TicketBookViewModel @Inject constructor(private val ticketBookUseCase: TicketBookUseCase) :
     ViewModel() {
-    private val _ticket = mutableStateOf(TicketBookState())
-    val ticket: State<TicketBookState> get() = _ticket
-    private val _bookTicket = mutableStateOf(BookTicketState())
-    val bookTicket: State<BookTicketState> get() = _bookTicket
+    private var _ticket by mutableStateOf(TicketBookState())
+    val ticket: TicketBookState get() = _ticket
+
+    private var _bookingTicket by mutableStateOf(TicketBookingState())
+    val bookingTicket: TicketBookingState get() = _bookingTicket
+
 
     fun getTicket() {
         ticketBookUseCase().onEach {
-            when (it) {
+            _ticket = when (it) {
                 is Resource.Loading -> {
-                    _ticket.value = TicketBookState(isLoading = true)
+                    TicketBookState(isLoading = true)
                 }
 
                 is Resource.Success -> {
-                    _ticket.value = TicketBookState(isData = it.data?.data)
+                    TicketBookState(isData = it.data)
                 }
 
                 is Resource.Error -> {
-                    _ticket.value = TicketBookState(isError = it.message.toString())
+                    TicketBookState(isError = it.message.toString())
+                }
+
+            }
+        }.launchIn(viewModelScope)
+    }
+    fun getTicketBook(bus :Int?, ticket: Int?, users: Int?) {
+        val bookDto = BookDto(bus,ticket,users)
+        ticketBookUseCase.invoke(bookDto).onEach {
+            _bookingTicket = when (it) {
+                is Resource.Loading -> {
+                    TicketBookingState(isLoading = true)
+                }
+
+                is Resource.Success -> {
+                    TicketBookingState(isData = it.data)
+                }
+
+                is Resource.Error -> {
+                    TicketBookingState(isError = it.message.toString())
                 }
 
             }
         }.launchIn(viewModelScope)
     }
 }
-//
-//    fun getBookTicket() {
-//        ticketBookUseCase().onEach {
-//            when (it) {
-//                is Resource.Loading -> {
-//                    _bookTicket.value = BookTicketState(isLoading = true)
-//                }
-//                is Resource.Success -> {
-//                    _bookTicket.value = BookTicketState(isData = it.data?.data)
-//                }
-//                is Resource.Error -> {
-//                    _bookTicket.value = BookTicketState(isError = it.message.toString())
-//                }
-//
-//            }
-//        }.launchIn(viewModelScope)
-//    }
-//}
 

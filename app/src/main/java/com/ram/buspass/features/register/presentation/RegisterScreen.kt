@@ -11,6 +11,8 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ButtonDefaults
@@ -24,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -64,6 +67,14 @@ fun RegisterViewScreen(
     var isNameEmpty by remember { mutableStateOf(false) }
     var isEmailEmpty by remember { mutableStateOf(false) }
     var isPasswordEmpty by remember { mutableStateOf(false) }
+    var mExpanded by remember { mutableStateOf(false) }
+    val users = listOf("Admin", "User", "Conductor")
+    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
+    val icon = if (mExpanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
 
     val onClick: () -> Unit = {
         MainScope().launch {
@@ -86,8 +97,10 @@ fun RegisterViewScreen(
 
     LaunchedEffect(key1 = getRegister.isData, block = {
         if (getRegister.isData?.isSuccess == true) {
-            navHostController.navigate(ScreenList.LoginScreen.route)
             showToast(context, "${getRegister.isData.message}")
+            navHostController.navigate(ScreenList.LoginScreen.route)
+
+
 
         }
     })
@@ -135,6 +148,48 @@ fun RegisterViewScreen(
                     .fillMaxWidth()
                     .padding(5.dp)
             )
+//            Column(
+//                modifier = Modifier.fillMaxWidth(),
+//                verticalArrangement = Arrangement.Center,
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//
+//
+//                InputTextFieldView(
+//                    value = roleSelectedText,
+//                    onValueChange = { roleSelectedText = it },
+//                    label = "Role",
+//                    trailingIcon = {
+//                        Icon(icon, "contentDescription",
+//                            Modifier.clickable { mExpanded = !mExpanded })
+//                    },
+//
+//                    modifier = Modifier
+//                        .onGloballyPositioned { coordinates ->
+//                            mTextFieldSize = coordinates.size.toSize()
+//                        }
+//                        .fillMaxWidth(),
+//                    placeholder = " Enter Role",
+//                    textStyle = TextStyle(),
+//                    invalidMessage = "",
+//                )
+//
+//                DropdownMenu(
+//                    expanded = mExpanded,
+//                    onDismissRequest = { mExpanded = false },
+//                    modifier = Modifier
+//                        .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
+//                ) {
+//                    users.forEach { label ->
+//                        DropdownMenuItem(onClick = {
+//                            roleSelectedText = label
+//                            mExpanded = false
+//                        }) {
+//                            Text(text = label)
+//                        }
+//                    }
+//                }
+//            }
 
             InputTextFieldView(
                 value = userName,

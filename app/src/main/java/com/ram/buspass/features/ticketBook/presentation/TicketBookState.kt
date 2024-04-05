@@ -1,9 +1,9 @@
 package com.ram.buspass.features.ticketBook.presentation
 
-import com.ram.buspass.features.helper.resource.remote.api.model.ticketBook.DataItem
+import com.ram.buspass.helper.resource.remote.api.model.ticketBook.TicketBookPojo
 
 data class TicketBookState(
     val isLoading: Boolean  = false,
-    val isData: List<DataItem>? = null,
-    val isError: String = ""
+    val isData: TicketBookPojo? = null,
+    val isError: String? = null
 )

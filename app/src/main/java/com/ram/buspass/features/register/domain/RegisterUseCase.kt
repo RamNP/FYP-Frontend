@@ -1,11 +1,11 @@
 package com.ram.buspass.features.register.domain
 
-import com.ram.buspass.features.helper.Resource
-import com.ram.buspass.features.helper.resource.remote.api.model.register.ResponsePojo
+import com.ram.buspass.helper.Resource
+import com.ram.buspass.helper.resource.remote.api.model.register.ResponsePojo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class RegisterUseCase(private val registerRepository: RegisterRepository) {
+    class RegisterUseCase(private val registerRepository: RegisterRepository) {
     operator fun invoke(email: String? = null, username:String? ,password: String? = null, role: String? = null): Flow<Resource<ResponsePojo?>> = flow {
         emit(Resource.Loading())
         try {

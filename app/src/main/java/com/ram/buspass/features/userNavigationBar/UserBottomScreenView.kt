@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ram.buspass.features.bottomnavigationwithFAB.ProfileScreen
+import com.ram.buspass.features.profile.ProfileViewScreen
 import com.ram.buspass.features.ticketBook.presentation.TicketBookViewScreens
 
 
@@ -14,10 +15,10 @@ fun UserMainScreenNavigation(navController: NavHostController) {
 
     NavHost(navController, startDestination = UserScreen.Book.route) {
         composable(UserScreen.Book.route) {
-            TicketBookViewScreens()
+            TicketBookViewScreens(navController)
         }
         composable(UserScreen.MyTikcet.route) {
-//            ViewTicketScreen(navController)
+            ProfileScreen()
 
         }
         composable(UserScreen.Location.route) {
@@ -28,7 +29,7 @@ fun UserMainScreenNavigation(navController: NavHostController) {
 
         }
         composable(UserScreen.Profile.route) {
-          ProfileScreen()
+            ProfileViewScreen(navController)
 
         }
 

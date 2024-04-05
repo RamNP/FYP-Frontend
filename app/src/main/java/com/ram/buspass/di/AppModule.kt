@@ -3,17 +3,19 @@ package com.ram.buspass.di
 
 import android.content.Context
 import androidx.room.Room
-import com.ram.buspass.features.helper.ClientInterceptor
-import com.ram.buspass.features.helper.resource.local.AppDatabase
-import com.ram.buspass.features.helper.resource.local.UserDao
-import com.ram.buspass.features.helper.resource.remote.api.ApiConstants
-import com.ram.buspass.features.helper.resource.remote.api.ApiService
+import com.ram.buspass.features.bookingDetails.data.BookingDetailsRepositoryImpl
+import com.ram.buspass.features.bookingDetails.domain.BookingDetailsRepository
 import com.ram.buspass.features.login.data.LoginRepoImpl
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.register.data.RegisterRepoImpl
 import com.ram.buspass.features.register.domain.RegisterRepository
 import com.ram.buspass.features.ticketBook.data.TicketBookRepositoryImpl
 import com.ram.buspass.features.ticketBook.domain.TicketBookRepository
+import com.ram.buspass.helper.ClientInterceptor
+import com.ram.buspass.helper.resource.local.AppDatabase
+import com.ram.buspass.helper.resource.local.UserDao
+import com.ram.buspass.helper.resource.remote.api.ApiConstants
+import com.ram.buspass.helper.resource.remote.api.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -73,6 +75,12 @@ object AppModule {
     @Singleton
     fun provideTicketBookRepositoryImpl(apiService: ApiService): TicketBookRepository {
         return TicketBookRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserBookingDetailsRepositoryImpl(apiService: ApiService): BookingDetailsRepository {
+        return BookingDetailsRepositoryImpl(apiService)
     }
 
 
