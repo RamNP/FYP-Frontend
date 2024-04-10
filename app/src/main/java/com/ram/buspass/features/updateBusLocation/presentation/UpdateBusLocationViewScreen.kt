@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -84,6 +86,8 @@ fun BusLocationViewScreen(
             placeholder = "Enter BusNumber",
             textStyle = TextStyle(),
             isError = isBusNumberEmpty,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+
             invalidMessage = "Bus Number Text field is Empty!",
             errorColor = Color.Red,
             leadingIcon = { IconView(imageVector = Icons.Default.Person) },
@@ -99,6 +103,7 @@ fun BusLocationViewScreen(
             placeholder = "Enter Latitude",
             textStyle = TextStyle(),
             isError = isLatitudeEmpty,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             invalidMessage = " Latitude Text field is Empty!",
             errorColor = Color.Red,
             leadingIcon = { IconView(imageVector = Icons.Default.Person) },
@@ -114,6 +119,7 @@ fun BusLocationViewScreen(
             placeholder = "Enter Longitude",
             textStyle = TextStyle(),
             isError = isLongitudeEmpty,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             invalidMessage = " Longitude Text field is Empty!",
             errorColor = Color.Red,
             leadingIcon = { IconView(imageVector = Icons.Default.Person) },

@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ram.buspass.features.bookingDetails.presentation.BookTicketDetailsViewScreen
-import com.ram.buspass.features.profile.ProfileViewScreen
+import com.ram.buspass.features.profile.presentation.ProfileViewScreen
 import com.ram.buspass.features.ticketBook.presentation.TicketBookViewScreens
 
 

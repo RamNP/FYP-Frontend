@@ -7,6 +7,7 @@ import com.ram.buspass.features.ticketBook.domain.BookDto
 import com.ram.buspass.features.updateBusLocation.domain.BusLocationDataDAO
 import com.ram.buspass.helper.resource.remote.api.model.booTicketDetails.BookingPojo
 import com.ram.buspass.helper.resource.remote.api.model.login.LoginPojo
+import com.ram.buspass.helper.resource.remote.api.model.profile.ProfilePojo
 import com.ram.buspass.helper.resource.remote.api.model.register.ResponsePojo
 import com.ram.buspass.helper.resource.remote.api.model.ticketBook.TicketBookPojo
 import com.ram.buspass.helper.resource.remote.api.model.ticketBook.TicketBookingPojo
@@ -29,6 +30,9 @@ interface ApiService {
         @Body loginUserModelDAO: LoginUserModelDAO
     ): LoginPojo?
 
+    @GET("/api/user/profile/")
+    suspend fun getProfile(): ProfilePojo
+
     @GET("api/ticket/bus_details/")
     suspend fun getBookTicket(): TicketBookPojo
 
@@ -43,6 +47,6 @@ interface ApiService {
     @GET("/api/verify/ticket/")
     suspend fun getVerifyTicket(): VerifyTicketPojo
 
-    @POST("update/bus/location/")
+    @POST("api/update/bus/location/")
     suspend fun updateBusLocation(@Body busLocationDataDAO: BusLocationDataDAO): LocationPojo?
 }

@@ -7,6 +7,8 @@ import com.ram.buspass.features.busLocationView.domain.VerifyTicketRepository
 import com.ram.buspass.features.busLocationView.domain.VerifyTicketUseCase
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.login.domain.LoginUseCase
+import com.ram.buspass.features.profile.domain.ProfileRepository
+import com.ram.buspass.features.profile.domain.ProfileUseCase
 import com.ram.buspass.features.register.domain.RegisterRepository
 import com.ram.buspass.features.register.domain.RegisterUseCase
 import com.ram.buspass.features.ticketBook.domain.TicketBookRepository
@@ -23,19 +25,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppComponent {
 
-
     @Provides
     @Singleton
     fun provideRegisterUseCase(registerRepository: RegisterRepository): RegisterUseCase {
         return RegisterUseCase(registerRepository)
     }
 
-
-
     @Provides
     @Singleton
     fun provideLoginUseCase(loginRepository: LoginRepository): LoginUseCase {
         return LoginUseCase(loginRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileUseCase(profileRepository: ProfileRepository): ProfileUseCase {
+        return ProfileUseCase(profileRepository)
     }
 
     @Provides

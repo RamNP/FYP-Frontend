@@ -1,12 +1,14 @@
-package com.ram.buspass.features.profile
+package com.ram.buspass.features.profile.presentation
 
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,55 +29,93 @@ import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.ram.buspass.R
+import com.ram.buspass.features.components.TextView
+import com.ram.buspass.helper.ClientInterceptor
+import com.ram.buspass.helper.NetworkObserver
+import com.ram.buspass.helper.resource.remote.api.ApiConstants.IMAGE_BASE_URL
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 
 
 @Composable
-fun ProfileViewScreen(navController: NavHostController) {
-//    val navController = rememberNavController()
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White),
+fun ProfileViewScreen(
+    navController: NavHostController,
+    profileViewModel: ProfileViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
+    val userId = ClientInterceptor(context).getUserId()
+    val profileResult = profileViewModel.profile
+    val connection by NetworkObserver.connectivityState()
+    val isConnected = connection === NetworkObserver.ConnectionState.Available
 
-        ) {
-        Row(
+
+    LaunchedEffect(key1 = Unit, block = {
+        profileViewModel.getUserProfile()
+    })
+
+    if (profileResult.isLoading) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator(1f)
+        }
+    }
+    if (profileResult.isError != null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            TextView(text = profileResult.isError)
+        }
+    }
+    profileResult.isData?.user_profile.let { results ->
+
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Purple)
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Profile",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White
-            )
-        }
-        Divider(modifier = Modifier.fillMaxWidth())
+                .background(Color.White),
 
-        ProfileCard(
-            personName = "Ram Pariyar",
-            location = "Islington College",
-            email = "Pariyarram@gmail.com",
-            userId = 2,
-            role = "User"
-        )
+            ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(White)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Profile",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                )
+            }
+
+            ProfileCard(
+                personName = results?.username,
+                address = results?.address,
+                email = results?.email,
+                userId = userId,
+                role = results?.role,
+                imageUrl = IMAGE_BASE_URL + results?.photo_image
+
+            )
+
+        }
+        Column(modifier = Modifier.fillMaxWidth().padding(top = 250.dp)) {
+
         Card(
             modifier = Modifier
                 .padding(16.dp)
@@ -191,23 +231,28 @@ fun ProfileViewScreen(navController: NavHostController) {
                 }
             }
         }
+        }
+
     }
+
 }
 
 
 @Composable
 fun ProfileCard(
     personName: String?,
-    location: String?,
+    address: String?,
     email: String?,
     role: String?,
-    userId: Int?
+    userId: Int?,
+    imageUrl: String,
 
-) {
+    ) {
 
     Card(
         modifier = Modifier
             .padding(16.dp)
+            .padding(bottom = 10.dp)
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
             White
@@ -235,7 +280,7 @@ fun ProfileCard(
                 ) {
 
                     Image(
-                        painter = painterResource(id = R.mipmap.ic_bus),
+                        painter = painterResource(id = R.mipmap.ic_buss_logo),
                         contentDescription = null
                     )
 
@@ -247,9 +292,12 @@ fun ProfileCard(
                 fontSize = 20.sp, fontWeight = FontWeight.Bold
             )
 
+
         }
         Column(
-            modifier = Modifier.fillMaxWidth().padding( start = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -258,18 +306,22 @@ fun ProfileCard(
                 modifier = Modifier
                     .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
 
-                ) {
+            ) {
                 Icon(imageVector = Icons.Default.PersonOutline, contentDescription = "")
-                Text(text = "$userId", modifier = Modifier.padding(top = 2.dp))
+                Text(text = "User Id: $userId", modifier = Modifier.padding(top = 2.dp))
 
 
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding()
                 ) {
                     Icon(imageVector = Icons.Default.People, contentDescription = "")
-                    Text(text = "$role", modifier = Modifier.padding(top = 4.dp, start = 4.dp))
+                    Text(
+                        text = " User role: $role",
+                        modifier = Modifier.padding(top = 4.dp, start = 4.dp)
+                    )
 
                 }
             }
@@ -280,7 +332,7 @@ fun ProfileCard(
 
             ) {
                 Icon(imageVector = Icons.Default.LocationOn, contentDescription = "")
-                Text(text = "$location", modifier = Modifier.padding(top = 2.dp))
+                Text(text = "$address", modifier = Modifier.padding(top = 2.dp))
 
 
 

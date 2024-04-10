@@ -27,7 +27,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.WhiteGrey
-import com.ram.buspass.ui.theme.Yellow
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
@@ -65,7 +64,7 @@ fun ConductorBottomBarWithFabViewScreen() {
                     }
                     ConductorNavigation.UpdateLocation.route.let { navController.navigate(it) }
                 },
-                contentColor = Color.White, backgroundColor = Yellow
+                contentColor = Color.White, backgroundColor = Purple
             )
             {
                 Icon(imageVector = Icons.Filled.LocationOn, contentDescription = "Add icon")

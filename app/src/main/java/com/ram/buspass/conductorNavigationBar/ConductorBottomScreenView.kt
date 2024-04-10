@@ -5,7 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ram.buspass.features.busLocationView.presentation.VerifyTicketViewScreen
-import com.ram.buspass.features.updateBusLocation.presentation.UpdateBusLocationViewScreen
+import com.ram.buspass.features.profile.presentation.ProfileViewScreen
+import com.ram.buspass.features.updateBusLocation.presentation.BusLocationViewScreen
 
 
 @Composable
@@ -18,12 +19,12 @@ fun ConductorMainScreenNavigation(navController: NavHostController) {
             VerifyTicketViewScreen(navController)
         }
         composable(ConductorNavigation.UpdateLocation.route) {
-            UpdateBusLocationViewScreen()
+            BusLocationViewScreen(navController)
+
         }
         composable(ConductorNavigation.VerifyPass.route) {
+            ProfileViewScreen(navController)
         }
-
-
 
     }
 

@@ -9,6 +9,8 @@ import com.ram.buspass.features.busLocationView.data.VerifyTicketRepoImpl
 import com.ram.buspass.features.busLocationView.domain.VerifyTicketRepository
 import com.ram.buspass.features.login.data.LoginRepoImpl
 import com.ram.buspass.features.login.domain.LoginRepository
+import com.ram.buspass.features.profile.data.ProfileRepoImpl
+import com.ram.buspass.features.profile.domain.ProfileRepository
 import com.ram.buspass.features.register.data.RegisterRepoImpl
 import com.ram.buspass.features.register.domain.RegisterRepository
 import com.ram.buspass.features.ticketBook.data.TicketBookRepositoryImpl
@@ -74,6 +76,12 @@ object AppModule {
     @Singleton
     fun provideLoginRepoImpl(apiService: ApiService): LoginRepository {
         return LoginRepoImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileRepoImpl(apiService: ApiService): ProfileRepository {
+        return ProfileRepoImpl(apiService)
     }
 
     @Provides

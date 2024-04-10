@@ -12,7 +12,7 @@ class UpdateBusLocationUseCase(private val updateBusLocationRepository: UpdateBu
         try {
             emit(Resource.Success(updateBusLocationRepository.getBusLocation(busNumber, latitude, longitude)))
         } catch (e: Exception){
-            emit(Resource.Error(e.message.toString()))
+            emit(Resource.Error(message = "Not found!"))
         }
     }
 }
