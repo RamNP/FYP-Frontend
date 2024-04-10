@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import com.ram.buspass.R
-import com.ram.buspass.features.userNavigationBar.ScreenList
+import com.ram.buspass.userNavigationBar.ScreenList
 
 //@Composable
 //fun SplashViewScreen(navHostController: NavHostController, getUserDevice: String?) {

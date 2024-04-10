@@ -1,11 +1,11 @@
-package com.ram.buspass.features.bookingDetails.presentation
+package com.ram.buspass.features.busLocationView.presentation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ram.buspass.features.bookingDetails.domain.BookingDetailsUseCase
+import com.ram.buspass.features.busLocationView.domain.VerifyTicketUseCase
 import com.ram.buspass.helper.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -13,26 +13,25 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class BookingViewModel @Inject constructor(private val bookingDetailsUseCase: BookingDetailsUseCase) :
+class VerifyTicketViewModel @Inject constructor(private val verifyTicketUseCase: VerifyTicketUseCase) :
     ViewModel() {
 
+    private var _vTicket by mutableStateOf(VerifyTicketState())
+    val vTicket: VerifyTicketState get() = _vTicket
 
-    private var _booking by mutableStateOf(BookingState())
-    val booking: BookingState get() = _booking
-
-    fun getBooking() {
-        bookingDetailsUseCase().onEach {
-            _booking = when (it) {
+    fun getVerifyTick() {
+        verifyTicketUseCase().onEach {
+            _vTicket = when (it) {
                 is Resource.Loading -> {
-                    BookingState(isLoading = true)
+                    VerifyTicketState(isLoading = true)
                 }
 
                 is Resource.Success -> {
-                    BookingState(isData = it.data)
+                    VerifyTicketState(isData = it.data)
                 }
 
                 is Resource.Error -> {
-                    BookingState(isError = it.message.toString())
+                    VerifyTicketState(isError = it.message.toString())
                 }
 
             }

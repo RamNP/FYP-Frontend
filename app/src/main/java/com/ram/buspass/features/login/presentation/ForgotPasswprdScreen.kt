@@ -31,7 +31,7 @@ import com.ram.buspass.features.components.IconView
 import com.ram.buspass.features.components.InputTextFieldView
 import com.ram.buspass.features.components.PainterImageView
 import com.ram.buspass.features.components.TextView
-import com.ram.buspass.features.userNavigationBar.ScreenList
+import com.ram.buspass.userNavigationBar.ScreenList
 
 @Composable
 fun ForgotViewScreen(navController: NavHostController) {

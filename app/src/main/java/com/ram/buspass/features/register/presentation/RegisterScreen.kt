@@ -43,9 +43,9 @@ import com.ram.buspass.features.components.InputTextFieldView
 import com.ram.buspass.features.components.PainterImageView
 import com.ram.buspass.features.components.PasswordTextFieldView
 import com.ram.buspass.features.components.TextView
-import com.ram.buspass.features.userNavigationBar.ScreenList
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
+import com.ram.buspass.userNavigationBar.ScreenList
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -70,10 +70,7 @@ fun RegisterViewScreen(
     var mExpanded by remember { mutableStateOf(false) }
     val users = listOf("Admin", "User", "Conductor")
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
-    val icon = if (mExpanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
+    val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
 
 
     val onClick: () -> Unit = {

@@ -1,4 +1,4 @@
-package com.ram.buspass.features.userNavigationBar
+package com.ram.buspass.userNavigationBar
 
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -7,10 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ram.buspass.Maps
-import com.ram.buspass.features.conductorNavigationBar.ConductorBottomBarWithFabViewScreen
-import com.ram.buspass.helper.ClientInterceptor
+import com.ram.buspass.conductorNavigationBar.ConductorBottomBarWithFabViewScreen
 import com.ram.buspass.features.login.presentation.LoginViewScreen
 import com.ram.buspass.features.register.presentation.RegisterViewScreen
+import com.ram.buspass.helper.ClientInterceptor
 
 @Composable
 fun MainNavigationScreen() {

@@ -46,7 +46,7 @@ import com.ram.buspass.features.components.PasswordTextFieldView
 import com.ram.buspass.features.components.TextView
 import com.ram.buspass.helper.ClientInterceptor
 import com.ram.buspass.helper.resource.remote.api.model.login.AuthResponse
-import com.ram.buspass.features.userNavigationBar.ScreenList
+import com.ram.buspass.userNavigationBar.ScreenList
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 

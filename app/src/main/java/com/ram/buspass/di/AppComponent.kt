@@ -3,12 +3,16 @@ package com.ram.buspass.di
 
 import com.ram.buspass.features.bookingDetails.domain.BookingDetailsRepository
 import com.ram.buspass.features.bookingDetails.domain.BookingDetailsUseCase
+import com.ram.buspass.features.busLocationView.domain.VerifyTicketRepository
+import com.ram.buspass.features.busLocationView.domain.VerifyTicketUseCase
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.login.domain.LoginUseCase
 import com.ram.buspass.features.register.domain.RegisterRepository
 import com.ram.buspass.features.register.domain.RegisterUseCase
 import com.ram.buspass.features.ticketBook.domain.TicketBookRepository
 import com.ram.buspass.features.ticketBook.domain.TicketBookUseCase
+import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
+import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,6 +49,19 @@ class AppComponent {
     fun provideBookingUseCase(bookingDetailsRepository: BookingDetailsRepository): BookingDetailsUseCase {
         return BookingDetailsUseCase(bookingDetailsRepository)
     }
+
+    @Provides
+    @Singleton
+    fun provideBusLocationUseCase(updateBusLocationRepository: UpdateBusLocationRepository): UpdateBusLocationUseCase {
+        return UpdateBusLocationUseCase(updateBusLocationRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVerifyTicketUseCase(verifyTicketRepository: VerifyTicketRepository): VerifyTicketUseCase {
+        return VerifyTicketUseCase(verifyTicketRepository)
+    }
+
 
 
 }

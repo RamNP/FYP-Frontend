@@ -1,4 +1,4 @@
-package com.ram.buspass.features.conductorNavigationBar
+package com.ram.buspass.conductorNavigationBar
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxWidth

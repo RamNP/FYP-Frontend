@@ -1,4 +1,4 @@
-package com.ram.buspass.features.userNavigationBar
+package com.ram.buspass.userNavigationBar
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxWidth

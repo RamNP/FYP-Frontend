@@ -8,9 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ram.buspass.features.userNavigationBar.MainNavigationScreen
+import androidx.navigation.compose.rememberNavController
 import com.ram.buspass.googleMap.presentation.GoogleMapViewScreen
 import com.ram.buspass.ui.theme.BusPassTheme
+import com.ram.buspass.userNavigationBar.MainNavigationScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
 //                    color = Purple
                 ) {
+                    val navController = rememberNavController()
                     MainNavigationScreen()
 //                    UserBottomBarWithFabViewScreen()
 //                      ConductorBottomBarWithFabViewScreen()

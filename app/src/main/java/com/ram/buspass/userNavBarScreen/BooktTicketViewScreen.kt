@@ -1,4 +1,4 @@
-package com.ram.buspass.features.userNavBarScreen
+package com.ram.buspass.userNavBarScreen
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

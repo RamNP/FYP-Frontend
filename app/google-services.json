@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "682972699526",
+    "project_id": "buspass-e07c6",
+    "storage_bucket": "buspass-e07c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682972699526:android:8777f9a5d2d5fa94d16a07",
+        "android_client_info": {
+          "package_name": "com.ram.buspass"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtmll_cLJr9qrlxdKxir24ceMC1395v7U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

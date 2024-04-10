@@ -1,6 +1,4 @@
-package com.ram.buspass.features.conductorNavigationBar
-
-import com.ram.buspass.features.userNavigationBar.UserScreen
+package com.ram.buspass.conductorNavigationBar
 
 
 val conductorItems = listOf(

@@ -1,10 +1,10 @@
-package com.ram.buspass.features.userNavigationBar
+package com.ram.buspass.userNavigationBar
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.ram.buspass.features.bottomnavigationwithFAB.ProfileScreen
+import com.ram.buspass.features.bookingDetails.presentation.BookTicketDetailsViewScreen
 import com.ram.buspass.features.profile.ProfileViewScreen
 import com.ram.buspass.features.ticketBook.presentation.TicketBookViewScreens
 
@@ -18,7 +18,7 @@ fun UserMainScreenNavigation(navController: NavHostController) {
             TicketBookViewScreens(navController)
         }
         composable(UserScreen.MyTikcet.route) {
-            ProfileScreen()
+            BookTicketDetailsViewScreen(navController)
 
         }
         composable(UserScreen.Location.route) {
@@ -26,6 +26,8 @@ fun UserMainScreenNavigation(navController: NavHostController) {
         }
 
         composable(UserScreen.Payment.route) {
+            BookTicketDetailsViewScreen(navController)
+
 
         }
         composable(UserScreen.Profile.route) {

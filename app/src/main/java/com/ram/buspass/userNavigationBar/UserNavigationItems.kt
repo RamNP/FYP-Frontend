@@ -1,4 +1,4 @@
-package com.ram.buspass.features.userNavigationBar
+package com.ram.buspass.userNavigationBar
 
 val bottomItems = listOf(
     UserScreen.Book,

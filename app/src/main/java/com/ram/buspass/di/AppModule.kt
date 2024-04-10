@@ -5,12 +5,16 @@ import android.content.Context
 import androidx.room.Room
 import com.ram.buspass.features.bookingDetails.data.BookingDetailsRepositoryImpl
 import com.ram.buspass.features.bookingDetails.domain.BookingDetailsRepository
+import com.ram.buspass.features.busLocationView.data.VerifyTicketRepoImpl
+import com.ram.buspass.features.busLocationView.domain.VerifyTicketRepository
 import com.ram.buspass.features.login.data.LoginRepoImpl
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.register.data.RegisterRepoImpl
 import com.ram.buspass.features.register.domain.RegisterRepository
 import com.ram.buspass.features.ticketBook.data.TicketBookRepositoryImpl
 import com.ram.buspass.features.ticketBook.domain.TicketBookRepository
+import com.ram.buspass.features.updateBusLocation.data.UpdateBusLocationRepoImpl
+import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
 import com.ram.buspass.helper.ClientInterceptor
 import com.ram.buspass.helper.resource.local.AppDatabase
 import com.ram.buspass.helper.resource.local.UserDao
@@ -41,6 +45,7 @@ object AppModule {
         ).fallbackToDestructiveMigration().build().usersDao()
     }
 
+    //Retrofit instance create
     @Provides
     @Singleton
     fun provideRetrofit(@ApplicationContext context: Context): ApiService {
@@ -81,6 +86,18 @@ object AppModule {
     @Singleton
     fun provideUserBookingDetailsRepositoryImpl(apiService: ApiService): BookingDetailsRepository {
         return BookingDetailsRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBusLocationRepositoryImpl(apiService: ApiService): UpdateBusLocationRepository {
+        return UpdateBusLocationRepoImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVerifyTicketRepositoryImpl(apiService: ApiService): VerifyTicketRepository {
+        return VerifyTicketRepoImpl(apiService)
     }
 
 

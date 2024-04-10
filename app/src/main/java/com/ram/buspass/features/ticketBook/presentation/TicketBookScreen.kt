@@ -59,12 +59,12 @@ import androidx.navigation.NavHostController
 import com.ram.buspass.features.components.ButtonView
 import com.ram.buspass.features.components.IconView
 import com.ram.buspass.features.components.TextView
-import com.ram.buspass.features.userNavigationBar.UserScreen
 import com.ram.buspass.helper.ClientInterceptor
-import com.ram.buspass.interfaceUtils.UserInterfaceUtil
+import com.ram.buspass.helper.NetworkObserver
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
+import com.ram.buspass.userNavigationBar.UserScreen
 
 
 @Composable
@@ -72,6 +72,8 @@ fun TicketBookViewScreens(
     navController: NavHostController,
     ticketBookViewModel: TicketBookViewModel = hiltViewModel(),
 ) {
+    val connection by NetworkObserver.connectivityState()
+    val isConnected = connection === NetworkObserver.ConnectionState.Available
     val ticketResult = ticketBookViewModel.ticket
     val bookingTicketResult = ticketBookViewModel.bookingTicket
 
@@ -141,135 +143,145 @@ fun TicketBookViewScreens(
         }
         var busNameText by remember { mutableStateOf(busName.getOrNull(0).toString()) }
         val scrollState = rememberScrollState()
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(White)
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Ticket Booking",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+        if (isConnected) {
+            Row(
                 modifier = Modifier
-            )
-        }
+                    .fillMaxWidth()
+                    .background(White)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Ticket Booking",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier
+                )
+            }
 
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-                .verticalScroll(scrollState)
-        ) {
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 28.dp)
+                    .padding(20.dp)
+                    .verticalScroll(scrollState)
             ) {
-
-//            Bus Name TextFiled
-                OutlinedTextField(
-                    value = busNameText,
-                    onValueChange = { busNameText = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                        .onGloballyPositioned { coordinates ->
-                            mTextFieldSize = coordinates.size.toSize()
-                        },
-                    label = { Text(" Select Bus Name") },
-                    trailingIcon = {
-                        Icon(
-                            icon,
-                            "Icon",
-                            Modifier.clickable { busIdExpanded = !busIdExpanded }
-                        )
-                    }
-                )
-
-                // Create a drop-down menu with list of bus details,
-                // when clicked, set the Text Field text as the bus id selected
-                DropdownMenu(
-                    expanded = busIdExpanded,
-                    onDismissRequest = { busIdExpanded = false },
-                    modifier = Modifier
-                        .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
-                ) {
-                    busName.forEach { busNames ->
-                        DropdownMenuItem(
-                            onClick = {
-                                busNameText = busNames
-                                selectedBusName = busNames
-                                busIdExpanded = false
-                                UserInterfaceUtil.showToast(context, "Bus ID : $selectedBusName")
-
-                            }
-                        ) {
-                            Text(text = busNames)
-                        }
-                    }
-                }
-            }
-
-            filteredData?.forEach { item ->
-                butId = item.bus_details?.id ?: 0
-                ticketId = item.ticket_details?.id ?: 0
 
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp)
+                        .padding(top = 28.dp)
                 ) {
-                    TicketCard(
-                        busNumber = "${item.bus_details?.bus_number}",
-                        busName = "${item.bus_details?.name}",
-                        fromTo = "${item.bus_details?.from_to}",
-                        route = "${item.bus_details?.route}",
-                        busSpeed = "${item.bus_details?.bus_speed}",
-                        ticketNo = "${item.ticket_details?.ticket_no}",
-                        date = "${item.ticket_details?.date}",
-                        time = "${item.ticket_details?.time}",
-                        cost = "${item.ticket_details?.cost}",
-                        navController = navController,
+
+//            Bus Name TextFiled
+                    OutlinedTextField(
+                        value = busNameText,
+                        onValueChange = { busNameText = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                            .onGloballyPositioned { coordinates ->
+                                mTextFieldSize = coordinates.size.toSize()
+                            },
+                        label = { Text(" Select Bus Name") },
+                        trailingIcon = {
+                            Icon(
+                                icon,
+                                "Icon",
+                                Modifier.clickable { busIdExpanded = !busIdExpanded }
+                            )
+                        }
                     )
 
+                    // Create a drop-down menu with list of bus details,
+                    // when clicked, set the Text Field text as the bus id selected
+                    DropdownMenu(
+                        expanded = busIdExpanded,
+                        onDismissRequest = { busIdExpanded = false },
+                        modifier = Modifier
+                            .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
+                    ) {
+                        busName.forEach { busNames ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    busNameText = busNames
+                                    selectedBusName = busNames
+                                    busIdExpanded = false
+                                    showToast(context, "Bus ID : $selectedBusName")
+
+                                }
+                            ) {
+                                Text(text = busNames)
+                            }
+                        }
+                    }
                 }
 
-                ButtonView(
-                    onClick = {
-                        ticketBookViewModel.getTicketBook(bus = butId, ticket = ticketId, users = userId)
-                    },
-                    btnColor = ButtonDefaults.buttonColors(Purple),
-                    text = "Book Ticket",
-                    textStyle = TextStyle()
-                )
-            }
-        }
-        //TicketBooking details
+                filteredData?.forEach { item ->
+                    butId = item.bus_details?.id ?: 0
+                    ticketId = item.ticket_details?.id ?: 0
 
-        if (bookingTicketResult.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                // indicator
-                CircularProgressIndicator(1f)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                    ) {
+                        TicketCard(
+                            busNumber = "${item.bus_details?.bus_number}",
+                            busName = "${item.bus_details?.name}",
+                            fromTo = "${item.bus_details?.from_to}",
+                            route = "${item.bus_details?.route}",
+                            busSpeed = "${item.bus_details?.bus_speed}",
+                            ticketNo = "${item.ticket_details?.ticket_no}",
+                            date = "${item.ticket_details?.date}",
+                            time = "${item.ticket_details?.time}",
+                            cost = "${item.ticket_details?.cost}",
+                            navController = navController,
+                        )
+
+                    }
+
+                    ButtonView(
+                        onClick = {
+
+                            ticketBookViewModel.getTicketBook(
+                                bus = butId,
+                                ticket = ticketId,
+                                users = userId
+                            )
+                        },
+                        btnColor = ButtonDefaults.buttonColors(Purple),
+                        text = "Book Ticket",
+                        textStyle = TextStyle()
+                    )
+                }
             }
+            //TicketBooking details
+
+            if (bookingTicketResult.isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    // indicator
+                    CircularProgressIndicator(1f)
+                }
+            }
+            if (bookingTicketResult.isError != null) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    // error message
+                    TextView(text = bookingTicketResult.isError)
+                    Log.e("BookingMessage", "${bookingTicketResult.isError}")
+                }
+            }
+            LaunchedEffect(key1 = bookingTicketResult, block = {
+                if (bookingTicketResult.isData?.isSuccess == true) {
+                    navController.navigate(UserScreen.MyTikcet.route)
+                    showToast(context, "${bookingTicketResult.isData.message}")
+                }
+            })
+        } else {
+            Text(text = "No Internet Net")
         }
-        if (bookingTicketResult.isError != null) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                // error message
-                TextView(text = bookingTicketResult.isError)
-                Log.e("BookingMessage","${bookingTicketResult.isError}")
-            }
-        }
-        LaunchedEffect(key1 = bookingTicketResult, block = {
-            if (bookingTicketResult.isData?.isSuccess == true) {
-                navController.navigate(UserScreen.MyTikcet.route)
-                showToast(context, "${bookingTicketResult.isData.message}")
-            }
-        })
     }
+
 }
 
 

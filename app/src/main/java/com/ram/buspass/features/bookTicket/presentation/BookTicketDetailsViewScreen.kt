@@ -10,7 +10,6 @@
 //import androidx.compose.foundation.layout.fillMaxWidth
 //import androidx.compose.foundation.layout.padding
 //import androidx.compose.foundation.lazy.LazyColumn
-//import androidx.compose.foundation.lazy.items
 //import androidx.compose.foundation.shape.RoundedCornerShape
 //import androidx.compose.material.icons.Icons
 //import androidx.compose.material.icons.filled.BusAlert
@@ -58,23 +57,23 @@
 //
 //    val ticketResults = bookTicketViewModel.bookTicket.value
 //
-////    Column(modifier = Modifier.fillMaxWidth()) {
-////        TopAppBar(
-////            modifier = Modifier.fillMaxWidth(),
-////            backgroundColor = Purple,
-////        ) {
-////            Row(
-////                modifier = Modifier.fillMaxWidth(),
-////                horizontalArrangement = Arrangement.Center
-////            ) {
-////                TextView(
-////                    text = "Book Ticket",
-////                    fontWeight = FontWeight.Bold,
-////                    fontSize = 18.sp,
-////                    color = Color.White
-////                )
-////            }
-////        }
+//    Column(modifier = Modifier.fillMaxWidth()) {
+//        TopAppBar(
+//            modifier = Modifier.fillMaxWidth(),
+//            backgroundColor = Purple,
+//        ) {
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.Center
+//            ) {
+//                TextView(
+//                    text = "Book Ticket",
+//                    fontWeight = FontWeight.Bold,
+//                    fontSize = 18.sp,
+//                    color = Color.White
+//                )
+//            }
+//        }
 //
 //
 //        // Button to trigger the API call
@@ -258,7 +257,6 @@
 //        }
 //    }
 //}
-//
 //
 //@Composable
 //fun ViewTicketCard(
