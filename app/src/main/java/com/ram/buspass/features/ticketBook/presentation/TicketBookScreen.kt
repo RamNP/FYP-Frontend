@@ -159,7 +159,6 @@ fun TicketBookViewScreens(
                 )
             }
 
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

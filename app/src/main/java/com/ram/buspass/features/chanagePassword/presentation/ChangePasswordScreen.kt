@@ -1,7 +1,5 @@
-package com.ram.buspass.features.editProfile.presentation
+package com.ram.buspass.features.chanagePassword.presentation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,19 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -33,19 +25,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.R
 import com.ram.buspass.features.components.ButtonView
 import com.ram.buspass.features.components.IconView
 import com.ram.buspass.features.components.InputTextFieldView
+import com.ram.buspass.features.components.PasswordTextFieldView
 import com.ram.buspass.features.components.TextView
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
@@ -53,36 +45,38 @@ import com.ram.buspass.ui.theme.White
 
 
 @Composable
-fun EditProfileViewScreen(
+fun ChangePasswordScreen(
     navController: NavHostController,
-    editProfileLocationViewModel: EditProfileLocationViewModel = hiltViewModel()
+    changePasswordViewModel: ChangePasswordViewModel = hiltViewModel()
 ) {
-    val visible by remember { mutableStateOf(true) }
-    var userName by remember { mutableStateOf("") }
-    val isNameEmpty by remember { mutableStateOf(false) }
-    var email by remember { mutableStateOf("") }
-    val isEmailEmpty by remember { mutableStateOf(false) }
-     val editProfileResult = editProfileLocationViewModel.editProfile
     val context = LocalContext.current
+    val isEmailEmpty by remember { mutableStateOf(false) }
+    val isOldPasswordEmpty by remember { mutableStateOf(false) }
+    val isNewPasswordEmpty by remember { mutableStateOf(false) }
+    var email by remember { mutableStateOf("") }
+    var oldPassword by remember { mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
+    val passwordResult = changePasswordViewModel.password
 
-
-    if (editProfileResult.isLoading) {
+    if (passwordResult.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator(1f)
         }
     }
-    if (editProfileResult.isError.isNotEmpty()) {
+    if (passwordResult.isError.isNotEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            TextView(text = editProfileResult.isError)
+            TextView(text = passwordResult.isError)
         }
     }
 
-    LaunchedEffect(key1 = editProfileResult.isData, block = {
-        if (editProfileResult.isData?.is_success == true) {
-            showToast(context, "${editProfileResult.isData.message}")
+    LaunchedEffect(key1 = passwordResult.isData, block = {
+        if (passwordResult.isData?.is_success == true) {
+            showToast(context, "${passwordResult.isData.message}")
 
         }
     })
+
+
 
     Column(
         modifier = Modifier
@@ -94,49 +88,21 @@ fun EditProfileViewScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(White)
+                .shadow(2.dp)
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "",
-                modifier = Modifier.clickable { navController.navigateUp() })
-            Text(text = " Edit Profile", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-            Icon(imageVector = Icons.Default.Share, contentDescription = "")
+                modifier = Modifier.clickable { navController.navigate("Profile") })
+            Text(
+                text = "Change Password",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(end = 80.dp)
+            )
         }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(), verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Card(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .width(100.dp)
-                    .height(100.dp)
-                    .clickable { },
-                shape = RoundedCornerShape(150.dp),
-                colors = CardDefaults.cardColors(Purple),
-            ) {
-
-                Image(
-                    painter = painterResource(id = R.mipmap.ic_profile),
-                    contentDescription = null
-                )
-            }
-            //
-            AnimatedVisibility(visible, modifier = Modifier
-
-                .clickable {})
-            {
-                Text(
-                    text = "Change picture", fontSize = 18.sp
-                )
-            }
-        }
-        //
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -146,7 +112,7 @@ fun EditProfileViewScreen(
         ) {
 
             InputTextFieldView(
-                value = email ,
+                value = email,
                 onValueChange = { email = it },
                 label = "Email",
                 placeholder = "Enter Email",
@@ -160,19 +126,31 @@ fun EditProfileViewScreen(
                     .padding(5.dp)
 
             )
-
-            InputTextFieldView(
-                value = userName,
-                onValueChange = { userName = it },
-                label = "UserName",
-                placeholder = "Enter UserName",
+            PasswordTextFieldView(
+                value = oldPassword,
+                onValueChange = { oldPassword = it },
+                label = "Old Password",
+                placeholder = "Enter Password",
                 textStyle = TextStyle(),
-                isEmpty = isNameEmpty,
-                invalidMessage = "The UserName is empty!",
-
+                isEmpty = isOldPasswordEmpty,
+                invalidMessage = "The old password is empty!",
+                leadingIcon = { IconView(imageVector = Icons.Default.Lock) },
                 errorColor = Color.Red,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            )
 
-                leadingIcon = { IconView(imageVector = Icons.Default.Person) },
+            PasswordTextFieldView(
+                value = newPassword,
+                onValueChange = { newPassword = it },
+                label = " New Password",
+                placeholder = "Enter Password",
+                textStyle = TextStyle(),
+                isEmpty = isNewPasswordEmpty,
+                invalidMessage = "The new password is empty!",
+                leadingIcon = { IconView(imageVector = Icons.Default.Lock) },
+                errorColor = Color.Red,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp)
@@ -181,18 +159,16 @@ fun EditProfileViewScreen(
 
             ButtonView(
                 onClick = {
-                    editProfileLocationViewModel.getUserEditProfile(email ,userName)
-                    showToast(context, "${editProfileResult.isData?.message}")
-
+                          changePasswordViewModel.getPassword(email, oldPassword, newPassword)
+                    showToast(context, "${passwordResult.isData?.message}")
 
                 },
-
                 btnColor = ButtonDefaults.buttonColors(Purple),
-                text = "Update",
+                text = "Save",
                 textStyle = TextStyle()
             )
+
 
         }
     }
 }
-

@@ -1,6 +1,5 @@
 package com.ram.buspass.userNavigationBar
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -20,8 +19,6 @@ fun MainNavigationScreen() {
     val interceptor = ClientInterceptor(context)
     val token = interceptor.getToken()
     val userRole = interceptor.getUserRole()
-    Log.e("UserRole:", "$userRole")
-    Log.e("token:", "$token")
 
     NavHost(navController,
         startDestination = if(token != null){
@@ -52,11 +49,11 @@ fun MainNavigationScreen() {
 
         }
         composable(ScreenList.BottomNavMenuUser.route){
-            UserBottomBarWithFabViewScreen()
+            UserBottomBarWithFabViewScreen(navController)
         }
 
         composable(ScreenList.BottomNavMenuConductor.route){
-            ConductorBottomBarWithFabViewScreen()
+            ConductorBottomBarWithFabViewScreen(navController)
         }
 
         composable(ScreenList.Maps.route){

@@ -11,14 +11,17 @@ import com.ram.buspass.helper.resource.remote.api.model.booTicketDetails.Booking
 import com.ram.buspass.helper.resource.remote.api.model.changePassword.ChangePasswordPojo
 import com.ram.buspass.helper.resource.remote.api.model.editProfile.EditProfilePojo
 import com.ram.buspass.helper.resource.remote.api.model.login.LoginPojo
+import com.ram.buspass.helper.resource.remote.api.model.passVerify.PassVerifyPojo
 import com.ram.buspass.helper.resource.remote.api.model.profile.ProfilePojo
 import com.ram.buspass.helper.resource.remote.api.model.register.ResponsePojo
 import com.ram.buspass.helper.resource.remote.api.model.ticketBook.TicketBookPojo
 import com.ram.buspass.helper.resource.remote.api.model.ticketBook.TicketBookingPojo
 import com.ram.buspass.helper.resource.remote.api.model.updateBusLocation.LocationPojo
 import com.ram.buspass.helper.resource.remote.api.model.verifyTicket.VerifyTicketPojo
+import com.ram.buspass.helper.resource.remote.api.model.viewBusLocation.ViewLocationPojo
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 
@@ -40,7 +43,7 @@ interface ApiService {
     @PUT("/api/user/profile/edit/")
     suspend fun editUserProfile(@Body editModelDto: EditModelDto): EditProfilePojo?
 
-    @POST("/api/change/password/")
+    @PATCH("/api/change/password/")
     suspend fun getChangePassword(@Body changePasswordDto: ChangePasswordDto): ChangePasswordPojo?
 
     @GET("api/ticket/bus_details/")
@@ -60,5 +63,9 @@ interface ApiService {
     @POST("api/update/bus/location/")
     suspend fun updateBusLocation(@Body busLocationDto: BusLocationDto): LocationPojo?
 
+    @GET("api/pass/verify/")
+    suspend fun getLocationView(): ViewLocationPojo?
+    @GET("api/pass/verify/")
+    suspend fun getPassVerify(): PassVerifyPojo?
 
 }

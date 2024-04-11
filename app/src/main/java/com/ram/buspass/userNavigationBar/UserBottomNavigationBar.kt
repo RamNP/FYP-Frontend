@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ram.buspass.ui.theme.Purple
@@ -31,7 +32,7 @@ import com.ram.buspass.ui.theme.WhiteGrey
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun UserBottomBarWithFabViewScreen() {
+fun UserBottomBarWithFabViewScreen(maiNavController: NavHostController) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -71,7 +72,7 @@ fun UserBottomBarWithFabViewScreen() {
             }
         }
     ) {
-        UserMainScreenNavigation(navController)
+        UserMainScreenNavigation(navController, maiNavController)
     }
 }
 

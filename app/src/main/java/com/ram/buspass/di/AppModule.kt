@@ -11,6 +11,8 @@ import com.ram.buspass.features.editProfile.data.EditProfileRepoImpl
 import com.ram.buspass.features.editProfile.domain.EditProfileRepository
 import com.ram.buspass.features.login.data.LoginRepoImpl
 import com.ram.buspass.features.login.domain.LoginRepository
+import com.ram.buspass.features.passVerify.data.PassVerifyRepoImpl
+import com.ram.buspass.features.passVerify.domain.PassVerifyRepository
 import com.ram.buspass.features.profile.data.ProfileRepoImpl
 import com.ram.buspass.features.profile.domain.ProfileRepository
 import com.ram.buspass.features.register.data.RegisterRepoImpl
@@ -122,6 +124,13 @@ object AppModule {
     @Singleton
     fun provideVerifyTicketRepositoryImpl(apiService: ApiService): VerifyTicketRepository {
         return VerifyTicketRepoImpl(apiService)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideVerifyPassRepositoryImpl(apiService: ApiService): PassVerifyRepository {
+        return PassVerifyRepoImpl(apiService)
     }
 
 

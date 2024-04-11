@@ -11,7 +11,7 @@ import com.ram.buspass.features.ticketBook.presentation.TicketBookViewScreens
 
 
 @Composable
-fun UserMainScreenNavigation(navController: NavHostController) {
+fun UserMainScreenNavigation(navController: NavHostController, maiNavController: NavHostController) {
 
     NavHost(navController, startDestination = UserScreen.Book.route) {
         composable(UserScreen.Book.route) {
@@ -31,7 +31,7 @@ fun UserMainScreenNavigation(navController: NavHostController) {
 
         }
         composable(UserScreen.Profile.route) {
-            ProfileViewScreen(navController)
+            ProfileViewScreen(navController, maiNavController)
 
         }
 

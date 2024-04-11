@@ -8,12 +8,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.FabPosition
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ram.buspass.ui.theme.Purple
@@ -31,7 +28,7 @@ import com.ram.buspass.ui.theme.WhiteGrey
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ConductorBottomBarWithFabViewScreen() {
+fun ConductorBottomBarWithFabViewScreen(maiNavController: NavHostController) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -47,31 +44,31 @@ fun ConductorBottomBarWithFabViewScreen() {
                 ConductorBottomNavViewScreen(navController = navController)
             }
         },
-        floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true,
-        floatingActionButton = {
-            FloatingActionButton(
-                shape = CircleShape,
-                onClick = {
-                    ConductorNavigation.UpdateLocation.route.let {
-                        navController.navigate(it) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                    ConductorNavigation.UpdateLocation.route.let { navController.navigate(it) }
-                },
-                contentColor = Color.White, backgroundColor = Purple
-            )
-            {
-                Icon(imageVector = Icons.Filled.LocationOn, contentDescription = "Add icon")
-            }
-        }
+//        floatingActionButtonPosition = FabPosition.Center,
+//        isFloatingActionButtonDocked = true,
+//        floatingActionButton = {
+//            FloatingActionButton(
+//                shape = CircleShape,
+//                onClick = {
+//                    ConductorNavigation.UpdateLocation.route.let {
+//                        navController.navigate(it) {
+//                            popUpTo(navController.graph.findStartDestination().id) {
+//                                saveState = true
+//                            }
+//                            launchSingleTop = true
+//                            restoreState = true
+//                        }
+//                    }
+//                    ConductorNavigation.UpdateLocation.route.let { navController.navigate(it) }
+//                },
+//                contentColor = Color.White, backgroundColor = Purple
+//            )
+//            {
+//                Icon(imageVector = Icons.Filled.LocationOn, contentDescription = "Add icon")
+//            }
+//        }
     ) {
-        ConductorMainScreenNavigation(navController)
+        ConductorMainScreenNavigation(navController, maiNavController)
     }
 }
 

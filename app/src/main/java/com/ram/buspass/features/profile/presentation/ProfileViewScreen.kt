@@ -22,11 +22,11 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.ManageAccounts
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material.icons.filled.PrivacyTip
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -34,6 +34,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,21 +52,29 @@ import com.ram.buspass.R
 import com.ram.buspass.features.components.TextView
 import com.ram.buspass.helper.ClientInterceptor
 import com.ram.buspass.helper.NetworkObserver
-import com.ram.buspass.helper.resource.remote.api.ApiConstants.IMAGE_BASE_URL
+import com.ram.buspass.helper.resource.remote.api.ApiConstants.BASE_URL
+import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
+import com.ram.buspass.userNavigationBar.ScreenList
+import com.ram.buspass.userNavigationBar.UserScreen
 
 
 @Composable
 fun ProfileViewScreen(
     navController: NavHostController,
+    maiNavController: NavHostController,
     profileViewModel: ProfileViewModel = hiltViewModel()
-) {
+    ) {
     val context = LocalContext.current
     val userId = ClientInterceptor(context).getUserId()
+    val editor = ClientInterceptor(context).getPreInstEditor()
+
     val profileResult = profileViewModel.profile
     val connection by NetworkObserver.connectivityState()
     val isConnected = connection === NetworkObserver.ConnectionState.Available
+    var showDialogBox by remember { mutableStateOf(false) }
+
 
 
     LaunchedEffect(key1 = Unit, block = {
@@ -109,7 +120,7 @@ fun ProfileViewScreen(
                 email = results?.email,
                 userId = userId,
                 role = results?.role,
-                imageUrl = IMAGE_BASE_URL + results?.photo_image
+                imageUrl = BASE_URL + results?.photo_image
 
             )
 
@@ -139,7 +150,7 @@ fun ProfileViewScreen(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
+                    TextView(
                         text = " Edit Profile",
                         modifier = Modifier.padding(top = 8.dp),
                         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
@@ -154,13 +165,13 @@ fun ProfileViewScreen(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = "Manage Account",
+                    TextView(
+                        text = "Change Password ",
                         modifier = Modifier.padding(top = 8.dp),
                         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
                     )
-                    IconButton(onClick = { navController.navigate("ManagePasswordScreen") }) {
-                        Icon(imageVector = Icons.Default.ManageAccounts, contentDescription = null)
+                    IconButton(onClick = { navController.navigate("ChangePassword") }) {
+                        Icon(imageVector = Icons.Default.Lock, contentDescription = null)
                     }
                 }
 
@@ -169,7 +180,7 @@ fun ProfileViewScreen(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
+                    TextView(
                         text = "Privacy  Policy",
                         modifier = Modifier.padding(top = 8.dp),
                         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
@@ -202,7 +213,7 @@ fun ProfileViewScreen(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
+                    TextView(
                         text = " Help & Feedback",
                         modifier = Modifier.padding(top = 8.dp),
                         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
@@ -219,13 +230,22 @@ fun ProfileViewScreen(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = "Share",
+                    TextView(
+                        text = "Logout",
                         modifier = Modifier.padding(top = 8.dp),
                         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
                     )
-                    IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Default.Share, contentDescription = null)
+                    IconButton(onClick = {
+                        maiNavController.navigate(ScreenList.LoginScreen.route) {
+                            popUpTo(UserScreen.Profile.route) {
+                                inclusive = true
+                            }
+                            editor.putString("authentication", "")?.apply()
+                            showDialogBox = false
+                            showToast(context, ("Logout is successfully"))
+                        }
+                    }) {
+                        Icon(imageVector = Icons.Default.Logout, contentDescription = null)
                     }
 
                 }
@@ -280,7 +300,7 @@ fun ProfileCard(
                 ) {
 
                     Image(
-                        painter = painterResource(id = R.mipmap.ic_buss_logo),
+                        painter = painterResource(id = R.mipmap.ic_profile),
                         contentDescription = null
                     )
 

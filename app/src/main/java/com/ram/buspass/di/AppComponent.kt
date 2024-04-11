@@ -9,6 +9,8 @@ import com.ram.buspass.features.editProfile.domain.EditProfileRepository
 import com.ram.buspass.features.editProfile.domain.EditProfileUseCase
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.login.domain.LoginUseCase
+import com.ram.buspass.features.passVerify.domain.PassVerifyRepository
+import com.ram.buspass.features.passVerify.domain.PassVerifyUseCase
 import com.ram.buspass.features.profile.domain.ProfileRepository
 import com.ram.buspass.features.profile.domain.ProfileUseCase
 import com.ram.buspass.features.register.domain.RegisterRepository
@@ -81,6 +83,12 @@ class AppComponent {
     @Singleton
     fun provideVerifyTicketUseCase(verifyTicketRepository: VerifyTicketRepository): VerifyTicketUseCase {
         return VerifyTicketUseCase(verifyTicketRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVerifyPassUseCase(passVerifyRepository: PassVerifyRepository): PassVerifyUseCase {
+        return PassVerifyUseCase(passVerifyRepository)
     }
 
 
