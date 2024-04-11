@@ -1,11 +1,15 @@
 package com.ram.buspass.helper.resource.remote.api
 
 
-import com.ram.buspass.features.login.domain.LoginUserModelDAO
-import com.ram.buspass.features.register.domain.UserModelDAO
+import com.ram.buspass.features.chanagePassword.domain.ChangePasswordDto
+import com.ram.buspass.features.editProfile.domain.EditModelDto
+import com.ram.buspass.features.login.domain.LoginUserModelDto
+import com.ram.buspass.features.register.domain.UserModelDto
 import com.ram.buspass.features.ticketBook.domain.BookDto
-import com.ram.buspass.features.updateBusLocation.domain.BusLocationDataDAO
+import com.ram.buspass.features.updateBusLocation.domain.BusLocationDto
 import com.ram.buspass.helper.resource.remote.api.model.booTicketDetails.BookingPojo
+import com.ram.buspass.helper.resource.remote.api.model.changePassword.ChangePasswordPojo
+import com.ram.buspass.helper.resource.remote.api.model.editProfile.EditProfilePojo
 import com.ram.buspass.helper.resource.remote.api.model.login.LoginPojo
 import com.ram.buspass.helper.resource.remote.api.model.profile.ProfilePojo
 import com.ram.buspass.helper.resource.remote.api.model.register.ResponsePojo
@@ -16,22 +20,28 @@ import com.ram.buspass.helper.resource.remote.api.model.verifyTicket.VerifyTicke
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface ApiService {
 
 
     @POST("api/register/user/")
     suspend fun registerUser(
-        @Body userModelDAO: UserModelDAO
+        @Body userModelDto: UserModelDto
     ): ResponsePojo?
 
-    @POST("api/loginuser/")
+    @POST("api/login/user/")
     suspend fun loginUser(
-        @Body loginUserModelDAO: LoginUserModelDAO
+        @Body loginUserModelDto: LoginUserModelDto
     ): LoginPojo?
 
     @GET("/api/user/profile/")
     suspend fun getProfile(): ProfilePojo
+    @PUT("/api/user/profile/edit/")
+    suspend fun editUserProfile(@Body editModelDto: EditModelDto): EditProfilePojo?
+
+    @POST("/api/change/password/")
+    suspend fun getChangePassword(@Body changePasswordDto: ChangePasswordDto): ChangePasswordPojo?
 
     @GET("api/ticket/bus_details/")
     suspend fun getBookTicket(): TicketBookPojo
@@ -48,5 +58,7 @@ interface ApiService {
     suspend fun getVerifyTicket(): VerifyTicketPojo
 
     @POST("api/update/bus/location/")
-    suspend fun updateBusLocation(@Body busLocationDataDAO: BusLocationDataDAO): LocationPojo?
+    suspend fun updateBusLocation(@Body busLocationDto: BusLocationDto): LocationPojo?
+
+
 }

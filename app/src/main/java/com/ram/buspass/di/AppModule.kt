@@ -5,8 +5,10 @@ import android.content.Context
 import androidx.room.Room
 import com.ram.buspass.features.bookingDetails.data.BookingDetailsRepositoryImpl
 import com.ram.buspass.features.bookingDetails.domain.BookingDetailsRepository
-import com.ram.buspass.features.busLocationView.data.VerifyTicketRepoImpl
-import com.ram.buspass.features.busLocationView.domain.VerifyTicketRepository
+import com.ram.buspass.features.chanagePassword.data.ChangePasswordRepoImpl
+import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
+import com.ram.buspass.features.editProfile.data.EditProfileRepoImpl
+import com.ram.buspass.features.editProfile.domain.EditProfileRepository
 import com.ram.buspass.features.login.data.LoginRepoImpl
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.profile.data.ProfileRepoImpl
@@ -17,6 +19,8 @@ import com.ram.buspass.features.ticketBook.data.TicketBookRepositoryImpl
 import com.ram.buspass.features.ticketBook.domain.TicketBookRepository
 import com.ram.buspass.features.updateBusLocation.data.UpdateBusLocationRepoImpl
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
+import com.ram.buspass.features.verifyTicket.data.VerifyTicketRepoImpl
+import com.ram.buspass.features.verifyTicket.domain.VerifyTicketRepository
 import com.ram.buspass.helper.ClientInterceptor
 import com.ram.buspass.helper.resource.local.AppDatabase
 import com.ram.buspass.helper.resource.local.UserDao
@@ -82,6 +86,18 @@ object AppModule {
     @Singleton
     fun provideProfileRepoImpl(apiService: ApiService): ProfileRepository {
         return ProfileRepoImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEditProfileRepoImpl(apiService: ApiService): EditProfileRepository {
+        return EditProfileRepoImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun providePasswordChangeRepoImpl(apiService: ApiService): ChangePasswordRepository {
+        return ChangePasswordRepoImpl(apiService)
     }
 
     @Provides

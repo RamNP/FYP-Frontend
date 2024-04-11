@@ -16,6 +16,7 @@ sealed class UserScreen(val route: String, val title: String?, val icon: ImageVe
     object Location : UserScreen("location", null, null)
     object Payment : UserScreen("payment", "Payment", Icons.Default.Money)
     object Profile : UserScreen("profile", "Profile", Icons.Default.Person)
+
 }
 
 
@@ -29,6 +30,9 @@ sealed class ScreenList(val route: String) {
     object LogoutScreen : ScreenList("LogoutScreen")
     object BottomNavMenuUser : ScreenList("BottomNavMenuUser")
     object BottomNavMenuConductor : ScreenList("BottomNavMenuConductor")
+
+    object EditProfile : ScreenList("EditProfile")
+
     object Maps : ScreenList("Maps")
 
 

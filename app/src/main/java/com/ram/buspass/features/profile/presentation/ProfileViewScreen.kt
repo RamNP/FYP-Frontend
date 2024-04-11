@@ -144,7 +144,7 @@ fun ProfileViewScreen(
                         modifier = Modifier.padding(top = 8.dp),
                         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
                     )
-                    IconButton(onClick = { navController.navigate("EditProfileScreen") }) {
+                    IconButton(onClick = { navController.navigate("EditProfile") }) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Icon")
                     }
 

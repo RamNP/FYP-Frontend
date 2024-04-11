@@ -3,8 +3,10 @@ package com.ram.buspass.di
 
 import com.ram.buspass.features.bookingDetails.domain.BookingDetailsRepository
 import com.ram.buspass.features.bookingDetails.domain.BookingDetailsUseCase
-import com.ram.buspass.features.busLocationView.domain.VerifyTicketRepository
-import com.ram.buspass.features.busLocationView.domain.VerifyTicketUseCase
+import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
+import com.ram.buspass.features.chanagePassword.domain.ChangePasswordUseCase
+import com.ram.buspass.features.editProfile.domain.EditProfileRepository
+import com.ram.buspass.features.editProfile.domain.EditProfileUseCase
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.login.domain.LoginUseCase
 import com.ram.buspass.features.profile.domain.ProfileRepository
@@ -15,6 +17,8 @@ import com.ram.buspass.features.ticketBook.domain.TicketBookRepository
 import com.ram.buspass.features.ticketBook.domain.TicketBookUseCase
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationUseCase
+import com.ram.buspass.features.verifyTicket.domain.VerifyTicketRepository
+import com.ram.buspass.features.verifyTicket.domain.VerifyTicketUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +45,18 @@ class AppComponent {
     @Singleton
     fun provideProfileUseCase(profileRepository: ProfileRepository): ProfileUseCase {
         return ProfileUseCase(profileRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEditProfileUseCase(editProfileRepository: EditProfileRepository): EditProfileUseCase {
+        return EditProfileUseCase(editProfileRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChangePasswordUseCase(changePasswordRepository: ChangePasswordRepository): ChangePasswordUseCase {
+        return ChangePasswordUseCase(changePasswordRepository)
     }
 
     @Provides

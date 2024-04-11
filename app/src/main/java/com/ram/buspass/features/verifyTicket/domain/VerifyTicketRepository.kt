@@ -1,4 +1,4 @@
-package com.ram.buspass.features.busLocationView.domain
+package com.ram.buspass.features.verifyTicket.domain
 
 import com.ram.buspass.helper.resource.remote.api.model.verifyTicket.VerifyTicketPojo
 

@@ -1,4 +1,4 @@
-package com.ram.buspass.features.busLocationView.presentation
+package com.ram.buspass.features.verifyTicket.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
