@@ -11,7 +11,7 @@ data class BusDetails(
 	val from_to: String? = null,
 	val route: String? = null,
 	val bus_speed: String? = null,
-	val name: String? = null,
+	val name: String,
 	val id: Int? = null,
 	val bus_number: String? = null
 )
