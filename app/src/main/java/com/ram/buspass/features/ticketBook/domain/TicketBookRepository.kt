@@ -1,7 +1,7 @@
 package com.ram.buspass.features.ticketBook.domain
 
-import com.ram.buspass.helper.resource.remote.api.model.ticketBook.TicketBookPojo
-import com.ram.buspass.helper.resource.remote.api.model.ticketBook.TicketBookingPojo
+import com.ram.buspass.features.ticketBook.data.TicketBookPojo
+import com.ram.buspass.features.ticketBook.data.TicketBookingPojo
 
 interface TicketBookRepository {
 

@@ -169,8 +169,6 @@ fun MainScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
     Log.e("longitude", "${currentPosition.longitude}")
 
 
-
-
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraState,

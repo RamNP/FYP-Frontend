@@ -1,7 +1,7 @@
 package com.ram.buspass.features.register.domain
 
-import com.ram.buspass.helper.Resource
-import com.ram.buspass.helper.resource.remote.api.model.register.ResponsePojo
+import com.ram.buspass.utils.Resource
+import com.ram.buspass.features.register.data.ResponsePojo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

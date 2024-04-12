@@ -1,7 +1,6 @@
 package com.ram.buspass.features.register.data
 
 import com.ram.buspass.helper.resource.remote.api.ApiService
-import com.ram.buspass.helper.resource.remote.api.model.register.ResponsePojo
 import com.ram.buspass.features.register.domain.RegisterRepository
 import com.ram.buspass.features.register.domain.UserModelDto
 

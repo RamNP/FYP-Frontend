@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.booTicketDetails
+package com.ram.buspass.features.bookTicket.data
 
 data class DataItem(
 	val bus_details: BusDetails? = null,

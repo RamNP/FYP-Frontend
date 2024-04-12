@@ -32,38 +32,38 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 
 @Composable
-fun UpdateBusLocationViewScreen() {
-    var isMapOpened by remember { mutableStateOf(false) }
+fun UpdateBusLocationViewScreen(navController: NavHostController) {
 
+    var isMapOpened by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(
-            onClick = {
-                isMapOpened = true
-            },
-            enabled = !isMapOpened
-        ) {
-            Text("Update bus location Map")
-        }
-
-        if (isMapOpened) {
-            MainGoogleMap()
-        }
+        MainGoogleMap(navController)
+//        Button(
+//            onClick = {
+//                isMapOpened = true
+//            },
+//            enabled = !isMapOpened
+//        ) {
+//            Text("Update bus location Map")
+//        }
+//
+//        if (isMapOpened) {
+////            MainGoogleMap()
+//        }
     }
 
 }
@@ -72,16 +72,13 @@ fun UpdateBusLocationViewScreen() {
 
 @SuppressLint("MissingPermission")
 @Composable
-fun MainGoogleMap() {
+fun MainGoogleMap(navController: NavHostController) {
     var markers by remember { mutableStateOf(emptyList<LatLng>()) }
     var lat by remember { mutableStateOf("") }
     var lng by remember { mutableStateOf("") }
     var mapView: MapView? by remember { mutableStateOf(null) }
     var googleMap: GoogleMap? by remember { mutableStateOf(null) }
-    val database = Firebase.database
-    val databaseRef = database.getReference("buses")
     var polyline: Polyline? = null // Variable to hold the polyline
-
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -129,7 +126,7 @@ fun MainGoogleMap() {
                     "longitude" to latLng.longitude
                 )
             }.toMap()
-            databaseRef.setValue(locationData)
+//            databaseRef.setValue(locationData)
         }
     }
 
@@ -186,6 +183,9 @@ fun MainGoogleMap() {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
             )
+        }
+        Button(onClick = { navController.navigate("Update") }) {
+            Text(text = "Updte")
         }
         Spacer(modifier = Modifier.height(16.dp))
         AndroidView(

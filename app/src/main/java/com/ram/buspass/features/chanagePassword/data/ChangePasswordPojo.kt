@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.changePassword
+package com.ram.buspass.features.chanagePassword.data
 
 import com.google.gson.annotations.SerializedName
 

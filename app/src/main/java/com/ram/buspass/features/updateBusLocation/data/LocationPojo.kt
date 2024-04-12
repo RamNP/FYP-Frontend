@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.updateBusLocation
+package com.ram.buspass.features.updateBusLocation.data
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,6 +1,6 @@
 package com.ram.buspass.features.register.domain
 
-import com.ram.buspass.helper.resource.remote.api.model.register.ResponsePojo
+import com.ram.buspass.features.register.data.ResponsePojo
 
 interface RegisterRepository {
 

@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.viewBusLocation
+package com.ram.buspass.features.locationView.data
 
 data class LocationViewPojo(
 	val bus_details: List<BusDetailsItem>? = null,

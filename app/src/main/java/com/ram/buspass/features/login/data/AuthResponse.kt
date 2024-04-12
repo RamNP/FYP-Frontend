@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.login
+package com.ram.buspass.features.login.data
 
 import com.google.gson.annotations.SerializedName
 

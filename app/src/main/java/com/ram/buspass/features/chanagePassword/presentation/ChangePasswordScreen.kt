@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -88,7 +87,6 @@ fun ChangePasswordScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(White)
-                .shadow(2.dp)
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -159,8 +157,9 @@ fun ChangePasswordScreen(
 
             ButtonView(
                 onClick = {
-                          changePasswordViewModel.getPassword(email, oldPassword, newPassword)
+                    changePasswordViewModel.getPassword(email, oldPassword, newPassword)
                     showToast(context, "${passwordResult.isData?.message}")
+                    navController.navigate("Profile")
 
                 },
                 btnColor = ButtonDefaults.buttonColors(Purple),

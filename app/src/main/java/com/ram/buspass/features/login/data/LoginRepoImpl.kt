@@ -1,7 +1,6 @@
 package com.ram.buspass.features.login.data
 
 import com.ram.buspass.helper.resource.remote.api.ApiService
-import com.ram.buspass.helper.resource.remote.api.model.login.LoginPojo
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.login.domain.LoginUserModelDto
 

@@ -50,7 +50,7 @@ import androidx.navigation.NavHostController
 import com.ram.buspass.features.components.ButtonView
 import com.ram.buspass.features.components.IconView
 import com.ram.buspass.features.components.TextView
-import com.ram.buspass.helper.NetworkObserver
+import com.ram.buspass.utils.NetworkObserver
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 import com.ram.buspass.userNavigationBar.UserScreen

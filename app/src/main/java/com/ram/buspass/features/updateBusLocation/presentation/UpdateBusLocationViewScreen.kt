@@ -47,6 +47,7 @@ fun BusLocationViewScreen(
     var isLatitudeEmpty by remember { mutableStateOf(false) }
     var isLongitudeEmpty by remember { mutableStateOf(false) }
     var mExpanded by remember { mutableStateOf(false) }
+    var isMapOpened by remember { mutableStateOf(false) }
 
 
 
@@ -66,7 +67,7 @@ fun BusLocationViewScreen(
     LaunchedEffect(key1 = getBusLocation.isData, block = {
         if (getBusLocation.isData?.is_success == true) {
             showToast(context, "${getBusLocation.isData.message}")
-            Log.e("is_success" ,"${getBusLocation.isData.message}" )
+            Log.e("is_success", "${getBusLocation.isData.message}")
 
 
         }
@@ -98,7 +99,7 @@ fun BusLocationViewScreen(
 
         InputTextFieldView(
             value = latitude.toString(),
-            onValueChange = { latitude= it.toFloat() },
+            onValueChange = { latitude = it.toFloat() },
             label = "Bus Latitude",
             placeholder = "Enter Latitude",
             textStyle = TextStyle(),
@@ -114,7 +115,7 @@ fun BusLocationViewScreen(
 
         InputTextFieldView(
             value = longitude.toString(), // Convert longitude to String
-            onValueChange = { longitude = it.toFloat()},
+            onValueChange = { longitude = it.toFloat() },
             label = "Bus Longitude",
             placeholder = "Enter Longitude",
             textStyle = TextStyle(),
@@ -139,5 +140,21 @@ fun BusLocationViewScreen(
         )
 
     }
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
+        ButtonView(
+            onClick = { navController.navigate("GoogleMapsScreen") },
+            btnColor = ButtonDefaults.buttonColors(Purple),
+            text = "Update Bus Geo",
+            textStyle = TextStyle()
+        )
+
+
+
+    }
 }

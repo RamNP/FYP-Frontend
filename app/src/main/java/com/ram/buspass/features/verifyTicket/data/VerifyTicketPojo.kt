@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.verifyTicket
+package com.ram.buspass.features.verifyTicket.data
 
 data class VerifyTicketPojo(
 	val data: List<DataItem?>? = null,

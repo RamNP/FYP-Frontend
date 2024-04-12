@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.editProfile
+package com.ram.buspass.features.editProfile.data
 
 import com.google.gson.annotations.SerializedName
 

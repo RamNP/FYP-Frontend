@@ -1,37 +1,37 @@
-package com.ram.buspass.features.verifyTicket.presentation
+package com.ram.buspass.features.locationView.presenation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ram.buspass.features.verifyTicket.domain.VerifyTicketUseCase
-import com.ram.buspass.helper.Resource
+import com.ram.buspass.features.locationView.domain.LocationViewUseCase
+import com.ram.buspass.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class VerifyTicketViewModel @Inject constructor(private val verifyTicketUseCase: VerifyTicketUseCase) :
+class LocationViewViewModel @Inject constructor(private val locationViewUseCase: LocationViewUseCase) :
     ViewModel() {
 
-    private var _vTicket by mutableStateOf(VerifyTicketState())
-    val vTicket: VerifyTicketState get() = _vTicket
+    private var _locationView by mutableStateOf(LocationViewState())
+    val locationView: LocationViewState get() = _locationView
 
-    fun getVerifyTick() {
-        verifyTicketUseCase().onEach {
-            _vTicket = when (it) {
+    fun getViewLocation() {
+        locationViewUseCase().onEach {
+            _locationView = when (it) {
                 is Resource.Loading -> {
-                    VerifyTicketState(isLoading = true)
+                    LocationViewState(isLoading = true)
                 }
 
                 is Resource.Success -> {
-                    VerifyTicketState(isData = it.data)
+                    LocationViewState(isData = it.data)
                 }
 
                 is Resource.Error -> {
-                    VerifyTicketState(isError = it.message.toString())
+                    LocationViewState(isError = it.message.toString())
                 }
 
             }

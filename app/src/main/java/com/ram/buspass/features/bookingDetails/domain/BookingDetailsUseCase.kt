@@ -1,7 +1,7 @@
 package com.ram.buspass.features.bookingDetails.domain
 
-import com.ram.buspass.helper.Resource
-import com.ram.buspass.helper.resource.remote.api.model.booTicketDetails.BookingPojo
+import com.ram.buspass.utils.Resource
+import com.ram.buspass.features.bookTicket.data.BookingPojo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

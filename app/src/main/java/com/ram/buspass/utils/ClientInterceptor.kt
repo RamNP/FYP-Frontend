@@ -1,10 +1,10 @@
-package com.ram.buspass.helper
+package com.ram.buspass.utils
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.activity.ComponentActivity
 import com.google.gson.Gson
-import com.ram.buspass.helper.resource.remote.api.model.login.AuthResponse
+import com.ram.buspass.features.login.data.AuthResponse
 import okhttp3.Interceptor
 import okhttp3.Response
 

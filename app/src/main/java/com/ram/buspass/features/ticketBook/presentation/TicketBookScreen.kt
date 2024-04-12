@@ -59,14 +59,16 @@ import androidx.navigation.NavHostController
 import com.ram.buspass.features.components.ButtonView
 import com.ram.buspass.features.components.IconView
 import com.ram.buspass.features.components.TextView
-import com.ram.buspass.helper.ClientInterceptor
-import com.ram.buspass.helper.NetworkObserver
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 import com.ram.buspass.userNavigationBar.UserScreen
+import com.ram.buspass.utils.ClientInterceptor
+import com.ram.buspass.utils.NetworkObserver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun TicketBookViewScreens(
     navController: NavHostController,
@@ -78,13 +80,12 @@ fun TicketBookViewScreens(
     val bookingTicketResult = ticketBookViewModel.bookingTicket
 
     val context = LocalContext.current
-    var busIdExpanded by remember { mutableStateOf(false) }
+    var busNameExpanded by remember { mutableStateOf(false) }
     var mExpanded by remember { mutableStateOf(false) }
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
     // Up Icon when expanded and down icon when collapsed
     val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
     var selectedBusName by remember { mutableStateOf("") }
-
     val userId = ClientInterceptor(context).getUserId()
     var butId by remember { mutableStateOf(0) }
     var ticketId by remember { mutableStateOf(0) }
@@ -128,7 +129,7 @@ fun TicketBookViewScreens(
             label.bus_details?.let { it ->
                 bus_Id.add(it.id ?: 0)
                 busNumber.add(it.bus_number ?: "")
-                busName.add(it.name ?: "")
+                busName.add(it.name)
                 fromTo.add(it.from_to ?: "")
                 busRoute.add(it.route ?: "")
 
@@ -173,47 +174,48 @@ fun TicketBookViewScreens(
                 ) {
 
 //            Bus Name TextFiled
-                    OutlinedTextField(
-                        value = busNameText,
-                        onValueChange = { busNameText = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp)
-                            .onGloballyPositioned { coordinates ->
-                                mTextFieldSize = coordinates.size.toSize()
-                            },
-                        label = { Text(" Select Bus Name") },
-                        trailingIcon = {
-                            Icon(
-                                icon,
-                                "Icon",
-                                Modifier.clickable { busIdExpanded = !busIdExpanded }
-                            )
-                        }
-                    )
+                OutlinedTextField(
+                    value = busNameText,
+                    onValueChange = { busNameText = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                        .onGloballyPositioned { coordinates ->
+                            mTextFieldSize = coordinates.size.toSize()
+                        },
+                    readOnly = true,
+                    label = { Text(" Select Bus Name") },
+                    trailingIcon = {
+                        Icon(
+                            icon,
+                            "Icon",
+                            Modifier.clickable { busNameExpanded = !busNameExpanded }
+                        )
+                    }
+                )
 
                     // Create a drop-down menu with list of bus details,
                     // when clicked, set the Text Field text as the bus id selected
-                    DropdownMenu(
-                        expanded = busIdExpanded,
-                        onDismissRequest = { busIdExpanded = false },
-                        modifier = Modifier
-                            .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
-                    ) {
-                        busName.forEach { busNames ->
-                            DropdownMenuItem(
-                                onClick = {
-                                    busNameText = busNames
-                                    selectedBusName = busNames
-                                    busIdExpanded = false
-                                    showToast(context, "Bus ID : $selectedBusName")
+                DropdownMenu(
+                    expanded = busNameExpanded,
+                    onDismissRequest = { busNameExpanded = false },
+                    modifier = Modifier
+                        .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
+                ) {
+                    busName.forEach { busNames ->
+                        DropdownMenuItem(
+                            onClick = {
+                                busNameText = busNames
+                                selectedBusName = busNames
+                                busNameExpanded = false
+                                showToast(context, "Bus Name: $selectedBusName")
 
-                                }
-                            ) {
-                                Text(text = busNames)
                             }
+                        ) {
+                            Text(text = busNames)
                         }
                     }
+                }
                 }
 
                 filteredData?.forEach { item ->
@@ -272,7 +274,7 @@ fun TicketBookViewScreens(
             }
             LaunchedEffect(key1 = bookingTicketResult, block = {
                 if (bookingTicketResult.isData?.isSuccess == true) {
-                    navController.navigate(UserScreen.MyTikcet.route)
+                    navController.navigate(UserScreen.MyTicket.route)
                     showToast(context, "${bookingTicketResult.isData.message}")
                 }
             })

@@ -1,6 +1,6 @@
 package com.ram.buspass.features.chanagePassword.presentation
 
-import com.ram.buspass.helper.resource.remote.api.model.changePassword.ChangePasswordPojo
+import com.ram.buspass.features.chanagePassword.data.ChangePasswordPojo
 
 data class ChangePasswordState(
     val isLoading: Boolean  = false,

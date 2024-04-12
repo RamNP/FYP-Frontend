@@ -181,9 +181,10 @@ fun EditProfileViewScreen(
 
             ButtonView(
                 onClick = {
-                    editProfileLocationViewModel.getUserEditProfile(email ,userName)
-                    showToast(context, "${editProfileResult.isData?.message}")
 
+                    editProfileLocationViewModel.getUserEditProfile(email ,userName)
+//                    showToast(context, "${editProfileResult.isData?.message}")
+                    navController.navigate("Profile")
 
                 },
 

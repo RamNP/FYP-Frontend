@@ -1,7 +1,7 @@
 package com.ram.buspass.features.passVerify.domain
 
-import com.ram.buspass.helper.Resource
-import com.ram.buspass.helper.resource.remote.api.model.passVerify.PassVerifyPojo
+import com.ram.buspass.utils.Resource
+import com.ram.buspass.features.passVerify.data.PassVerifyPojo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

@@ -1,9 +1,9 @@
-package com.ram.buspass.features.verifyTicket.presentation
+package com.ram.buspass.features.locationView.presenation
 
-import com.ram.buspass.helper.resource.remote.api.model.verifyTicket.VerifyTicketPojo
+import com.ram.buspass.features.locationView.data.LocationViewPojo
 
-data class VerifyTicketState(
+data class LocationViewState(
     val isLoading: Boolean  = false,
-    val isData: VerifyTicketPojo? = null,
+    val isData: LocationViewPojo? = null,
     val isError: String? = null
 )

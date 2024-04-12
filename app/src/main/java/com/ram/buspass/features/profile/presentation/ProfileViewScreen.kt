@@ -50,14 +50,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.ram.buspass.R
 import com.ram.buspass.features.components.TextView
-import com.ram.buspass.helper.ClientInterceptor
-import com.ram.buspass.helper.NetworkObserver
 import com.ram.buspass.helper.resource.remote.api.ApiConstants.BASE_URL
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 import com.ram.buspass.userNavigationBar.ScreenList
 import com.ram.buspass.userNavigationBar.UserScreen
+import com.ram.buspass.utils.ClientInterceptor
+import com.ram.buspass.utils.NetworkObserver
 
 
 @Composable

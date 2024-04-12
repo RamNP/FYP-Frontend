@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.profile
+package com.ram.buspass.features.profile.data
 
 data class ProfilePojo(
 	val user_profile: UserProfile? = null,

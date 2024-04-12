@@ -1,6 +1,6 @@
 package com.ram.buspass.features.profile.presentation
 
-import com.ram.buspass.helper.resource.remote.api.model.profile.ProfilePojo
+import com.ram.buspass.features.profile.data.ProfilePojo
 
 data class ProfileState(
     val isLoading: Boolean  = false,

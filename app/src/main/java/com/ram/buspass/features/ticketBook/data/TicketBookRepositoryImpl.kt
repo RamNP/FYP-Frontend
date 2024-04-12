@@ -3,8 +3,6 @@ package com.ram.buspass.features.ticketBook.data
 import com.ram.buspass.features.ticketBook.domain.BookDto
 import com.ram.buspass.features.ticketBook.domain.TicketBookRepository
 import com.ram.buspass.helper.resource.remote.api.ApiService
-import com.ram.buspass.helper.resource.remote.api.model.ticketBook.TicketBookPojo
-import com.ram.buspass.helper.resource.remote.api.model.ticketBook.TicketBookingPojo
 
 
 class TicketBookRepositoryImpl(private val apiService: ApiService) : TicketBookRepository {

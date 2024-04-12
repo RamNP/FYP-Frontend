@@ -2,7 +2,7 @@ package com.ram.buspass.userNavigationBar
 
 val bottomItems = listOf(
     UserScreen.Book,
-    UserScreen.MyTikcet,
+    UserScreen.MyTicket,
     UserScreen.Location,
     UserScreen.Payment,
     UserScreen.Profile

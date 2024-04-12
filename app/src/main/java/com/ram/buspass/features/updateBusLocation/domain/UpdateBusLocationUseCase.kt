@@ -1,7 +1,7 @@
 package com.ram.buspass.features.updateBusLocation.domain
 
-import com.ram.buspass.helper.Resource
-import com.ram.buspass.helper.resource.remote.api.model.updateBusLocation.LocationPojo
+import com.ram.buspass.utils.Resource
+import com.ram.buspass.features.updateBusLocation.data.LocationPojo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

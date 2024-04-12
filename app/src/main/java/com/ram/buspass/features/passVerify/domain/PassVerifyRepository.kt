@@ -1,6 +1,6 @@
 package com.ram.buspass.features.passVerify.domain
 
-import com.ram.buspass.helper.resource.remote.api.model.passVerify.PassVerifyPojo
+import com.ram.buspass.features.passVerify.data.PassVerifyPojo
 
 interface PassVerifyRepository {
 

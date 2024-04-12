@@ -9,6 +9,8 @@ import com.ram.buspass.features.chanagePassword.data.ChangePasswordRepoImpl
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
 import com.ram.buspass.features.editProfile.data.EditProfileRepoImpl
 import com.ram.buspass.features.editProfile.domain.EditProfileRepository
+import com.ram.buspass.features.locationView.data.LocationViewRepoImpl
+import com.ram.buspass.features.locationView.domain.LocationViewRepository
 import com.ram.buspass.features.login.data.LoginRepoImpl
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.passVerify.data.PassVerifyRepoImpl
@@ -23,7 +25,7 @@ import com.ram.buspass.features.updateBusLocation.data.UpdateBusLocationRepoImpl
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
 import com.ram.buspass.features.verifyTicket.data.VerifyTicketRepoImpl
 import com.ram.buspass.features.verifyTicket.domain.VerifyTicketRepository
-import com.ram.buspass.helper.ClientInterceptor
+import com.ram.buspass.utils.ClientInterceptor
 import com.ram.buspass.helper.resource.local.AppDatabase
 import com.ram.buspass.helper.resource.local.UserDao
 import com.ram.buspass.helper.resource.remote.api.ApiConstants
@@ -131,6 +133,13 @@ object AppModule {
     @Singleton
     fun provideVerifyPassRepositoryImpl(apiService: ApiService): PassVerifyRepository {
         return PassVerifyRepoImpl(apiService)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideLocationViewRepositoryImpl(apiService: ApiService): LocationViewRepository {
+        return LocationViewRepoImpl(apiService)
     }
 
 

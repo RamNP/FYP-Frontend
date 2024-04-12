@@ -1,6 +1,6 @@
 package com.ram.buspass.features.updateBusLocation.presentation
 
-import com.ram.buspass.helper.resource.remote.api.model.updateBusLocation.LocationPojo
+import com.ram.buspass.features.updateBusLocation.data.LocationPojo
 
 data class UpdateBusLocationState(
     val isLoading: Boolean  = false,

@@ -1,6 +1,6 @@
 package com.ram.buspass.features.chanagePassword.domain
 
-import com.ram.buspass.helper.resource.remote.api.model.changePassword.ChangePasswordPojo
+import com.ram.buspass.features.chanagePassword.data.ChangePasswordPojo
 
 interface ChangePasswordRepository {
 

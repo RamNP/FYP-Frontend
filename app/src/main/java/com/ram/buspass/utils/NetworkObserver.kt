@@ -1,4 +1,4 @@
-package com.ram.buspass.helper
+package com.ram.buspass.utils
 
 import android.content.Context
 import android.net.ConnectivityManager

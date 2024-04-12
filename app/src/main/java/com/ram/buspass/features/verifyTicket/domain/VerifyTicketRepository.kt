@@ -1,6 +1,6 @@
 package com.ram.buspass.features.verifyTicket.domain
 
-import com.ram.buspass.helper.resource.remote.api.model.verifyTicket.VerifyTicketPojo
+import com.ram.buspass.features.verifyTicket.data.VerifyTicketPojo
 
 interface  VerifyTicketRepository {
     suspend fun getVerifyTicketDetails(): VerifyTicketPojo

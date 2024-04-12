@@ -1,7 +1,7 @@
 package com.ram.buspass.features.profile.domain
 
-import com.ram.buspass.helper.Resource
-import com.ram.buspass.helper.resource.remote.api.model.profile.ProfilePojo
+import com.ram.buspass.utils.Resource
+import com.ram.buspass.features.profile.data.ProfilePojo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

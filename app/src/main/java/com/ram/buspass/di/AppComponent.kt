@@ -7,6 +7,8 @@ import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordUseCase
 import com.ram.buspass.features.editProfile.domain.EditProfileRepository
 import com.ram.buspass.features.editProfile.domain.EditProfileUseCase
+import com.ram.buspass.features.locationView.domain.LocationViewRepository
+import com.ram.buspass.features.locationView.domain.LocationViewUseCase
 import com.ram.buspass.features.login.domain.LoginRepository
 import com.ram.buspass.features.login.domain.LoginUseCase
 import com.ram.buspass.features.passVerify.domain.PassVerifyRepository
@@ -89,6 +91,12 @@ class AppComponent {
     @Singleton
     fun provideVerifyPassUseCase(passVerifyRepository: PassVerifyRepository): PassVerifyUseCase {
         return PassVerifyUseCase(passVerifyRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationViewUseCase(locationViewRepository: LocationViewRepository): LocationViewUseCase {
+        return LocationViewUseCase(locationViewRepository)
     }
 
 

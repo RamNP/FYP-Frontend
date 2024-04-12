@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.passVerify
+package com.ram.buspass.features.passVerify.data
 
 
 data class PassVerifyPojo(

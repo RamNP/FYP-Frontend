@@ -1,4 +1,4 @@
-package com.ram.buspass.helper.resource.remote.api.model.ticketBook
+package com.ram.buspass.features.ticketBook.data
 
 import com.google.gson.annotations.SerializedName
 

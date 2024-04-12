@@ -9,6 +9,7 @@ import com.ram.buspass.features.editProfile.presentation.EditProfileViewScreen
 import com.ram.buspass.features.passVerify.presentation.PassVerifyViewScreen
 import com.ram.buspass.features.profile.presentation.ProfileViewScreen
 import com.ram.buspass.features.updateBusLocation.presentation.BusLocationViewScreen
+import com.ram.buspass.features.updateBusLocation.presentation.UpdateBusLocationViewScreen
 import com.ram.buspass.features.verifyTicket.presentation.VerifyTicketViewScreen
 import com.ram.buspass.userNavigationBar.ScreenList
 
@@ -40,6 +41,10 @@ fun ConductorMainScreenNavigation(
         }
         composable(ScreenList.ChangePassword.route) {
             ChangePasswordScreen(navController)
+        }
+
+        composable(ScreenList.GoogleMapsScreen.route){
+            UpdateBusLocationViewScreen(navController)
         }
 
     }

@@ -1,6 +1,6 @@
 package com.ram.buspass.features.verifyTicket.presentation
 
-import com.ram.buspass.helper.resource.remote.api.model.verifyTicket.VerifyTicketPojo
+import com.ram.buspass.features.verifyTicket.data.VerifyTicketPojo
 
 data class VerifyTicketState(
     val isLoading: Boolean  = false,
