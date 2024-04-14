@@ -11,9 +11,9 @@ data class BusDetailsItem(
 	val from_to: String? = null,
 	val route: String? = null,
 	val bus_speed: String? = null,
-	val latitude: Any? = null,
+	val latitude: Double? = null,
 	val name: String? = null,
 	val bus_number: String? = null,
-	val longitude: Any? = null
+	val longitude: Double? = null
 )
 

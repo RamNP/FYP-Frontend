@@ -33,6 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
@@ -42,45 +45,45 @@ import com.google.android.gms.maps.model.PolylineOptions
 
 
 @Composable
-fun UpdateBusLocationViewScreen(navController: NavHostController) {
+fun UpdateBusLocationViewScreens(navController: NavHostController) {
 
     var isMapOpened by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MainGoogleMap(navController)
-//        Button(
-//            onClick = {
-//                isMapOpened = true
-//            },
-//            enabled = !isMapOpened
-//        ) {
-//            Text("Update bus location Map")
-//        }
-//
-//        if (isMapOpened) {
-////            MainGoogleMap()
-//        }
+        Button(
+            onClick = {
+                isMapOpened = true
+            },
+            enabled = !isMapOpened
+        ) {
+            Text("Update bus location Map")
+        }
+
+        if (isMapOpened) {
+            UpdateBusLocationViewScreen(navController)
+        }
     }
-
 }
-
-
 
 @SuppressLint("MissingPermission")
 @Composable
-fun MainGoogleMap(navController: NavHostController) {
+fun UpdateBusLocationViewScreen(navController: NavHostController) {
     var markers by remember { mutableStateOf(emptyList<LatLng>()) }
     var lat by remember { mutableStateOf("") }
     var lng by remember { mutableStateOf("") }
     var mapView: MapView? by remember { mutableStateOf(null) }
     var googleMap: GoogleMap? by remember { mutableStateOf(null) }
     var polyline: Polyline? = null // Variable to hold the polyline
+
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    val fusedLocationClient: FusedLocationProviderClient = remember { LocationServices.getFusedLocationProviderClient(context) }
 
     // Permission request launcher
     val requestPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
@@ -98,17 +101,33 @@ fun MainGoogleMap(navController: NavHostController) {
                 markers.forEach { marker ->
                     googleMap?.addMarker(MarkerOptions().position(marker))
                 }
-//                setMapClickListener()
+//                setMapClickListener(map)
+//                requestUserLocation()
             }
         } else {
             // Permission denied, handle accordingly
         }
     }
 
-    fun setMapClickListener() {
-        googleMap?.setOnMapClickListener { latLng ->
+    fun requestUserLocation() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                location?.let {
+                    val latLng = LatLng(location.latitude, location.longitude)
+                    googleMap?.addMarker(MarkerOptions().position(latLng).title("Current Location"))
+                    googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+                }
+            }
+        } else {
+            // Permission denied, handle accordingly
+        }
+    }
+
+    fun setMapClickListener(map: GoogleMap) {
+        map.setOnMapClickListener { latLng ->
             markers = markers + listOf(latLng)
-            googleMap?.addMarker(MarkerOptions().position(latLng))
+            map.addMarker(MarkerOptions().position(latLng))
             if (markers.size >= 2) {
                 polyline?.remove() // Remove the existing polyline if any
                 val polylineOptions = PolylineOptions().apply {
@@ -118,7 +137,7 @@ fun MainGoogleMap(navController: NavHostController) {
                         add(marker)
                     }
                 }
-                polyline = googleMap?.addPolyline(polylineOptions) // Draw new polyline
+                polyline = map.addPolyline(polylineOptions) // Draw new polyline
             }
             val locationData = markers.mapIndexed { index, latLng ->
                 "Location${index + 1}" to hashMapOf(
@@ -126,7 +145,8 @@ fun MainGoogleMap(navController: NavHostController) {
                     "longitude" to latLng.longitude
                 )
             }.toMap()
-//            databaseRef.setValue(locationData)
+            lat = latLng.latitude.toString()
+            lng = latLng.longitude.toString()
         }
     }
 
@@ -148,7 +168,8 @@ fun MainGoogleMap(navController: NavHostController) {
                     markers.forEach { marker ->
                         googleMap?.addMarker(MarkerOptions().position(marker))
                     }
-                    setMapClickListener()
+                    requestUserLocation()
+                    setMapClickListener(map)
                 }
             } else {
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -183,10 +204,16 @@ fun MainGoogleMap(navController: NavHostController) {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
             )
+
         }
-        Button(onClick = { navController.navigate("Update") }) {
-            Text(text = "Updte")
+
+        // Button to navigate to OtherScreen and pass latitude and longitude values
+        Button(onClick = {
+            navController.navigate("updateGeo/${lat}/${lng}")
+        }) {
+            Text(text = "Navigate to Other Screen")
         }
+
         Spacer(modifier = Modifier.height(16.dp))
         AndroidView(
             factory = { context ->
@@ -200,3 +227,4 @@ fun MainGoogleMap(navController: NavHostController) {
         )
     }
 }
+

@@ -31,6 +31,9 @@ sealed class ScreenList(val route: String) {
     object EditProfile : ScreenList("EditProfile")
     object ChangePassword : ScreenList("ChangePassword")
     object GoogleMapsScreen : ScreenList("GoogleMapsScreen")
+    object ShowGoogleMapsScreen : ScreenList("ShowGoogleMapsScreen")
+
+
 
 
 }

@@ -43,6 +43,14 @@ fun UserMainScreenNavigation(navController: NavHostController, maiNavController:
         }
 
 
+        composable(ScreenList.ShowGoogleMapsScreen.route) {
+
+
+
+
+        }
+
+
         composable(ScreenList.GoogleMapsScreen.route){
             UpdateBusLocationViewScreen(navController)
         }

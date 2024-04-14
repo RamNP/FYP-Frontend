@@ -2,8 +2,10 @@ package com.ram.buspass.conductorNavigationBar
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.ram.buspass.features.chanagePassword.presentation.ChangePasswordScreen
 import com.ram.buspass.features.editProfile.presentation.EditProfileViewScreen
 import com.ram.buspass.features.passVerify.presentation.PassVerifyViewScreen
@@ -24,14 +26,20 @@ fun ConductorMainScreenNavigation(
         composable(ConductorNavigation.VerifyTicket.route) {
             VerifyTicketViewScreen(navController)
         }
-        composable(ConductorNavigation.UpdateLocation.route) {
-            BusLocationViewScreen(navController)
+        composable(
+            route = ConductorNavigation.UpdateGeo.route,
+            arguments = listOf(
+                navArgument( "latitude") { type = NavType.StringType },
+                navArgument("longitude") { type = NavType.StringType }
+            )) {navBackStackEntry ->
+            val latitude = navBackStackEntry.arguments?.getString("latitude") ?: ""
+            val longitude = navBackStackEntry.arguments?.getString("longitude")?: ""
+            BusLocationViewScreen(latitude , longitude ,navController)
 
         }
         composable(ConductorNavigation.VerifyPass.route) {
             PassVerifyViewScreen(navController)
         }
-
         composable(ConductorNavigation.Profile.route) {
             ProfileViewScreen(navController, maiNavController)
         }
@@ -44,7 +52,7 @@ fun ConductorMainScreenNavigation(
         }
 
         composable(ScreenList.GoogleMapsScreen.route){
-            UpdateBusLocationViewScreen(navController)
+                UpdateBusLocationViewScreen(navController)
         }
 
     }

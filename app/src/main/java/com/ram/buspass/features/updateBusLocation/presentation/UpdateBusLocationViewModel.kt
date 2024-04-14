@@ -18,7 +18,7 @@ class UpdateBusLocationViewModel @Inject constructor(private val updateBusLocati
     private var _busLocation by mutableStateOf(UpdateBusLocationState())
     val busLocation: UpdateBusLocationState get() = _busLocation
 
-    fun getBusLocation(busNumber: String? = null,latitude: Float? = null, longitude: Float? = null) {
+    fun getBusLocation(busNumber: String? = null,latitude: String? = null, longitude: String? = null) {
         updateBusLocationUseCase(busNumber,latitude , longitude, ).onEach { resource ->
             _busLocation = when(resource) {
                 is Resource.Loading -> {

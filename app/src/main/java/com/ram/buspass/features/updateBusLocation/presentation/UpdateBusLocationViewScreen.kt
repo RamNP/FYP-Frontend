@@ -12,6 +12,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,14 +36,16 @@ import com.ram.buspass.ui.theme.Purple
 
 @Composable
 fun BusLocationViewScreen(
+    latitude: String,
+    longitude: String,
     navController: NavHostController,
     updateBusLocationViewModel: UpdateBusLocationViewModel = hiltViewModel()
 ) {
     val getBusLocation = updateBusLocationViewModel.busLocation
     val context = LocalContext.current
     var busNumber by remember { mutableStateOf("") }
-    var latitude by remember { mutableStateOf(0f) }
-    var longitude by remember { mutableStateOf(0f) }
+//    var latitude by remember { mutableStateOf(0f) }
+//    var longitude by remember { mutableStateOf(0f) }
     var isBusNumberEmpty by remember { mutableStateOf(false) }
     var isLatitudeEmpty by remember { mutableStateOf(false) }
     var isLongitudeEmpty by remember { mutableStateOf(false) }
@@ -97,37 +100,43 @@ fun BusLocationViewScreen(
                 .padding(5.dp)
         )
 
-        InputTextFieldView(
-            value = latitude.toString(),
-            onValueChange = { latitude = it.toFloat() },
-            label = "Bus Latitude",
-            placeholder = "Enter Latitude",
-            textStyle = TextStyle(),
-            isError = isLatitudeEmpty,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            invalidMessage = " Latitude Text field is Empty!",
-            errorColor = Color.Red,
-            leadingIcon = { IconView(imageVector = Icons.Default.Person) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-        )
+        Text(text = "Latitude: $latitude")
+        Text(text = "Longitude: $longitude")
+        Log.e("LatitudeValue" ,"$latitude")
+        Log.e("LongitudeValue" ,"$longitude")
 
-        InputTextFieldView(
-            value = longitude.toString(), // Convert longitude to String
-            onValueChange = { longitude = it.toFloat() },
-            label = "Bus Longitude",
-            placeholder = "Enter Longitude",
-            textStyle = TextStyle(),
-            isError = isLongitudeEmpty,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            invalidMessage = " Longitude Text field is Empty!",
-            errorColor = Color.Red,
-            leadingIcon = { IconView(imageVector = Icons.Default.Person) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-        )
+
+//        InputTextFieldView(
+//            value = latitude.toString(),
+//            onValueChange = { latitude = it.toDouble() },
+//            label = "Bus Latitude",
+//            placeholder = "Enter Latitude",
+//            textStyle = TextStyle(),
+//            isError = isLatitudeEmpty,
+//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+//            invalidMessage = " Latitude Text field is Empty!",
+//            errorColor = Color.Red,
+//            leadingIcon = { IconView(imageVector = Icons.Default.Person) },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(5.dp)
+//        )
+
+//        InputTextFieldView(
+//            value = longitude.toString(), // Convert longitude to String
+//            onValueChange = { longitude = it.toDouble()},
+//            label = "Bus Longitude",
+//            placeholder = "Enter Longitude",
+//            textStyle = TextStyle(),
+//            isError = isLongitudeEmpty,
+//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+//            invalidMessage = " Longitude Text field is Empty!",
+//            errorColor = Color.Red,
+//            leadingIcon = { IconView(imageVector = Icons.Default.Person) },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(5.dp)
+//        )
 
         ButtonView(
             onClick = {

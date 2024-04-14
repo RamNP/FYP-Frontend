@@ -5,7 +5,7 @@ import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationReposi
 import com.ram.buspass.helper.resource.remote.api.ApiService
 
 class UpdateBusLocationRepoImpl (private val apiService: ApiService):UpdateBusLocationRepository{
-    override suspend fun getBusLocation(busNumber: String?, latitude: Float?, longitude: Float?
+    override suspend fun getBusLocation(busNumber: String?, latitude: String?, longitude: String?
     ): LocationPojo? {
         val locationDetails = BusLocationDto(busNumber ,latitude ,longitude)
         return apiService.updateBusLocation(locationDetails)

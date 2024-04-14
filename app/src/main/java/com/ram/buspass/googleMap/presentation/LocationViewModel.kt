@@ -22,8 +22,6 @@ class LocationViewModel @Inject constructor(
     private val _viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState.Loading)
     val viewState = _viewState.asStateFlow()
 
-    /* This function is responsible for updating the ViewState based
-       on the event coming from the view */
     fun handle(event: PermissionEvent) {
         when (event) {
             PermissionEvent.Granted -> {

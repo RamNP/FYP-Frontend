@@ -1,6 +1,8 @@
 package com.ram.buspass.features.locationView.presenation
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,8 +35,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.ram.buspass.features.components.ButtonView
 import com.ram.buspass.features.components.TextView
 import com.ram.buspass.features.locationView.data.BusDetailsItem
@@ -48,11 +56,6 @@ fun LocationViewScreen(
     locationViewViewModel: LocationViewViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    var busNumber by remember { mutableStateOf("") }
-    var busName by remember { mutableStateOf("") }
-    var fromTo by remember { mutableStateOf("") }
-    var route by remember { mutableStateOf("") }
-    var busSpeed by remember { mutableStateOf("") }
     val locationViewResults = locationViewViewModel.locationView
 
 
@@ -75,7 +78,11 @@ fun LocationViewScreen(
 
     locationViewResults.isData?.bus_details.let { locationResults ->
 
-        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 40.dp)
+        ) {
 
             Row(
                 modifier = Modifier
@@ -109,9 +116,10 @@ fun LocationViewScreen(
                             fromTo = it.from_to ?: "",
                             route = it.route ?: "",
                             busSpeed = it.bus_speed ?: "",
-                            latitude = it.latitude,
-                            longitude = it.longitude ,
-                            navController =  navController
+                            latitude = it.latitude ?: 0.0,
+                            longitude = it.longitude,
+                            navController = navController,
+                            context = context
                         )
                     }
                 }
@@ -127,15 +135,16 @@ fun LocationViewCard(
     fromTo: String?,
     route: String?,
     busSpeed: String?,
-    latitude: Any?,
-    longitude: Any?,
-    navController: NavHostController
+    latitude: Double?,
+    longitude: Double?,
+    navController: NavHostController,
+    context: Context
 ) {
+    var mapDisplayed by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
+            .fillMaxSize()
             .border(
                 width = 1.dp,
                 color = Color.Gray,
@@ -224,12 +233,62 @@ fun LocationViewCard(
         }
 
 
-        ButtonView(
-            onClick = { val uri = "geo:${latitude},${longitude}?z=15"
-                navController.navigate(uri) },
-            btnColor = ButtonDefaults.buttonColors(Purple),
-            text = "Show Geo",
-            textStyle = TextStyle() , modifier = Modifier.padding(start = 10.dp , bottom = 10.dp)
-        )
+    }
+    Column(modifier = Modifier.fillMaxSize()) {
+
+
+        Box(modifier = Modifier.fillMaxSize()) {
+
+            ButtonView(
+                onClick = {
+                    mapDisplayed = true
+//                    navController.navigate(ScreenList.ShowGoogleMapsScreen.route)
+                },
+                btnColor = ButtonDefaults.buttonColors(Purple),
+                text = "Show Geo",
+                textStyle = TextStyle(), modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
+            )
+                if (mapDisplayed) {
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp)
+                            .padding(top = 2.dp)
+                    ) {
+
+                        MapViewContainer(latitude = latitude ?: 0.0, longitude = longitude ?: 0.0)
+                    }
+                }
+
+
+
+
+        }
     }
 }
+
+
+@Composable
+fun MapViewContainer(latitude: Double, longitude: Double) {
+    val context = LocalContext.current
+
+
+        AndroidView(
+
+            factory = { context ->
+                MapView(context).apply {
+                    onCreate(Bundle())
+                    getMapAsync { googleMap ->
+                        val location = LatLng(latitude, longitude)
+                        googleMap.addMarker(
+                            MarkerOptions().position(location).title("Bus Current Location")
+                        )
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+                    }
+                }
+            },
+            modifier = Modifier
+                .fillMaxSize()
+        )
+    }

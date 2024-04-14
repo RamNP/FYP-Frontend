@@ -6,7 +6,7 @@ data class BusLocationDto(
     @SerializedName("bus_number")
     val busNumber: String?,
     @SerializedName("latitude")
-    val latitude: Float?,
+    val latitude: String?,
     @SerializedName("longitude")
-    val longitude: Float?
+    val longitude: String?
 )
