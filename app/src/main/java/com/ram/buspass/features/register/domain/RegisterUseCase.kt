@@ -5,11 +5,16 @@ import com.ram.buspass.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-    class RegisterUseCase(private val registerRepository: RegisterRepository) {
-    operator fun invoke(email: String? = null, username:String? ,password: String? = null, role: String? = null): Flow<Resource<RegisterPojo?>> = flow {
+class RegisterUseCase(private val registerRepository: RegisterRepository) {
+    operator fun invoke(email: String?, username:String? ,password: String?, role: String?): Flow<Resource<RegisterPojo>> = flow {
         emit(Resource.Loading())
         try {
-            emit(Resource.Success(registerRepository.getRegisterUser(email,username, password, role)))
+            val response = registerRepository.getRegisterUser(email,username, password, role)
+            if (response?.is_success == true){
+                emit(Resource.Success(data = response))
+            } else {
+                emit(Resource.Error(message = response?.message))
+            }
         } catch (e: Exception){
             emit(Resource.Error(e.message.toString()))
         }

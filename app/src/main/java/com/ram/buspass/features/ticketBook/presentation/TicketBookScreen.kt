@@ -56,15 +56,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.utils.components.ButtonView
-import com.ram.buspass.utils.components.IconView
-import com.ram.buspass.utils.components.TextView
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 import com.ram.buspass.userNavigationBar.UserScreen
 import com.ram.buspass.utils.ClientInterceptor
 import com.ram.buspass.utils.NetworkObserver
+import com.ram.buspass.utils.components.ButtonView
+import com.ram.buspass.utils.components.IconView
+import com.ram.buspass.utils.components.TextView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
@@ -85,7 +85,7 @@ fun TicketBookViewScreens(
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
     // Up Icon when expanded and down icon when collapsed
     val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-    var selectedBusName by remember { mutableStateOf("") }
+    var selectedBusName by remember { mutableStateOf("Nepal yatayat") }
     val userId = ClientInterceptor(context).getUserId()
     var butId by remember { mutableStateOf(0) }
     var ticketId by remember { mutableStateOf(0) }

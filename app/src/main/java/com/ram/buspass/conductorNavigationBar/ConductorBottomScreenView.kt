@@ -26,15 +26,9 @@ fun ConductorMainScreenNavigation(
         composable(ConductorNavigation.VerifyTicket.route) {
             VerifyTicketViewScreen(navController)
         }
-        composable(
-            route = ConductorNavigation.UpdateGeo.route,
-            arguments = listOf(
-                navArgument( "latitude") { type = NavType.StringType },
-                navArgument("longitude") { type = NavType.StringType }
-            )) {navBackStackEntry ->
-            val latitude = navBackStackEntry.arguments?.getString("latitude") ?: ""
-            val longitude = navBackStackEntry.arguments?.getString("longitude")?: ""
-            BusLocationViewScreen(latitude , longitude ,navController)
+        composable(ConductorNavigation.UpdateGeo.route,)
+        {
+            BusLocationViewScreen(navController)
 
         }
         composable(ConductorNavigation.VerifyPass.route) {
@@ -51,9 +45,18 @@ fun ConductorMainScreenNavigation(
             ChangePasswordScreen(navController)
         }
 
-        composable(ScreenList.GoogleMapsScreen.route){
-                UpdateBusLocationViewScreen(navController)
+
+        composable(
+            route = ScreenList.GoogleMapsScreen.route,
+            arguments = listOf(
+                navArgument( "bus_number") { type = NavType.StringType }
+            )) {navBackStackEntry ->
+            val bus_number = navBackStackEntry.arguments?.getString("bus_number") ?: ""
+            UpdateBusLocationViewScreen(bus_number,navController )
+
+
         }
+
 
     }
 

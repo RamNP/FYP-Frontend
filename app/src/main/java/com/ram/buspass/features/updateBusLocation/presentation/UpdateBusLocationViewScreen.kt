@@ -1,5 +1,6 @@
 package com.ram.buspass.features.updateBusLocation.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,8 +21,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.MyLocation
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -38,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,23 +47,20 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.utils.components.ButtonView
-import com.ram.buspass.utils.components.IconView
-import com.ram.buspass.utils.components.InputTextFieldView
-import com.ram.buspass.utils.components.TextView
+import com.ram.buspass.R
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
-import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 import com.ram.buspass.utils.NetworkObserver
+import com.ram.buspass.utils.components.InputTextFieldView
+import com.ram.buspass.utils.components.TextView
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun BusLocationViewScreen(
-    latitude: String,
-    longitude: String,
     navController: NavHostController,
     updateBusLocationViewModel: UpdateBusLocationViewModel = hiltViewModel()
 ) {
-    val getBusLocation = updateBusLocationViewModel.busLocation
     val getBookingBus = updateBusLocationViewModel.bookingBus
     val connection by NetworkObserver.connectivityState()
     val isConnected = connection === NetworkObserver.ConnectionState.Available
@@ -73,9 +70,7 @@ fun BusLocationViewScreen(
     var mExpanded by remember { mutableStateOf(false) }
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
     var busId by remember { mutableStateOf(0) }
-
     val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-
     var isBusNumberEmpty by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = Unit, block = {
@@ -105,7 +100,6 @@ fun BusLocationViewScreen(
             busNumber.add(label.bus_number ?: "")
 
         }
-
         var busNumberText by remember { mutableStateOf(busNumber.getOrNull(0).toString()) }
 
 
@@ -189,9 +183,11 @@ fun BusLocationViewScreen(
                 }
             }
             filteredData?.forEach { item ->
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
 
 
                     BookingBusCard(
@@ -200,135 +196,16 @@ fun BusLocationViewScreen(
                         fromTo = item.from_to ?: "",
                         route = item.route ?: "",
                         busSpeed = item.bus_speed ?: "",
+                        onClickAction = {
+                            navController.navigate("GoogleMapsScreen/${busNumberText}")
+
+                        }
                     )
                 }
             }
         }
     }
-
-
-//Location Update api call
-    if (getBusLocation.isLoading) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                TextView(
-                    text = "Waiting is Page is Opening  ..",
-                    style = TextStyle(color = Color.Gray, fontSize = 18.sp),
-                )
-                androidx.compose.material3.CircularProgressIndicator(
-                    1f,
-                    modifier = Modifier,
-                    color = Purple,
-                )
-            }
-        }
-    }
-
-    LaunchedEffect(key1 = getBusLocation.isError, block = {
-        if (getBusLocation.isError.isNotEmpty()) {
-            showToast(context, getBusLocation.isError)
-
-        }
-    })
-
-
-    LaunchedEffect(key1 = getBusLocation.isData, block = {
-        if (getBusLocation.isData?.is_success == true) {
-            showToast(context, "${getBusLocation.isData.message}")
-
-        }
-    })
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 320.dp)
-        ) {
-            InputTextFieldView(
-                value = latitude,
-                onValueChange = { },
-                label = "Bus Latitude",
-                placeholder = "Enter Latitude",
-                textStyle = TextStyle(),
-                isError = false,
-                readOnly = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                invalidMessage = "",
-                errorColor = Color.Red,
-                leadingIcon = { IconView(imageVector = Icons.Default.MyLocation) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            )
-
-            InputTextFieldView(
-                value = longitude.toString(), // Convert longitude to String
-                onValueChange = {},
-                label = "Bus Longitude",
-                placeholder = "Enter Longitude",
-                textStyle = TextStyle(),
-                readOnly = true,
-                isError = false,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                invalidMessage = "",
-                errorColor = Color.Red,
-                leadingIcon = { IconView(imageVector = Icons.Default.MyLocation) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            )
-
-
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            ButtonView(
-                onClick = {
-                    updateBusLocationViewModel.getBusLocation(
-                        selectedBusNumber,
-                        latitude,
-                        longitude
-                    )
-//                    Log.e("is_success", "${getBusLocation.isData?.message}")
-                    showToast(context, "Bus location updated successfully")
-
-
-                },
-                btnColor = ButtonDefaults.buttonColors(Purple),
-                text = "Update",
-                textStyle = TextStyle()
-            )
-
-
-            ButtonView(
-                onClick = { navController.navigate("GoogleMapsScreen") },
-                btnColor = ButtonDefaults.buttonColors(Purple),
-                text = "Update Bus Geo",
-                textStyle = TextStyle()
-            )
-
-
-        }
-    }
 }
-
 @Composable
 fun BookingBusCard(
     busNumber: String?,
@@ -336,10 +213,13 @@ fun BookingBusCard(
     fromTo: String?,
     route: String?,
     busSpeed: String?,
-) {
+    onClickAction: () -> Unit,
+
+    ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClickAction() }
             .border(
                 width = 1.dp,
                 color = Color.Gray,
@@ -351,6 +231,10 @@ fun BookingBusCard(
             ),
         colors = CardDefaults.cardColors(White)
     ) {
+        Row(modifier = Modifier
+            .fillMaxWidth()) {
+
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -405,7 +289,13 @@ fun BookingBusCard(
 
             )
 
+        }
+            Row(modifier = Modifier
+                .fillMaxWidth()) {
 
+                Image(painter = painterResource(id = R.mipmap.ic_bus), contentDescription = null)
+
+            }
         }
 
     }

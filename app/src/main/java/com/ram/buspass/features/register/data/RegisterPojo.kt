@@ -7,6 +7,5 @@ data class RegisterPojo(
 	val message: String? = null,
 	@SerializedName("is_success")
 	val is_success: Boolean? = null,
-
 )
 

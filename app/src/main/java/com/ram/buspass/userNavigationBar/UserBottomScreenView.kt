@@ -10,7 +10,6 @@ import com.ram.buspass.features.editProfile.presentation.EditProfileViewScreen
 import com.ram.buspass.features.locationView.presenation.LocationViewScreen
 import com.ram.buspass.features.profile.presentation.ProfileViewScreen
 import com.ram.buspass.features.ticketBook.presentation.TicketBookViewScreens
-import com.ram.buspass.features.updateBusLocation.presentation.UpdateBusLocationViewScreen
 
 
 @Composable
@@ -48,9 +47,9 @@ fun UserMainScreenNavigation(
         composable(ScreenList.ShowGoogleMapsScreen.route) {
         }
 
-        composable(ScreenList.GoogleMapsScreen.route) {
-            UpdateBusLocationViewScreen(navController)
-        }
+//        composable(ScreenList.GoogleMapsScreen.route) {
+//            UpdateBusLocationViewScreen(navController, bus_number)
+//        }
 
     }
 

@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.ram.buspass.R
-import com.ram.buspass.utils.components.TextView
 import com.ram.buspass.helper.resource.remote.api.ApiConstants.BASE_URL
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
@@ -58,6 +57,7 @@ import com.ram.buspass.userNavigationBar.ScreenList
 import com.ram.buspass.userNavigationBar.UserScreen
 import com.ram.buspass.utils.ClientInterceptor
 import com.ram.buspass.utils.NetworkObserver
+import com.ram.buspass.utils.components.TextView
 
 
 @Composable
@@ -83,8 +83,17 @@ fun ProfileViewScreen(
 
     if (profileResult.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(1f)
-        }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextView(
+                    text = "Waiting This Page is Opening..",
+                    style = TextStyle( color = Color.Gray , fontSize = 18.sp),
+                )
+                CircularProgressIndicator(1f, modifier = Modifier, color = Purple , )
+            }        }
     }
     if (profileResult.isError != null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -330,12 +339,9 @@ fun ProfileCard(
                 Icon(imageVector = Icons.Default.PersonOutline, contentDescription = "")
                 Text(text = "User Id: $userId", modifier = Modifier.padding(top = 2.dp))
 
-
-
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding()
+                        .fillMaxWidth().padding(start = 10.dp)
                 ) {
                     Icon(imageVector = Icons.Default.People, contentDescription = "")
                     Text(

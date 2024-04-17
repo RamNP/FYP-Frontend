@@ -29,11 +29,10 @@ sealed class ScreenList(val route: String) {
     object BottomNavMenuConductor : ScreenList("BottomNavMenuConductor")
     object EditProfile : ScreenList("EditProfile")
     object ChangePassword : ScreenList("ChangePassword")
-    object GoogleMapsScreen : ScreenList("GoogleMapsScreen")
+    object GoogleMapsScreen : ScreenList("GoogleMapsScreen/{bus_number}")
     object ShowGoogleMapsScreen : ScreenList("ShowGoogleMapsScreen")
 
 
 
 
 }
-

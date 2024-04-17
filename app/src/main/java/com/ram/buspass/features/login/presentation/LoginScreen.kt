@@ -38,6 +38,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
 import com.ram.buspass.R
+import com.ram.buspass.features.login.data.AuthResponse
+import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
+import com.ram.buspass.ui.theme.Purple
+import com.ram.buspass.userNavigationBar.ScreenList
+import com.ram.buspass.utils.ClientInterceptor
+import com.ram.buspass.utils.NetworkObserver
 import com.ram.buspass.utils.components.ButtonView
 import com.ram.buspass.utils.components.ClickableTextView
 import com.ram.buspass.utils.components.IconView
@@ -45,13 +51,9 @@ import com.ram.buspass.utils.components.InputTextFieldView
 import com.ram.buspass.utils.components.PainterImageView
 import com.ram.buspass.utils.components.PasswordTextFieldView
 import com.ram.buspass.utils.components.TextView
-import com.ram.buspass.features.login.data.AuthResponse
-import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
-import com.ram.buspass.ui.theme.Purple
-import com.ram.buspass.userNavigationBar.ScreenList
-import com.ram.buspass.utils.ClientInterceptor
-import com.ram.buspass.utils.NetworkObserver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun LoginViewScreen(

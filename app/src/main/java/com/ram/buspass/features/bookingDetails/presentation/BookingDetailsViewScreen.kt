@@ -90,8 +90,17 @@ fun BookTicketDetailsViewScreen(
 
     if (bookingResults.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(1f)
-        }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextView(
+                    text = "Waiting This Page is Opening..",
+                    style = TextStyle( color = Color.Gray , fontSize = 18.sp),
+                )
+                CircularProgressIndicator(1f, modifier = Modifier, color = Purple , )
+            }        }
     }
     if (bookingResults.isError != null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -121,7 +130,7 @@ fun BookTicketDetailsViewScreen(
                         color = Color.Black, modifier = Modifier.padding(end = 80.dp)
                     )
                 }
-
+//Search bar search by Bus name/
                 SearchView(state = textState, placeHolder = "Search here...", modifier = Modifier)
 
                 LazyColumn(

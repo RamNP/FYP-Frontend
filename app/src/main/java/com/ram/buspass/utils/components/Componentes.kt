@@ -262,6 +262,69 @@ fun InputTextFieldView(
         }
     }
 }
+
+
+
+// input text fields
+@Composable
+fun InputTextFieldViewLat(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    leadingIcon: @Composable() (() -> Unit)? = null,
+    trailingIcon: @Composable() (() -> Unit)? = null,
+
+    modifier: Modifier ,
+    placeholder: String,
+    textStyle: TextStyle,
+    isEmpty: Boolean = false,
+    isError: Boolean = false,
+    singleLine: Boolean = true,
+
+    maxLines: Int = 1,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+    shape: Shape = ShapeDefaults.Medium,
+    invalidMessage: String,
+    errorColor: Color = Color.Unspecified
+) {
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            label = { TextView(text = label, style = textStyle) },
+            placeholder = {
+                TextView(
+                    text = placeholder,
+                    style = TextStyle(
+                        color = Color.Gray,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal,
+                        lineHeight = 24.sp
+                    ),
+                    modifier = Modifier
+                )
+            },
+            trailingIcon = trailingIcon,
+            leadingIcon = leadingIcon,
+            enabled = enabled,
+            readOnly = readOnly,
+            keyboardOptions = keyboardOptions,// KeyboardOptions(keyboardType = KeyboardType.Text),
+            singleLine = singleLine,
+            maxLines = maxLines,
+            shape = shape,
+            isError = (isEmpty || isError),
+            modifier = modifier
+        )
+        if (isEmpty) {
+            TextView(text = "Email Text field is Empty!", style = TextStyle(color = errorColor))
+        }
+        if (isError) {
+            TextView(text = invalidMessage, style = TextStyle(color = errorColor))
+        }
+    }
+}
 //Search bar text filed
 
 @Composable
@@ -371,9 +434,9 @@ fun SearchView(
         },
         modifier
             .fillMaxWidth()
-            .padding(20.dp)
-            .clip(RoundedCornerShape(30.dp))
-            .border(2.dp, Color.DarkGray, RoundedCornerShape(30.dp)),
+            .padding(16.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .border(1.dp, Color.Gray, RoundedCornerShape(10.dp)),
         placeholder = {
             Text(text = placeHolder)
         },

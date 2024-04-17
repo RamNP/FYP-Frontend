@@ -44,29 +44,6 @@ fun ConductorBottomBarWithFabViewScreen(maiNavController: NavHostController) {
                 ConductorBottomNavViewScreen(navController = navController)
             }
         },
-//        floatingActionButtonPosition = FabPosition.Center,
-//        isFloatingActionButtonDocked = true,
-//        floatingActionButton = {
-//            FloatingActionButton(
-//                shape = CircleShape,
-//                onClick = {
-//                    ConductorNavigation.UpdateLocation.route.let {
-//                        navController.navigate(it) {
-//                            popUpTo(navController.graph.findStartDestination().id) {
-//                                saveState = true
-//                            }
-//                            launchSingleTop = true
-//                            restoreState = true
-//                        }
-//                    }
-//                    ConductorNavigation.UpdateLocation.route.let { navController.navigate(it) }
-//                },
-//                contentColor = Color.White, backgroundColor = Purple
-//            )
-//            {
-//                Icon(imageVector = Icons.Filled.LocationOn, contentDescription = "Add icon")
-//            }
-//        }
     ) {
         ConductorMainScreenNavigation(navController, maiNavController)
     }
