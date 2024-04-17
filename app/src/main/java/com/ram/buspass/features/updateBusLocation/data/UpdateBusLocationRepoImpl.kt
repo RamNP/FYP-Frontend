@@ -7,7 +7,21 @@ import com.ram.buspass.helper.resource.remote.api.ApiService
 class UpdateBusLocationRepoImpl (private val apiService: ApiService):UpdateBusLocationRepository{
     override suspend fun getBusLocation(busNumber: String?, latitude: String?, longitude: String?
     ): LocationPojo? {
-        val locationDetails = BusLocationDto(busNumber ,latitude ,longitude)
-        return apiService.updateBusLocation(locationDetails)
+        try {
+            val locationDetails = BusLocationDto(busNumber ,latitude ,longitude)
+            return apiService.updateBusLocation(locationDetails)
+
+        } catch (e: Exception){
+            throw Exception(e)
+
+        }
+
+    }
+    override suspend fun getBooingBus(): BookingBusPojo? {
+        try {
+            return apiService.getBookingBus()
+        } catch (e: Exception) {
+            throw Exception(e)
+        }
     }
 }

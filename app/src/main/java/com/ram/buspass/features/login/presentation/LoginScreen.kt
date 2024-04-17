@@ -1,6 +1,7 @@
 package com.ram.buspass.features.login.presentation
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,11 +45,12 @@ import com.ram.buspass.features.components.InputTextFieldView
 import com.ram.buspass.features.components.PainterImageView
 import com.ram.buspass.features.components.PasswordTextFieldView
 import com.ram.buspass.features.components.TextView
-import com.ram.buspass.utils.ClientInterceptor
 import com.ram.buspass.features.login.data.AuthResponse
-import com.ram.buspass.userNavigationBar.ScreenList
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
+import com.ram.buspass.userNavigationBar.ScreenList
+import com.ram.buspass.utils.ClientInterceptor
+import com.ram.buspass.utils.NetworkObserver
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -58,7 +60,9 @@ fun LoginViewScreen(
 ) {
     val context = LocalContext.current
     val interceptor = ClientInterceptor(context)
-    val editor  = interceptor.getPreInstEditor()
+    val editor = interceptor.getPreInstEditor()
+    val connection by NetworkObserver.connectivityState()
+    val isConnected = connection === NetworkObserver.ConnectionState.Available
 
     val result = loginViewModel.login
     var email by remember { mutableStateOf("") }
@@ -69,8 +73,20 @@ fun LoginViewScreen(
     val showDialog = remember { mutableStateOf(false) }
 
     if (result.isLoading) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(1f)
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 10.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextView(
+                    text = "Logging Please Waiting ..",
+                    style = TextStyle( color = Color.Gray , fontSize = 18.sp),
+                )
+                CircularProgressIndicator(1f, modifier = Modifier, color = Purple , )
+            }
         }
     }
 
@@ -78,6 +94,7 @@ fun LoginViewScreen(
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             // show error
             showToast(context, result.isError)
+            Log.e("erros" ,"$result.isError")
         }
     }
 
@@ -85,17 +102,19 @@ fun LoginViewScreen(
         if (result.isData?.isSuccess == true) {
             val authentication = AuthResponse(
                 accessToken = result.isData.authResponse?.accessToken,
-                role = result.isData.authResponse?.role ,
-                id= result.isData.authResponse?.id,
+                role = result.isData.authResponse?.role,
+                id = result.isData.authResponse?.id,
             )
+            Log.e("Loginn" ,"$authentication")
             when (result.isData.authResponse?.role) {
-                    "user" -> {
-                        navController.navigate(ScreenList.BottomNavMenuUser.route) {
-                            popUpTo(ScreenList.LoginScreen.route) {
-                                inclusive = true
-                            }
+                "user" -> {
+                    navController.navigate(ScreenList.BottomNavMenuUser.route) {
+                        popUpTo(ScreenList.LoginScreen.route) {
+                            inclusive = true
                         }
                     }
+                }
+
                 else -> {
                     navController.navigate(ScreenList.BottomNavMenuConductor.route) {
                         popUpTo(ScreenList.LoginScreen.route) {
@@ -105,7 +124,7 @@ fun LoginViewScreen(
                 }
             }
             editor.putString("authentication", Gson().toJson(authentication)).apply()
-            showToast(context ,"${result.isData.message}")
+            showToast(context, "${result.isData.message}")
 
 
         }
@@ -177,7 +196,9 @@ fun LoginViewScreen(
             Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = checked.value,
-                    onCheckedChange = { isChecked -> checked.value = isChecked }, colors = CheckboxDefaults.colors( // Providing default colors for the checkbox
+                    onCheckedChange = { isChecked -> checked.value = isChecked },
+                    colors = CheckboxDefaults.colors(
+                        // Providing default colors for the checkbox
                         checkedColor = Purple,
                         uncheckedColor = Color.Gray,
                     )
@@ -187,16 +208,21 @@ fun LoginViewScreen(
             ClickableTextView(
                 text = AnnotatedString("Forgot Password?"),
                 style = TextStyle(color = Purple),
-                onClick = { navController.navigate(ScreenList.ForgotScreen.route) },
+                onClick = { },
                 modifier = Modifier.fillMaxWidth()
             )
         }
         ButtonView(
             onClick = {
+                if (isConnected) {
                 isEmailEmpty = email.isEmpty()
                 isPasswordEmpty = password.isEmpty()
                 if (email.isNotEmpty() && password.isNotEmpty()) {
                     loginViewModel.getLoginUser(email, password)
+                }
+
+                }else{
+                    showToast(context ,"No Internet connection")
                 }
             },
             btnColor = ButtonDefaults.buttonColors(Purple),

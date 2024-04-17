@@ -1,23 +1,24 @@
 package com.ram.buspass.helper.resource.remote.api
 
 
+import com.ram.buspass.features.bookTicket.data.BookingPojo
+import com.ram.buspass.features.chanagePassword.data.ChangePasswordPojo
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordDto
+import com.ram.buspass.features.editProfile.data.EditProfilePojo
 import com.ram.buspass.features.editProfile.domain.EditModelDto
 import com.ram.buspass.features.locationView.data.LocationViewPojo
 import com.ram.buspass.features.login.data.LoginPojo
 import com.ram.buspass.features.login.domain.LoginUserModelDto
-import com.ram.buspass.features.register.data.ResponsePojo
-import com.ram.buspass.features.register.domain.UserModelDto
-import com.ram.buspass.features.ticketBook.domain.BookDto
-import com.ram.buspass.features.updateBusLocation.domain.BusLocationDto
-import com.ram.buspass.features.bookTicket.data.BookingPojo
-import com.ram.buspass.features.chanagePassword.data.ChangePasswordPojo
-import com.ram.buspass.features.editProfile.data.EditProfilePojo
 import com.ram.buspass.features.passVerify.data.PassVerifyPojo
 import com.ram.buspass.features.profile.data.ProfilePojo
+import com.ram.buspass.features.register.data.RegisterPojo
+import com.ram.buspass.features.register.domain.UserModelDto
 import com.ram.buspass.features.ticketBook.data.TicketBookPojo
 import com.ram.buspass.features.ticketBook.data.TicketBookingPojo
+import com.ram.buspass.features.ticketBook.domain.BookDto
+import com.ram.buspass.features.updateBusLocation.data.BookingBusPojo
 import com.ram.buspass.features.updateBusLocation.data.LocationPojo
+import com.ram.buspass.features.updateBusLocation.domain.BusLocationDto
 import com.ram.buspass.features.verifyTicket.data.VerifyTicketPojo
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -31,7 +32,7 @@ interface ApiService {
     @POST("api/register/user/")
     suspend fun registerUser(
         @Body userModelDto: UserModelDto
-    ): ResponsePojo?
+    ): RegisterPojo?
 
     @POST("api/login/user/")
     suspend fun loginUser(
@@ -65,7 +66,12 @@ interface ApiService {
 
     @GET("api/view_bus_location/")
     suspend fun getLocationView(): LocationViewPojo
+
+    @GET("api/booking/bus/details/")
+    suspend fun getBookingBus(): BookingBusPojo?
     @GET("api/pass/verify/")
     suspend fun getPassVerify(): PassVerifyPojo?
+
+
 
 }

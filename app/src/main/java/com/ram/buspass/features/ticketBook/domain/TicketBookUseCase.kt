@@ -1,8 +1,8 @@
 package com.ram.buspass.features.ticketBook.domain
 
-import com.ram.buspass.utils.Resource
 import com.ram.buspass.features.ticketBook.data.TicketBookPojo
 import com.ram.buspass.features.ticketBook.data.TicketBookingPojo
+import com.ram.buspass.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -18,6 +18,7 @@ class TicketBookUseCase(private val ticketBookRepository: TicketBookRepository) 
         }
 
     }
+
     operator fun invoke(bookDto: BookDto): Flow<Resource<TicketBookingPojo?>> = flow {
         emit(Resource.Loading())
         try {

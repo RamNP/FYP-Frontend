@@ -16,7 +16,9 @@ import javax.inject.Inject
 class UpdateBusLocationViewModel @Inject constructor(private val updateBusLocationUseCase: UpdateBusLocationUseCase) :
     ViewModel() {
     private var _busLocation by mutableStateOf(UpdateBusLocationState())
+    private var _bookingBus by mutableStateOf(BookingBusState())
     val busLocation: UpdateBusLocationState get() = _busLocation
+    val bookingBus: BookingBusState get() = _bookingBus
 
     fun getBusLocation(busNumber: String? = null,latitude: String? = null, longitude: String? = null) {
         updateBusLocationUseCase(busNumber,latitude , longitude, ).onEach { resource ->
@@ -35,4 +37,24 @@ class UpdateBusLocationViewModel @Inject constructor(private val updateBusLocati
             }
         }.launchIn(viewModelScope)
     }
+
+    //get Booking Bus View Model
+    fun getBookingBusDetails() {
+        updateBusLocationUseCase().onEach {
+            _bookingBus = when(it) {
+                is Resource.Loading -> {
+                    BookingBusState(isLoading = true)
+                }
+
+                is Resource.Success -> {
+                    BookingBusState(isData = it.data)
+                }
+
+                is Resource.Error -> {
+                    BookingBusState(isError = it.message.toString())
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
 }

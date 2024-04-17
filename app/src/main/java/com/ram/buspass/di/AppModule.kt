@@ -25,11 +25,11 @@ import com.ram.buspass.features.updateBusLocation.data.UpdateBusLocationRepoImpl
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
 import com.ram.buspass.features.verifyTicket.data.VerifyTicketRepoImpl
 import com.ram.buspass.features.verifyTicket.domain.VerifyTicketRepository
-import com.ram.buspass.utils.ClientInterceptor
 import com.ram.buspass.helper.resource.local.AppDatabase
 import com.ram.buspass.helper.resource.local.UserDao
 import com.ram.buspass.helper.resource.remote.api.ApiConstants
 import com.ram.buspass.helper.resource.remote.api.ApiService
+import com.ram.buspass.utils.ClientInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,7 +55,7 @@ object AppModule {
         ).fallbackToDestructiveMigration().build().usersDao()
     }
 
-    //Retrofit instance create
+    // create Retrofit instance
     @Provides
     @Singleton
     fun provideRetrofit(@ApplicationContext context: Context): ApiService {

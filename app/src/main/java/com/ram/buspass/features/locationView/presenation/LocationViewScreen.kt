@@ -271,8 +271,6 @@ fun LocationViewCard(
 
 @Composable
 fun MapViewContainer(latitude: Double, longitude: Double) {
-    val context = LocalContext.current
-
 
         AndroidView(
 

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -70,6 +71,7 @@ fun VerifyTicketViewScreen(
 
     verifyTicketResults.isData?.data?.let { ticketResults ->
 
+
         Column(modifier = Modifier.fillMaxWidth()) {
 
             Row(
@@ -77,14 +79,13 @@ fun VerifyTicketViewScreen(
                     .fillMaxWidth()
                     .background(White)
                     .padding(16.dp),
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.Center
             ) {
-
-                TextView(
+                Text(
                     text = "Verify Ticket",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    color = Color.Black, modifier = Modifier.padding(end = 80.dp)
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
                 )
             }
             Column(modifier = Modifier.fillMaxWidth()) {
