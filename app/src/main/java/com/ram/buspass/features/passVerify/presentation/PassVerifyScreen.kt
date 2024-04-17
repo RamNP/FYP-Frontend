@@ -25,20 +25,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.features.components.TextView
+import com.ram.buspass.utils.components.TextView
+import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
+import com.ram.buspass.utils.NetworkObserver
 
 @Composable
 fun PassVerifyViewScreen(
     navController: NavHostController,
     passVerifyViewModel: PassVerifyViewModel = hiltViewModel()
 ) {
+    val connection by NetworkObserver.connectivityState()
+    val isConnected = connection === NetworkObserver.ConnectionState.Available
     val passResult = passVerifyViewModel.passVerify
     var busNumber by remember { mutableStateOf("") }
     var busName by remember { mutableStateOf("") }
@@ -55,19 +60,23 @@ fun PassVerifyViewScreen(
     var email by remember { mutableStateOf("") }
 
 
-
-
-
-
-
     LaunchedEffect(key1 = Unit, block = {
         passVerifyViewModel.getPassVerify()
     })
 
     if (passResult.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            // indicator
-            CircularProgressIndicator(1f)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextView(
+                    text = "This page is Opening.",
+                    style = TextStyle( color = Color.Gray , fontSize = 18.sp),
+                )
+                CircularProgressIndicator(1f, modifier = Modifier, color = Purple , )
+            }
         }
     }
     if (passResult.isError != null) {
@@ -77,81 +86,88 @@ fun PassVerifyViewScreen(
         }
     }
     passResult.isData?.data?.let { passResults ->
-        Column(modifier = Modifier.fillMaxWidth()) {
 
-            Row(
+        if (isConnected) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(White)
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Pass Verify",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
+                }
+            }
+
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(White)
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center
+                    .padding(top = 30.dp, bottom = 40.dp)
             ) {
-                Text(
-                    text = "Pass Verify",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black
-                )
-            }
-        }
 
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 30.dp, bottom = 40.dp)) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    items(passResults) { it ->
+                        it?.bus_details?.let {
+                            busNumber = it.bus_number ?: ""
+                            busName = it.name ?: ""
+                            fromTo = it.from_to ?: ""
+                            route = it.route ?: ""
+                            busSpeed = it.bus_speed ?: ""
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                items(passResults) { it ->
-                    it?.bus_details?.let {
-                        busNumber = it.bus_number ?: ""
-                        busName = it.name ?: ""
-                        fromTo = it.from_to ?: ""
-                        route = it.route ?: ""
-                        busSpeed = it.bus_speed ?: ""
+                        }
+                        it?.ticket_details?.let {
+                            ticketNo = it.ticket_no ?: 0
+                            ticketDate = it.date ?: ""
+                            cost = it.cost ?: 0
+                            time = it.time ?: ""
 
-                    }
-                    it?.ticket_details?.let {
-                        ticketNo = it.ticket_no ?: 0
-                        ticketDate = it.date ?: ""
-                        cost = it.cost ?: 0
-                        time = it.time ?: ""
+                        }
 
-                    }
+                        it?.user_details?.let {
+                            userId = it.id ?: 0
+                            userName = it.username ?: ""
+                            email = it.email ?: ""
 
-                    it?.user_details?.let {
-                        userId = it.id ?: 0
-                        userName = it.username ?: ""
-                        email = it.email ?: ""
+                        }
 
-                    }
+                        it?.pass_details?.let {
 
-                    it?.pass_details?.let {
+                            VerifyPassCard(
+                                id = it.id,
+                                status = it.status,
+                                passDate = it.created_date,
+                                userId = userId,
+                                userName = userName,
+                                email = email,
+                                busNumber = busNumber,
+                                busName = busName,
+                                fromTo = fromTo,
+                                route = route,
+                                busSpeed = busSpeed,
+                                ticketNo = ticketNo,
+                                cost = cost,
+                                date = ticketDate,
+                                time = time
+                            )
 
-                        VerifyPassCard(
-                            id = it.id,
-                            status = it.status,
-                            passDate = it.created_date,
-                            userId = userId,
-                            userName = userName,
-                            email = email,
-                            busNumber = busNumber,
-                            busName = busName,
-                            fromTo = fromTo,
-                            route = route,
-                            busSpeed = busSpeed,
-                            ticketNo = ticketNo,
-                            cost = cost,
-                            date = ticketDate,
-                            time = time
-                        )
-
+                        }
                     }
                 }
             }
+        }else{
+            TextView(text = "No Internet Net")
         }
     }
 }

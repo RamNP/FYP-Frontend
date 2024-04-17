@@ -8,12 +8,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.FabPosition
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,29 +44,29 @@ fun UserBottomBarWithFabViewScreen(maiNavController: NavHostController) {
                 BottomNavViewScreen(navController = navController)
             }
         },
-        floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true,
-        floatingActionButton = {
-            FloatingActionButton(
-                shape = CircleShape,
-                onClick = {
-                    UserScreen.Location.route?.let {
-                        navController.navigate(it) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                    UserScreen.Location.route?.let { navController.navigate(it) }
-                },
-                contentColor = Color.White, backgroundColor = Purple
-            )
-            {
-                Icon(imageVector = Icons.Filled.LocationOn, contentDescription = "Add icon")
-            }
-        }
+//        floatingActionButtonPosition = FabPosition.Center,
+//        isFloatingActionButtonDocked = true,
+//        floatingActionButton = {
+//            FloatingActionButton(
+//                shape = CircleShape,
+//                onClick = {
+//                    UserScreen.Location.route?.let {
+//                        navController.navigate(it) {
+//                            popUpTo(navController.graph.findStartDestination().id) {
+//                                saveState = true
+//                            }
+//                            launchSingleTop = true
+//                            restoreState = true
+//                        }
+//                    }
+//                    UserScreen.Location.route?.let { navController.navigate(it) }
+//                },
+//                contentColor = Color.White, backgroundColor = Purple
+//            )
+//            {
+//                Icon(imageVector = Icons.Filled.LocationOn, contentDescription = "Add icon")
+//            }
+//        }
     ) {
         UserMainScreenNavigation(navController, maiNavController)
     }

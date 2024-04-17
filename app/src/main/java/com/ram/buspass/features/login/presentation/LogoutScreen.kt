@@ -15,8 +15,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.ram.buspass.features.components.IconView
-import com.ram.buspass.features.components.TextView
+import com.ram.buspass.utils.components.IconView
+import com.ram.buspass.utils.components.TextView
 
 @Composable
 fun LogoutViewScreen(navController: NavController) {

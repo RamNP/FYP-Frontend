@@ -4,7 +4,6 @@ val bottomItems = listOf(
     UserScreen.Book,
     UserScreen.MyTicket,
     UserScreen.Location,
-    UserScreen.Payment,
     UserScreen.Profile
 )
 

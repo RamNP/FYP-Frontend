@@ -1,4 +1,4 @@
-package com.ram.buspass.features.components
+package com.ram.buspass.utils.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

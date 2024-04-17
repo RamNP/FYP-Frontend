@@ -56,9 +56,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.features.components.ButtonView
-import com.ram.buspass.features.components.IconView
-import com.ram.buspass.features.components.TextView
+import com.ram.buspass.utils.components.ButtonView
+import com.ram.buspass.utils.components.IconView
+import com.ram.buspass.utils.components.TextView
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
@@ -98,8 +98,17 @@ fun TicketBookViewScreens(
 
     if (ticketResult.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            // indicator
-            CircularProgressIndicator(1f)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextView(
+                    text = "Waiting This Page is Opening..",
+                    style = TextStyle( color = Color.Gray , fontSize = 18.sp),
+                )
+                CircularProgressIndicator(1f, modifier = Modifier, color = Purple , )
+            }
         }
     }
     if (ticketResult.isError != null) {
@@ -262,7 +271,17 @@ fun TicketBookViewScreens(
             if (bookingTicketResult.isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     // indicator
-                    CircularProgressIndicator(1f)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextView(
+                            text = "Waiting This Page is Opening..",
+                            style = TextStyle( color = Color.Gray , fontSize = 18.sp),
+                        )
+                        CircularProgressIndicator(1f, modifier = Modifier, color = Purple , )
+                    }
                 }
             }
             if (bookingTicketResult.isError != null) {

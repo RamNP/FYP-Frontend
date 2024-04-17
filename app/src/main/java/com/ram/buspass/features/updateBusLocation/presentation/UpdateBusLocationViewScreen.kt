@@ -47,13 +47,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.features.components.ButtonView
-import com.ram.buspass.features.components.IconView
-import com.ram.buspass.features.components.InputTextFieldView
-import com.ram.buspass.features.components.TextView
+import com.ram.buspass.utils.components.ButtonView
+import com.ram.buspass.utils.components.IconView
+import com.ram.buspass.utils.components.InputTextFieldView
+import com.ram.buspass.utils.components.TextView
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
+import com.ram.buspass.utils.NetworkObserver
 
 @Composable
 fun BusLocationViewScreen(
@@ -64,7 +65,8 @@ fun BusLocationViewScreen(
 ) {
     val getBusLocation = updateBusLocationViewModel.busLocation
     val getBookingBus = updateBusLocationViewModel.bookingBus
-
+    val connection by NetworkObserver.connectivityState()
+    val isConnected = connection === NetworkObserver.ConnectionState.Available
     val context = LocalContext.current
     var selectedBusNumber by remember { mutableStateOf("") }
     var busNumberExpanded by remember { mutableStateOf(false) }
@@ -148,12 +150,14 @@ fun BusLocationViewScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     invalidMessage = " Latitude Text field is Empty!",
                     errorColor = Color.Red,
-                    leadingIcon = {  },
-                    trailingIcon ={Icon(
-                        icon,
-                        "Icon",
-                        Modifier.clickable { busNumberExpanded = !busNumberExpanded }
-                    )},
+                    leadingIcon = { },
+                    trailingIcon = {
+                        Icon(
+                            icon,
+                            "Icon",
+                            Modifier.clickable { busNumberExpanded = !busNumberExpanded }
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxWidth()
@@ -185,7 +189,9 @@ fun BusLocationViewScreen(
                 }
             }
             filteredData?.forEach { item ->
-                Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)) {
 
 
                     BookingBusCard(
@@ -205,7 +211,21 @@ fun BusLocationViewScreen(
     if (getBusLocation.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
-            CircularProgressIndicator(1f)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextView(
+                    text = "Waiting is Page is Opening  ..",
+                    style = TextStyle(color = Color.Gray, fontSize = 18.sp),
+                )
+                androidx.compose.material3.CircularProgressIndicator(
+                    1f,
+                    modifier = Modifier,
+                    color = Purple,
+                )
+            }
         }
     }
 
@@ -287,9 +307,7 @@ fun BusLocationViewScreen(
                         longitude
                     )
 //                    Log.e("is_success", "${getBusLocation.isData?.message}")
-                    showToast(context ,"Bus location updated successfully")
-
-
+                    showToast(context, "Bus location updated successfully")
 
 
                 },
@@ -305,7 +323,6 @@ fun BusLocationViewScreen(
                 text = "Update Bus Geo",
                 textStyle = TextStyle()
             )
-
 
 
         }

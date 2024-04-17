@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.ram.buspass.R
-import com.ram.buspass.features.components.TextView
+import com.ram.buspass.utils.components.TextView
 import com.ram.buspass.helper.resource.remote.api.ApiConstants.BASE_URL
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple

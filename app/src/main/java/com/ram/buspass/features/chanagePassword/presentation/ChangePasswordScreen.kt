@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.features.components.ButtonView
-import com.ram.buspass.features.components.IconView
-import com.ram.buspass.features.components.InputTextFieldView
-import com.ram.buspass.features.components.PasswordTextFieldView
-import com.ram.buspass.features.components.TextView
+import com.ram.buspass.utils.components.ButtonView
+import com.ram.buspass.utils.components.IconView
+import com.ram.buspass.utils.components.InputTextFieldView
+import com.ram.buspass.utils.components.PasswordTextFieldView
+import com.ram.buspass.utils.components.TextView
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White

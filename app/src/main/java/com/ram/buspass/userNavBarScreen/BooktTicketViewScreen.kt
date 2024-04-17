@@ -22,10 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ram.buspass.features.components.ButtonView
-import com.ram.buspass.features.components.SearchBar
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
+import com.ram.buspass.utils.components.ButtonView
+import com.ram.buspass.utils.components.SearchBar
 
 
 @Composable
@@ -45,6 +45,7 @@ fun BookTicketCardDetails() {
             }
         }
         SearchBar(hint = "Search...") { searchText ->
+
         }
         Column(
             modifier = Modifier

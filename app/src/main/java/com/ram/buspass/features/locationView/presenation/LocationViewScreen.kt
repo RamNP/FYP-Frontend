@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,12 +43,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.ram.buspass.features.components.ButtonView
-import com.ram.buspass.features.components.TextView
 import com.ram.buspass.features.locationView.data.BusDetailsItem
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
-
+import com.ram.buspass.utils.components.ButtonView
+import com.ram.buspass.utils.components.SearchView
+import com.ram.buspass.utils.components.TextView
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -58,16 +59,29 @@ fun LocationViewScreen(
     val context = LocalContext.current
     val locationViewResults = locationViewViewModel.locationView
 
+    val textState = remember {
+        mutableStateOf(TextFieldValue(""))
+    }
 
+    val searchedText = textState.value.text
     LaunchedEffect(key1 = Unit, block = {
         locationViewViewModel.getViewLocation()
     })
 
-
     if (locationViewResults.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             // indicator
-            CircularProgressIndicator(1f)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextView(
+                    text = "Waiting This Page is Opening..",
+                    style = TextStyle( color = Color.Gray , fontSize = 18.sp),
+                )
+                CircularProgressIndicator(1f, modifier = Modifier, color = Purple , )
+            }
         }
     }
     if (locationViewResults.isError != null) {
@@ -77,13 +91,9 @@ fun LocationViewScreen(
     }
 
     locationViewResults.isData?.bus_details.let { locationResults ->
-
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 40.dp)
+            modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp)
         ) {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,7 +101,6 @@ fun LocationViewScreen(
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.Center,
             ) {
-
                 TextView(
                     text = "Location View",
                     fontWeight = FontWeight.Bold,
@@ -99,29 +108,27 @@ fun LocationViewScreen(
                     color = Color.Black, modifier = Modifier.padding(end = 80.dp)
                 )
             }
-            Column(modifier = Modifier.fillMaxWidth()) {
 
+            SearchView(state = textState, placeHolder = "Search here...", modifier = Modifier)
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    items(locationResults ?: listOf()) { it: BusDetailsItem ->
-                        // Use it directly without null-checking or let block
-                        LocationViewCard(
-                            busNumber = it.bus_number ?: "",
-                            busName = it.name ?: "",
-                            fromTo = it.from_to ?: "",
-                            route = it.route ?: "",
-                            busSpeed = it.bus_speed ?: "",
-                            latitude = it.latitude ?: 0.0,
-                            longitude = it.longitude,
-                            navController = navController,
-                            context = context
-                        )
-                    }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(locationResults?.filter {
+                    it.name?.contains(searchedText, ignoreCase = true) == true // Step 3: Filter the list
+                } ?: listOf()) { it: BusDetailsItem ->
+                    LocationViewCard(
+                        busNumber = it.bus_number ?: "",
+                        busName = it.name ?: "",
+                        fromTo = it.from_to ?: "",
+                        route = it.route ?: "",
+                        busSpeed = it.bus_speed ?: "",
+                        latitude = it.latitude ?: 0.0,
+                        longitude = it.longitude,
+                        navController = navController,
+                        context = context
+                    )
                 }
             }
         }

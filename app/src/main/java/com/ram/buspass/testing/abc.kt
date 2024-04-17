@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ram.buspass.features.components.TextView
+import com.ram.buspass.utils.components.TextView
 import com.ram.buspass.ui.theme.Purple
 
 @Composable

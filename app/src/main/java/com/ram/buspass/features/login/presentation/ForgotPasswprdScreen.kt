@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ram.buspass.R
-import com.ram.buspass.features.components.IconView
-import com.ram.buspass.features.components.InputTextFieldView
-import com.ram.buspass.features.components.PainterImageView
-import com.ram.buspass.features.components.TextView
+import com.ram.buspass.utils.components.IconView
+import com.ram.buspass.utils.components.InputTextFieldView
+import com.ram.buspass.utils.components.PainterImageView
+import com.ram.buspass.utils.components.TextView
 import com.ram.buspass.userNavigationBar.ScreenList
 
 @Composable

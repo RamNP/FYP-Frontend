@@ -1,7 +1,9 @@
-package com.ram.buspass.features.components
+package com.ram.buspass.utils.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.LocalTextStyle
@@ -34,14 +38,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -49,8 +57,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
@@ -58,8 +64,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -312,7 +320,6 @@ fun InputTextFieldSearchBar(
 
     }
 }
-
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
@@ -320,28 +327,68 @@ fun SearchBar(
     onSearch: (String) -> Unit
 ) {
     var text by remember { mutableStateOf("") }
-    val focusManager = LocalFocusManager.current
-    val context = LocalContext.current
 
-    Row(
-        modifier = modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-    ) {
-        InputTextFieldSearchBar(
-            value = text ,
-            onValueChange = { text = it },
-            label = "",
-            placeholder = "Search",
-            textStyle = TextStyle(),
-            trailingIcon = { IconView(imageVector = Icons.Default.Search) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-        )
-
+    // Callback to handle search when enter key is pressed
+    val onSearchAction = {
+        onSearch(text)
     }
+
+    TextField(
+        value = text,
+        onValueChange = { text = it },
+        placeholder = { Text(hint) },
+        textStyle = TextStyle(),
+        leadingIcon = {
+            IconView(
+                imageVector = Icons.Default.Search,
+                modifier = Modifier.clickable {
+                    onSearch(text)
+                }
+            )
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done // Change to Done action
+        ),
+        keyboardActions = KeyboardActions(onDone = { onSearchAction.invoke() }),
+        singleLine = true,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchView(
+    state: MutableState<TextFieldValue>,
+    placeHolder: String,
+    modifier: Modifier
+) {
+    TextField(
+        value = state.value,
+        onValueChange = {value->
+            state.value = value
+        },
+        modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+            .clip(RoundedCornerShape(30.dp))
+            .border(2.dp, Color.DarkGray, RoundedCornerShape(30.dp)),
+        placeholder = {
+            Text(text = placeHolder)
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.White
+        ),
+        maxLines = 1,
+        singleLine = true,
+        textStyle = TextStyle(
+            color = Color.Black, fontSize = 20.sp
+        )
+    )
+
+}
+
 // password input text fields
 @Composable
 fun PasswordTextFieldView(

@@ -14,7 +14,10 @@ import com.ram.buspass.features.updateBusLocation.presentation.UpdateBusLocation
 
 
 @Composable
-fun UserMainScreenNavigation(navController: NavHostController, maiNavController: NavHostController) {
+fun UserMainScreenNavigation(
+    navController: NavHostController,
+    maiNavController: NavHostController
+) {
 
     NavHost(navController, startDestination = UserScreen.Book.route) {
         composable(UserScreen.Book.route) {
@@ -28,9 +31,9 @@ fun UserMainScreenNavigation(navController: NavHostController, maiNavController:
             LocationViewScreen(navController)
         }
 
-        composable(UserScreen.Payment.route) {
-
-        }
+//        composable(UserScreen.Payment.route) {
+//
+//        }
         composable(UserScreen.Profile.route) {
             ProfileViewScreen(navController, maiNavController)
         }
@@ -42,16 +45,10 @@ fun UserMainScreenNavigation(navController: NavHostController, maiNavController:
             ChangePasswordScreen(navController)
         }
 
-
         composable(ScreenList.ShowGoogleMapsScreen.route) {
-
-
-
-
         }
 
-
-        composable(ScreenList.GoogleMapsScreen.route){
+        composable(ScreenList.GoogleMapsScreen.route) {
             UpdateBusLocationViewScreen(navController)
         }
 

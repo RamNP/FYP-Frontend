@@ -42,18 +42,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.features.components.ButtonView
-import com.ram.buspass.features.components.IconView
-import com.ram.buspass.features.components.TextView
-import com.ram.buspass.utils.NetworkObserver
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 import com.ram.buspass.userNavigationBar.UserScreen
+import com.ram.buspass.utils.NetworkObserver
+import com.ram.buspass.utils.components.ButtonView
+import com.ram.buspass.utils.components.IconView
+import com.ram.buspass.utils.components.SearchView
+import com.ram.buspass.utils.components.TextView
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -76,7 +78,11 @@ fun BookTicketDetailsViewScreen(
 
 
     val bookingResults = bookingViewModel.booking
+    val textState = remember {
+        mutableStateOf(TextFieldValue(""))
+    }
 
+    val searchedText = textState.value.text
 
     LaunchedEffect(key1 = Unit, block = {
         bookingViewModel.getBooking()
@@ -94,7 +100,6 @@ fun BookTicketDetailsViewScreen(
     }
 
     if(isConnected) {
-
         bookingResults.isData?.data?.let { results ->
 
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -117,6 +122,7 @@ fun BookTicketDetailsViewScreen(
                     )
                 }
 
+                SearchView(state = textState, placeHolder = "Search here...", modifier = Modifier)
 
                 LazyColumn(
                     modifier = Modifier
@@ -124,7 +130,10 @@ fun BookTicketDetailsViewScreen(
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    items(results) { it ->
+                    items(results.filter {
+                        it.bus_details?.name?.contains(searchedText, ignoreCase = true) == true // Step 3: Filter the list
+                    }
+                    ) { it ->
                         it.bus_details?.let {
                             busNumber = it.bus_number ?: ""
                             busName = it.name ?: ""
