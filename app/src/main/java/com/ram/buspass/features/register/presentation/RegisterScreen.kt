@@ -273,24 +273,6 @@ fun RegisterViewScreen(
             )
 
 
-//            ButtonView(
-//                onClick = {
-//                    isNameEmpty = role.isEmpty()
-//                    isEmailEmpty = email.isEmpty()
-//                    isPasswordEmpty = password.isEmpty()
-//                    if (role.isNotEmpty() || email.isNotEmpty() || password.isNotEmpty()) {
-//                        onClick.invoke()
-//                        navHostController.navigate(ScreenList.LoginScreen.route)
-//                    } else {
-//                        showToast(context, "The above field is empty!")
-//                    }
-//                },
-//                btnColor = ButtonDefaults.buttonColors(Purple),
-//                text = "Register now",
-//                textStyle = TextStyle(Color.White, fontWeight = FontWeight.Bold),
-//                modifier = Modifier.fillMaxWidth()
-//            )
-
             ButtonView(
                 onClick = {
                     isNameEmpty = username.isEmpty() // isNameEmpty // name error message

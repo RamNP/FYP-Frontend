@@ -11,8 +11,8 @@ import com.ram.buspass.features.editProfile.presentation.EditProfileViewScreen
 import com.ram.buspass.features.passVerify.presentation.PassVerifyViewScreen
 import com.ram.buspass.features.profile.presentation.ProfileViewScreen
 import com.ram.buspass.features.updateBusLocation.presentation.BusLocationViewScreen
-import com.ram.buspass.features.updateBusLocation.presentation.UpdateBusLocationViewScreen
 import com.ram.buspass.features.verifyTicket.presentation.VerifyTicketViewScreen
+import com.ram.buspass.testing.UpdateBusLocationGoogleMapScreenScreen
 import com.ram.buspass.userNavigationBar.ScreenList
 
 
@@ -52,7 +52,7 @@ fun ConductorMainScreenNavigation(
                 navArgument( "bus_number") { type = NavType.StringType }
             )) {navBackStackEntry ->
             val bus_number = navBackStackEntry.arguments?.getString("bus_number") ?: ""
-            UpdateBusLocationViewScreen(bus_number,navController )
+            UpdateBusLocationGoogleMapScreenScreen(bus_number,navController )
 
 
         }

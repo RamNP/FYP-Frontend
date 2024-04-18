@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ram.buspass.features.updateBusLocation.domain.BusLocationDto
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationUseCase
 import com.ram.buspass.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,8 +21,9 @@ class UpdateBusLocationViewModel @Inject constructor(private val updateBusLocati
     val busLocation: UpdateBusLocationState get() = _busLocation
     val bookingBus: BookingBusState get() = _bookingBus
 
-    fun getBusLocation(busNumber: String? = null,latitude: String? = null, longitude: String? = null) {
-        updateBusLocationUseCase(busNumber,latitude , longitude, ).onEach { resource ->
+    fun getBusLocation(bus_number: String?,latitude: String?, longitude: String?) {
+        val  busLocationDto = BusLocationDto(bus_number ,latitude, longitude)
+        updateBusLocationUseCase.invoke(busLocationDto ).onEach { resource ->
             _busLocation = when(resource) {
                 is Resource.Loading -> {
                     UpdateBusLocationState(isLoading = true)
