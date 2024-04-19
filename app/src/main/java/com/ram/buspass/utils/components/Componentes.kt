@@ -582,7 +582,7 @@ fun SignInGoogleButton(
 
                 ) {
                 Image(
-                    painter = painterResource(id = R.mipmap.ic_google),
+                    painter = painterResource(id = R.mipmap.ic_register),
                     contentDescription = null, modifier = Modifier
                         .height(20.dp)
                         .width(20.dp)
@@ -609,7 +609,7 @@ fun ButtonAppBarView() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.mipmap.ic_islington),
+                    painter = painterResource(id = R.mipmap.ic_register),
                     contentDescription = null,
                     Modifier
                         .padding(start = 10.dp)
@@ -668,7 +668,7 @@ fun ButtonAppBarViewAp(navController: NavHostController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.mipmap.ic_islington),
+                    painter = painterResource(id = R.mipmap.ic_register),
                     contentDescription = "",
                     Modifier
                         .padding(start = 10.dp)
