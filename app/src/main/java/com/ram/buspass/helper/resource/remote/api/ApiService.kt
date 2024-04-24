@@ -4,6 +4,7 @@ package com.ram.buspass.helper.resource.remote.api
 import com.ram.buspass.features.bookingTicket.data.BookingPojo
 import com.ram.buspass.features.chanagePassword.data.ChangePasswordPojo
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordDto
+import com.ram.buspass.features.editProfile.data.EditImagePojo
 import com.ram.buspass.features.editProfile.data.EditProfilePojo
 import com.ram.buspass.features.editProfile.domain.EditModelDto
 import com.ram.buspass.features.locationView.data.LocationViewPojo
@@ -19,11 +20,15 @@ import com.ram.buspass.features.ticketBook.domain.BookDto
 import com.ram.buspass.features.updateBusLocation.data.BookingBusPojo
 import com.ram.buspass.features.updateBusLocation.data.LocationPojo
 import com.ram.buspass.features.updateBusLocation.domain.BusLocationDto
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ApiService {
@@ -42,6 +47,13 @@ interface ApiService {
     suspend fun getProfile(): ProfilePojo
     @PUT("/api/user/profile/edit/")
     suspend fun editUserProfile(@Body editModelDto: EditModelDto): EditProfilePojo?
+
+    @Multipart
+    @PATCH("/api/change/profile_url/")
+    suspend fun editProfileImage(
+        @Part("id") id: RequestBody?,
+        @Part photo_image: MultipartBody.Part?,
+    ):EditImagePojo?
 
     @PATCH("/api/change/password/")
     suspend fun getChangePassword(@Body changePasswordDto: ChangePasswordDto): ChangePasswordPojo?

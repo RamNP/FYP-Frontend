@@ -10,6 +10,7 @@ import com.ram.buspass.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,6 +18,9 @@ class EditProfileLocationViewModel @Inject constructor(private val editProfileUs
     ViewModel() {
     private var _editProfile by mutableStateOf(EditProfileState())
     val editProfile: EditProfileState get() = _editProfile
+
+    private var _editProfileImage by mutableStateOf(EditProfileImageState())
+    val editProfileImage: EditProfileImageState get() = _editProfileImage
 
     fun getUserEditProfile(email: String? = null,username: String? = null,) {
         editProfileUseCase(email, username, ).onEach { resource ->
@@ -31,6 +35,25 @@ class EditProfileLocationViewModel @Inject constructor(private val editProfileUs
 
                 is Resource.Error -> {
                     EditProfileState(isError = resource.message.toString())
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+
+    fun updateProfileImage(userId: Int, imageFile: File?) {
+        editProfileUseCase.invoke(userId, imageFile).onEach { result ->
+            _editProfileImage = when (result) {
+                is Resource.Loading -> {
+                    EditProfileImageState(isLoading = true)
+                }
+
+                is Resource.Success -> {
+                    EditProfileImageState(isData = editProfileImage.isData)
+                }
+
+                is Resource.Error -> {
+                    EditProfileImageState(isError = result.message.toString())
                 }
             }
         }.launchIn(viewModelScope)

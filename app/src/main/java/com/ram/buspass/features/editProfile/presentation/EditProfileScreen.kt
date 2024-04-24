@@ -1,7 +1,8 @@
 package com.ram.buspass.features.editProfile.presentation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,21 +37,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.R
+import coil.compose.AsyncImage
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 import com.ram.buspass.utils.components.ButtonView
+import com.ram.buspass.utils.components.ConvertUriToFiles.convertUriToFile
 import com.ram.buspass.utils.components.IconView
 import com.ram.buspass.utils.components.InputTextFieldView
 import com.ram.buspass.utils.components.TextView
+import java.io.File
 
 
 @Composable
@@ -63,12 +67,39 @@ fun EditProfileViewScreen(
     var email by remember { mutableStateOf("") }
     val isEmailEmpty by remember { mutableStateOf(false) }
      val editProfileResult = editProfileLocationViewModel.editProfile
-    val context = LocalContext.current
+    val editProfileResultImage = editProfileLocationViewModel.editProfileImage
+    var getNewImage by remember { mutableStateOf<Uri?>(null) }
+    var imageFiles by remember { mutableStateOf<File?>(null) }
+    var isShowConfirm by remember { mutableStateOf(false) }
+    var userId by remember { mutableIntStateOf(0) }
 
+
+
+    val context = LocalContext.current
+    val galleryImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            getNewImage = uri
+            uri?.let {
+                imageFiles = convertUriToFile(context, uri)
+                isShowConfirm = true
+            }
+        }
+    )
 
     if (editProfileResult.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(1f)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextView(
+                    text = "This page is Opening.",
+                    style = TextStyle(color = Color.Gray, fontSize = 18.sp),
+                )
+                CircularProgressIndicator(1f, modifier = Modifier, color = Purple)
+            }
         }
     }
     if (editProfileResult.isError.isNotEmpty()) {
@@ -80,6 +111,37 @@ fun EditProfileViewScreen(
     LaunchedEffect(key1 = editProfileResult.isData, block = {
         if (editProfileResult.isData?.is_success == true) {
             showToast(context, "${editProfileResult.isData.message}")
+
+        }
+    })
+
+    //edit Profile Image
+
+
+    if (editProfileResultImage.isLoading) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextView(
+                    text = "This page is Opening.",
+                    style = TextStyle(color = Color.Gray, fontSize = 18.sp),
+                )
+                CircularProgressIndicator(1f, modifier = Modifier, color = Purple)
+            }
+        }
+    }
+    if (editProfileResultImage.isError.isNotEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            TextView(text = editProfileResult.isError)
+        }
+    }
+
+    LaunchedEffect(key1 = editProfileResultImage.isData, block = {
+        if (editProfileResult.isData?.is_success == true) {
+            editProfileLocationViewModel.updateProfileImage(userId ,imageFiles)
 
         }
     })
@@ -110,31 +172,9 @@ fun EditProfileViewScreen(
                 .fillMaxWidth(), verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+           val userProfileImage = editProfileResultImage.isData?.user_profile?. photo_image
 
-            Card(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .width(100.dp)
-                    .height(100.dp)
-                    .clickable { },
-                shape = RoundedCornerShape(150.dp),
-                colors = CardDefaults.cardColors(Purple),
-            ) {
-
-                Image(
-                    painter = painterResource(id = R.mipmap.ic_logo),
-                    contentDescription = null , modifier = Modifier.width(300.dp)
-                )
-            }
-            //
-            AnimatedVisibility(visible, modifier = Modifier
-
-                .clickable {})
-            {
-                Text(
-                    text = "Change picture", fontSize = 18.sp
-                )
-            }
+            EditProfileCard(getNewImage = userProfileImage?.toUri() , onClickPickImages = {galleryImageLauncher.launch("image/*")})
         }
         //
         Column(
@@ -183,7 +223,6 @@ fun EditProfileViewScreen(
                 onClick = {
 
                     editProfileLocationViewModel.getUserEditProfile(email ,userName)
-//                    showToast(context, "${editProfileResult.isData?.message}")
                     navController.navigate("Profile")
 
                 },
@@ -195,5 +234,31 @@ fun EditProfileViewScreen(
 
         }
     }
+}
+
+@Composable
+fun EditProfileCard(
+    onClickPickImages: () -> Unit,
+    getNewImage:Uri?
+) {
+
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .width(100.dp)
+            .height(100.dp)
+            .clickable { },
+        shape = RoundedCornerShape(150.dp),
+        colors = CardDefaults.cardColors(Purple),
+    ) {
+
+        AsyncImage(
+            model = getNewImage,
+            contentDescription = null,
+            Modifier
+        )
+    }
+    TextView(text = "Change Picture" , modifier = Modifier.clickable { onClickPickImages() })
+
 }
 
