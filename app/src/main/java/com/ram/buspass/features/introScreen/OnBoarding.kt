@@ -17,12 +17,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,33 +31,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.ram.buspass.R
-import kotlinx.coroutines.delay
+import com.ram.buspass.helper.ClientInterceptor
+import com.ram.buspass.ui.theme.Purple
+import com.ram.buspass.userNavigationBar.ScreenList
 import kotlinx.coroutines.launch
 
-@ExperimentalPagerApi
-@Preview
+@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun OnBoarding() {
+fun OnBoardingScreen(navController: NavHostController) {
     val items = OnBoardingItems.getData()
     val scope = rememberCoroutineScope()
     val pageState = rememberPagerState()
+    val context = LocalContext.current
+    val interceptor = ClientInterceptor(context)
+    val editor = interceptor.getPreInstEditor()
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopSection(
@@ -83,12 +87,22 @@ fun OnBoarding() {
         ) { page ->
             OnBoardingItem(items = items[page])
         }
-        BottomSection(size = items.size, index = pageState.currentPage) {
-            if (pageState.currentPage + 1 < items.size) scope.launch {
-                pageState.scrollToPage(pageState.currentPage + 1)
-            }
+        BottomSection(
+            size = items.size,
+            index = pageState.currentPage,
+            onButtonClick = {
+                if (pageState.currentPage + 1 < items.size) {
+                    scope.launch {
+                        pageState.scrollToPage(pageState.currentPage + 1)
+                    }
+                } else {
+                    navController.navigate(ScreenList.LoginScreen.route)
+                    editor.putString("appInstallation", "AppInstall").apply()
 
-        }
+                }
+
+            }
+        )
     }
 }
 
@@ -101,8 +115,12 @@ fun TopSection(onBackClick: () -> Unit = {}, onSkipClick: () -> Unit = {}) {
             .padding(12.dp)
     ) {
         // Back button
-        IconButton(onClick = onBackClick, modifier = Modifier.align(Alignment.CenterStart)){
-            Icon(imageVector = Icons.Outlined.KeyboardArrowLeft, contentDescription = null)
+        IconButton(onClick = onBackClick, modifier = Modifier.align(Alignment.CenterStart)) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
+                contentDescription = null,
+                modifier = Modifier.size(30.dp)
+            )
         }
 
         // Skip Button
@@ -117,7 +135,7 @@ fun TopSection(onBackClick: () -> Unit = {}, onSkipClick: () -> Unit = {}) {
 }
 
 @Composable
-fun BottomSection(size: Int, index: Int, onButtonClick: () -> Unit = {}) {
+fun BottomSection(size: Int, index: Int, onButtonClick: (() -> Unit)) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -128,14 +146,14 @@ fun BottomSection(size: Int, index: Int, onButtonClick: () -> Unit = {}) {
 
         // FAB Next
         FloatingActionButton(
-            onClick =  onButtonClick ,
+            onClick = onButtonClick,
             containerColor = Color.Black,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         ) {
             Icon(
-                Icons.Outlined.KeyboardArrowRight,
+                Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 tint = Color.White,
                 contentDescription = "Localized description"
             )
@@ -169,7 +187,7 @@ fun Indicator(isSelected: Boolean) {
             .width(width.value)
             .clip(CircleShape)
             .background(
-                color = if (isSelected) MaterialTheme.colorScheme.primary else Color(0XFFF8E2E7)
+                color = if (isSelected) Purple else Color(0XFFF8E2E7)
             )
     ) {
 
@@ -185,43 +203,20 @@ fun OnBoardingItem(items: OnBoardingItems) {
     ) {
         Image(
             painter = painterResource(id = items.image),
-            contentDescription = "Image1",
-            modifier = Modifier.padding(start = 50.dp, end = 50.dp)
+            contentDescription = "Image",
+//            modifier = Modifier.padding(start = 50.dp, end = 50.dp)
         )
-
-        Spacer(modifier = Modifier.height(25.dp))
-
         Text(
             text = stringResource(id = items.title),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.Bold,
+            color = Color.Gray,
+            fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center,
+            fontSize = 20.sp,
             letterSpacing = 1.sp,
         )
         Spacer(modifier = Modifier.height(2.dp))
 
-        Text(
-            text = stringResource(id = items.desc),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.Light,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(10.dp),
-            letterSpacing = 1.sp,
-        )
     }
 }
 
 
-@Composable
-fun SplashScreen() {
-    LaunchedEffect(key1 = true) {
-        delay(2000)
-    }
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(painter = painterResource(id = R.mipmap.ic_bus), contentDescription = null)
-
-    }
-
-}

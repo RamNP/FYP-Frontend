@@ -1,11 +1,11 @@
-package com.ram.buspass.features.bookingDetails.presentation
+package com.ram.buspass.features.bookingTicket.presentation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ram.buspass.features.bookingDetails.domain.BookingDetailsUseCase
+import com.ram.buspass.features.bookingTicket.domain.BookingDetailsUseCase
 import com.ram.buspass.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

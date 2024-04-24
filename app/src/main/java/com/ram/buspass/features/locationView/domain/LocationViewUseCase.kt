@@ -1,7 +1,7 @@
 package com.ram.buspass.features.locationView.domain
 
-import com.ram.buspass.utils.Resource
 import com.ram.buspass.features.locationView.data.LocationViewPojo
+import com.ram.buspass.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -14,7 +14,7 @@ class LocationViewUseCase(private  val locationViewRepository: LocationViewRepos
             emit(Resource.Success(data = locationViewRepository.getLocationView()))
 
         } catch (e: Exception) {
-            emit(Resource.Error(message = e.message.toString()))
+            emit(Resource.Error(message = "No Fund!"))
         }
 
     }

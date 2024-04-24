@@ -1,4 +1,4 @@
-package com.ram.buspass.features.bookingDetails.presentation
+package com.ram.buspass.features.bookingTicket.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -56,7 +56,9 @@ import com.ram.buspass.utils.components.ButtonView
 import com.ram.buspass.utils.components.IconView
 import com.ram.buspass.utils.components.SearchView
 import com.ram.buspass.utils.components.TextView
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun BookTicketDetailsViewScreen(
@@ -130,7 +132,7 @@ fun BookTicketDetailsViewScreen(
                         color = Color.Black, modifier = Modifier.padding(end = 80.dp)
                     )
                 }
-//Search bar search by Bus name/
+//Search bar search by Bus Number
                 SearchView(state = textState, placeHolder = "Search here...", modifier = Modifier)
 
                 LazyColumn(
@@ -140,7 +142,7 @@ fun BookTicketDetailsViewScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     items(results.filter {
-                        it.bus_details?.name?.contains(searchedText, ignoreCase = true) == true // Step 3: Filter the list
+                        it.bus_details?.bus_number?.contains(searchedText, ignoreCase = true) == true // Step 3: Filter the list
                     }
                     ) { it ->
                         it.bus_details?.let {

@@ -1,5 +1,6 @@
 package com.ram.buspass.features.register.presentation
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,7 +26,9 @@ class RegisterViewModel @Inject constructor(private val registerUseCase: Registe
                 }
 
                 is Resource.Success -> {
+                    Log.e("message:","${register.data?.message}")
                     RegisterState(data = register.data, message  = resource.data?.message)
+
                 }
 
                 is Resource.Error -> {
@@ -35,3 +38,4 @@ class RegisterViewModel @Inject constructor(private val registerUseCase: Registe
         }.launchIn(viewModelScope)
     }
 }
+

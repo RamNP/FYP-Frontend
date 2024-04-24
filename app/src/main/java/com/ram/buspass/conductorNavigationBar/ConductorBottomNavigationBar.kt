@@ -98,7 +98,7 @@ fun ConductorBottomNavViewScreen(navController: NavController) {
                 selectedContentColor = Color.Red,
                 unselectedContentColor = WhiteGrey,
                 onClick = {
-                    items.route?.let { route ->
+                    items.route.let { route ->
                         navController.navigate(route) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true

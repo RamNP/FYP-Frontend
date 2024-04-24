@@ -10,13 +10,13 @@ class RegisterUseCase(private val registerRepository: RegisterRepository) {
         emit(Resource.Loading())
         try {
             val response = registerRepository.getRegisterUser(email,username, password, role)
-            if (response?.is_success == true){
+            if (response?.isSuccess == true){
                 emit(Resource.Success(data = response))
             } else {
                 emit(Resource.Error(message = response?.message))
             }
         } catch (e: Exception){
-            emit(Resource.Error(e.message.toString()))
+            emit(Resource.Error("Not Found!"))
         }
     }
 }

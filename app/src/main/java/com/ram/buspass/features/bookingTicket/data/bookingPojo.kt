@@ -1,4 +1,4 @@
-package com.ram.buspass.features.bookTicket.data
+package com.ram.buspass.features.bookingTicket.data
 
 data class DataItem(
 	val bus_details: BusDetails? = null,

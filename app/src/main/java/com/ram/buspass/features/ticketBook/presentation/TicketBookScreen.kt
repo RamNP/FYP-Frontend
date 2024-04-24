@@ -56,14 +56,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.ram.buspass.helper.ClientInterceptor
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 import com.ram.buspass.userNavigationBar.UserScreen
-import com.ram.buspass.utils.ClientInterceptor
 import com.ram.buspass.utils.NetworkObserver
 import com.ram.buspass.utils.components.ButtonView
 import com.ram.buspass.utils.components.IconView
+import com.ram.buspass.utils.components.InternetLoading
 import com.ram.buspass.utils.components.TextView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -80,12 +81,12 @@ fun TicketBookViewScreens(
     val bookingTicketResult = ticketBookViewModel.bookingTicket
 
     val context = LocalContext.current
-    var busNameExpanded by remember { mutableStateOf(false) }
+    var busNumberExpanded by remember { mutableStateOf(false) }
     var mExpanded by remember { mutableStateOf(false) }
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
     // Up Icon when expanded and down icon when collapsed
     val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-    var selectedBusName by remember { mutableStateOf("Nepal yatayat") }
+    var selectedBusNumber by remember { mutableStateOf("B101") }
     val userId = ClientInterceptor(context).getUserId()
     var butId by remember { mutableStateOf(0) }
     var ticketId by remember { mutableStateOf(0) }
@@ -121,7 +122,7 @@ fun TicketBookViewScreens(
     ticketResult.isData?.data.let { result ->
 
         val filteredData = result?.filter {
-            it.bus_details?.name == selectedBusName
+            it.bus_details?.bus_number == selectedBusNumber
         }
 
         val bus_Id = mutableListOf<Int>()
@@ -151,7 +152,7 @@ fun TicketBookViewScreens(
                 ticketCost.add(it.cost ?: 0)
             }
         }
-        var busNameText by remember { mutableStateOf(busName.getOrNull(0).toString()) }
+        var busNumberText by remember { mutableStateOf(busNumber.getOrNull(0).toString()) }
         val scrollState = rememberScrollState()
         if (isConnected) {
             Row(
@@ -184,8 +185,8 @@ fun TicketBookViewScreens(
 
 //            Bus Name TextFiled
                 OutlinedTextField(
-                    value = busNameText,
-                    onValueChange = { busNameText = it },
+                    value = busNumberText,
+                    onValueChange = { busNumberText = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp)
@@ -193,12 +194,12 @@ fun TicketBookViewScreens(
                             mTextFieldSize = coordinates.size.toSize()
                         },
                     readOnly = true,
-                    label = { Text(" Select Bus Name") },
+                    label = { Text(" Select Bus Number") },
                     trailingIcon = {
                         Icon(
                             icon,
                             "Icon",
-                            Modifier.clickable { busNameExpanded = !busNameExpanded }
+                            Modifier.clickable { busNumberExpanded = !busNumberExpanded }
                         )
                     }
                 )
@@ -206,22 +207,22 @@ fun TicketBookViewScreens(
                     // Create a drop-down menu with list of bus details,
                     // when clicked, set the Text Field text as the bus id selected
                 DropdownMenu(
-                    expanded = busNameExpanded,
-                    onDismissRequest = { busNameExpanded = false },
+                    expanded = busNumberExpanded,
+                    onDismissRequest = { busNumberExpanded = false },
                     modifier = Modifier
                         .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
                 ) {
-                    busName.forEach { busNames ->
+                    busNumber.forEach { busNum ->
                         DropdownMenuItem(
                             onClick = {
-                                busNameText = busNames
-                                selectedBusName = busNames
-                                busNameExpanded = false
-                                showToast(context, "Bus Name: $selectedBusName")
+                                busNumberText = busNum
+                                selectedBusNumber = busNum
+                                busNumberExpanded = false
+                                showToast(context, "Bus Number: $selectedBusNumber")
 
                             }
                         ) {
-                            Text(text = busNames)
+                            Text(text = busNum)
                         }
                     }
                 }
@@ -298,7 +299,7 @@ fun TicketBookViewScreens(
                 }
             })
         } else {
-            Text(text = "No Internet Net")
+            InternetLoading()
         }
     }
 

@@ -6,10 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import com.ram.buspass.googleMap.presentation.GoogleMapViewScreen
 import com.ram.buspass.ui.theme.BusPassTheme
 import com.ram.buspass.userNavigationBar.MainNavigationScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,25 +14,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val getSharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE)
-        val getUserDevice = getSharedPreferences.getString("login_screen", "")
         setContent {
             BusPassTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-//                    color = Purple
                 ) {
-                    val navController = rememberNavController()
                     MainNavigationScreen()
-//                    UserBottomBarWithFabViewScreen()
-//                      ConductorBottomBarWithFabViewScreen()
-//                    Maps()
+
                 }
             }
         }
@@ -43,14 +32,6 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Composable
-fun Maps(
-) {
-//    MyApp()
-    GoogleMapViewScreen()
-
-
-}
 
 
 

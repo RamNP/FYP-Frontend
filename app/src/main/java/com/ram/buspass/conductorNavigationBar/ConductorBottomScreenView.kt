@@ -12,7 +12,7 @@ import com.ram.buspass.features.passVerify.presentation.PassVerifyViewScreen
 import com.ram.buspass.features.profile.presentation.ProfileViewScreen
 import com.ram.buspass.features.updateBusLocation.presentation.BusLocationViewScreen
 import com.ram.buspass.features.verifyTicket.presentation.VerifyTicketViewScreen
-import com.ram.buspass.testing.UpdateBusLocationGoogleMapScreenScreen
+import com.ram.buspass.features.updateBusLocation.presentation.UpdateBusLocationGoogleMapScreenScreen
 import com.ram.buspass.userNavigationBar.ScreenList
 
 

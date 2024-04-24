@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -67,7 +69,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun RegisterViewScreen(
-    navHostController: NavHostController,
+    navController: NavHostController,
     registerViewModel: RegisterViewModel = hiltViewModel()
 ) {
 
@@ -77,7 +79,7 @@ fun RegisterViewScreen(
     val context = LocalContext.current
     var role by remember { mutableStateOf("") }
     val isRoleEmpty by remember { derivedStateOf { role.isEmpty() } }
-
+   val scrollState = rememberScrollState()
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -94,22 +96,18 @@ fun RegisterViewScreen(
     val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
 
 
-//    val onClick: () -> Unit = {
-//        MainScope().launch {
-//            registerViewModel.getRegisterUser(email, userName, password, role)
-//        }
-//    }
-
-
-    // register button onClickAction
+    // register button
     val onClick = {
         if (isConnected) {
             MainScope().launch {
                 if (isValidEmailAddress(email)) {
                     registerViewModel.getRegisterUser(email, username, password, role)
-                    navHostController.navigate(ScreenList.LoginScreen.route)
-                    showToast(context ,"User Created successfully")
+                    navController.navigate(ScreenList.LoginScreen.route)
+                    showToast(context, "User Created successfully")
+
+
                 }
+
             }
         } else {
             showToast(context, "No Internet connection")
@@ -141,25 +139,33 @@ fun RegisterViewScreen(
         }
     })
 
-
+    LaunchedEffect(key1 = getRegister.data?.message, block = {
+        if (getRegister.data?.isSuccess == true) {
+            showToast(context, "${getRegister.data.message}")
+            navController.navigate(ScreenList.LoginScreen.route)
+        }
+    })
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(10.dp),
         ) {
-            IconButton(onClick = { navHostController.navigate(ScreenList.LoginScreen.route) }) {
-                IconView(imageVector = Icons.Default.ArrowBack)
+            IconButton(onClick = { navController.navigate(ScreenList.LoginScreen.route) }) {
+                IconView(imageVector = Icons.Default.ArrowBackIosNew)
             }
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally,
 
                 ) {
                 PainterImageView(
                     painterResource(id = R.mipmap.ic_register),
-                    modifier = Modifier.height(250.dp)
+                    modifier = Modifier
+                        .height(280.dp)
+                        .width(300.dp)
 
                 )
                 Spacer(modifier = Modifier.padding(5.dp))
@@ -171,24 +177,13 @@ fun RegisterViewScreen(
 
 
             }
-//            InputTextFieldView(
-//                value = role,
-//                onValueChange = { role = it },
-//                label = "Role",
-//                placeholder = "Enter Role",
-//                textStyle = TextStyle(),
-//                isError = roleEmptyValue,
-//                invalidMessage = "Role Text field is Empty!",
-//                errorColor = Color.Red,
-//                leadingIcon = { IconView(imageVector = Icons.Default.Person) },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(5.dp)
-//            )
+
 
 
             Column(
-                modifier = Modifier.fillMaxWidth().padding(5.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

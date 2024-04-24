@@ -25,6 +25,8 @@ sealed class ScreenList(val route: String) {
     object LoginScreen : ScreenList("LoginScreen")
     object RegisterScreen : ScreenList("RegisterScreen")
     object ForgotScreen : ScreenList("ForgotScreen")
+    object OnBoardingScreen : ScreenList("OnBoardingScreen")
+
     object BottomNavMenuUser : ScreenList("BottomNavMenuUser")
     object BottomNavMenuConductor : ScreenList("BottomNavMenuConductor")
     object EditProfile : ScreenList("EditProfile")

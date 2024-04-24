@@ -1,7 +1,7 @@
 package com.ram.buspass.helper.resource.remote.api
 
 
-import com.ram.buspass.features.bookTicket.data.BookingPojo
+import com.ram.buspass.features.bookingTicket.data.BookingPojo
 import com.ram.buspass.features.chanagePassword.data.ChangePasswordPojo
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordDto
 import com.ram.buspass.features.editProfile.data.EditProfilePojo
@@ -19,17 +19,16 @@ import com.ram.buspass.features.ticketBook.domain.BookDto
 import com.ram.buspass.features.updateBusLocation.data.BookingBusPojo
 import com.ram.buspass.features.updateBusLocation.data.LocationPojo
 import com.ram.buspass.features.updateBusLocation.domain.BusLocationDto
-import com.ram.buspass.features.verifyTicket.data.VerifyTicketPojo
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Query
 
 interface ApiService {
 
-
-    @POST("api/register/user/")
+    @POST("api/register/user/") // api/register/user/
     suspend fun registerUser(
         @Body userModelDto: UserModelDto
     ): RegisterPojo?
@@ -59,7 +58,7 @@ interface ApiService {
     suspend fun getUserBooking(): BookingPojo
 
     @GET("/api/verify/ticket/")
-    suspend fun getVerifyTicket(): VerifyTicketPojo
+    suspend fun getVerifyTicket(): PassVerifyPojo
 
     @POST("api/update/bus/location/")
     suspend fun updateBusLocation(@Body busLocationDto: BusLocationDto): LocationPojo?
@@ -71,7 +70,7 @@ interface ApiService {
     suspend fun getBookingBus(): BookingBusPojo?
     @GET("api/pass/verify/")
     suspend fun getPassVerify(): PassVerifyPojo?
-
-
+    @PATCH("/api/pass/activate/")
+    suspend fun getPassStatus(@Query("pass_id") passId: Int?): PassVerifyPojo
 
 }

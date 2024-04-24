@@ -13,10 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,16 +33,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.ram.buspass.utils.components.TextView
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
+import com.ram.buspass.utils.components.SearchView
+import com.ram.buspass.utils.components.TextView
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun VerifyTicketViewScreen(
@@ -46,6 +53,17 @@ fun VerifyTicketViewScreen(
     verifyTicketViewModel: VerifyTicketViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = verifyTicketViewModel.isRefresh,
+        onRefresh = { verifyTicketViewModel.loadStuff() }
+    )
+
+    val textState = remember {
+        mutableStateOf(TextFieldValue(""))
+    }
+
+    val searchedText = textState.value.text
     var busNumber by remember { mutableStateOf("") }
     var busName by remember { mutableStateOf("") }
     var fromTo by remember { mutableStateOf("") }
@@ -99,42 +117,77 @@ fun VerifyTicketViewScreen(
                     color = Color.Black
                 )
             }
-            Column(modifier = Modifier.fillMaxWidth()) {
+            SearchView(state = textState, placeHolder = "Search here...", modifier = Modifier)
+
+            Column(modifier = Modifier.fillMaxWidth().padding(bottom = 30.dp)) {
 
 
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .pullRefresh(pullRefreshState),
+//                    contentAlignment = Alignment.TopCenter
+//                ) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    items(ticketResults) { it ->
-                        it?.bus_details?.let {
-                            busNumber = it.bus_number ?: ""
-                            busName = it.name ?: ""
-                            fromTo = it.from_to ?: ""
-                            route = it.route ?: ""
-                            busSpeed = it.bus_speed ?: ""
+                    val filteredTickets = ticketResults.filter {
+                        it?.bus_details?.bus_number?.contains(searchedText, ignoreCase = true) == true
+                    }
 
-                        }
-                        it?.ticket_details?.let {
+                    items(filteredTickets) { ticket ->
+                        busNumber = ticket?.bus_details?.bus_number ?: ""
+                        busName = ticket?.bus_details?.name ?: ""
+                        fromTo = ticket?.bus_details?.from_to ?: ""
+                        route = ticket?.bus_details?.route ?: ""
+                        busSpeed = ticket?.bus_details?.bus_speed ?: ""
+
+                        ticket?.ticket_details?.let { ticketDetails ->
                             VerifyTicketCard(
-                                ticketNo = it.ticket_no ?: 0,
-                                cost = it.cost ?: 0,
-                                time = it.time ?: "",
-                                date = it.date ?: "",
+                                ticketNo = ticketDetails.ticket_no ?: 0,
+                                cost = ticketDetails.cost ?: 0,
+                                time = ticketDetails.time ?: "",
+                                date = ticketDetails.date ?: "",
                                 busNumber = busNumber,
                                 busName = busName,
-                                fromTo = fromTo,
-
-                                )
+                                fromTo = fromTo
+                            )
                         }
-
                     }
+                }
+
+//                    PullRefreshIndicatorView(
+//                        modifier = Modifier.align(Alignment.TopCenter),
+//                        refreshing = verifyTicketViewModel.isRefresh,
+//                        state = pullRefreshState
+//                    )
                 }
             }
         }
     }
+
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun PullRefreshIndicatorView(
+    modifier: Modifier,
+    refreshing: Boolean,
+    state: PullRefreshState,
+    backgroundColor: Color = Color.White,
+    contentColor: Color = Purple,
+    scale: Boolean = false,
+) {
+    PullRefreshIndicator(
+        refreshing = refreshing,
+        state = state,
+        modifier = modifier,
+        contentColor = contentColor,
+        backgroundColor = backgroundColor,
+        scale = scale
+    )
 }
 
 @Composable

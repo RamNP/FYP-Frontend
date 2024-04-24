@@ -14,7 +14,7 @@ class TicketBookUseCase(private val ticketBookRepository: TicketBookRepository) 
             emit(Resource.Success(data = ticketBookRepository.getTicket()))
 
         } catch (e: Exception) {
-            emit(Resource.Error(message = e.message.toString()))
+            emit(Resource.Error(message =" No Fund!"))
         }
 
     }
@@ -28,7 +28,7 @@ class TicketBookUseCase(private val ticketBookRepository: TicketBookRepository) 
                 )
             )
         } catch (e: Exception) {
-            emit(Resource.Error(e.message.toString()))
+            emit(Resource.Error("No Fund!"))
         }
     }
 

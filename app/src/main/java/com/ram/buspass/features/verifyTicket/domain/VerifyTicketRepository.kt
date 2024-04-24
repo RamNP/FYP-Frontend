@@ -1,7 +1,7 @@
 package com.ram.buspass.features.verifyTicket.domain
 
-import com.ram.buspass.features.verifyTicket.data.VerifyTicketPojo
+import com.ram.buspass.features.passVerify.data.PassVerifyPojo
 
 interface  VerifyTicketRepository {
-    suspend fun getVerifyTicketDetails(): VerifyTicketPojo
+    suspend fun getVerifyTicketDetails(): PassVerifyPojo
 }

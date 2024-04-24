@@ -105,7 +105,7 @@ fun LocationViewScreen(
                     text = "Location View",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = Color.Black, modifier = Modifier.padding(end = 80.dp)
+                    color = Color.Black,
                 )
             }
 
@@ -116,7 +116,7 @@ fun LocationViewScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(locationResults?.filter {
-                    it.name?.contains(searchedText, ignoreCase = true) == true // Step 3: Filter the list
+                    it.bus_number?.contains(searchedText, ignoreCase = true) == true // Step 3: Filter the list
                 } ?: listOf()) { it: BusDetailsItem ->
                     LocationViewCard(
                         busNumber = it.bus_number ?: "",

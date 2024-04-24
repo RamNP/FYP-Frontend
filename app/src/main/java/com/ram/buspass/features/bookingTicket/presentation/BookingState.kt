@@ -1,6 +1,6 @@
-package com.ram.buspass.features.bookingDetails.presentation
+package com.ram.buspass.features.bookingTicket.presentation
 
-import com.ram.buspass.features.bookTicket.data.BookingPojo
+import com.ram.buspass.features.bookingTicket.data.BookingPojo
 
 data class BookingState(
     val isLoading: Boolean  = false,

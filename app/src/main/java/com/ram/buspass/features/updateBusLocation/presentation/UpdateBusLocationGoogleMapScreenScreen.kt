@@ -1,4 +1,4 @@
-package com.ram.buspass.testing
+package com.ram.buspass.features.updateBusLocation.presentation
 
 
 import android.Manifest
@@ -52,14 +52,12 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.ram.buspass.conductorNavigationBar.ConductorNavigation
-import com.ram.buspass.features.updateBusLocation.presentation.UpdateBusLocationViewModel
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
 import com.ram.buspass.utils.components.InputTextFieldView
 import com.ram.buspass.utils.components.TextView
-
 @SuppressLint("MissingPermission")
 @Composable
 fun UpdateBusLocationGoogleMapScreenScreen(
@@ -75,10 +73,8 @@ fun UpdateBusLocationGoogleMapScreenScreen(
     val getBusLocation = updateBusLocationViewModel.busLocation
     val context = LocalContext.current
     val fusedLocationClient: FusedLocationProviderClient = remember { LocationServices.getFusedLocationProviderClient(context) }
-//    var isInitialized by remember { mutableStateOf(false) } // Flag to track initialization status
 
 //Location Update api call
-
     LaunchedEffect(key1 = latitude,key2 = longitude,block = {
         updateBusLocationViewModel.getBusLocation(bus_number ,latitude, longitude)
         Log.e("LocationDetailsLat" , "$latitude")

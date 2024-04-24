@@ -32,17 +32,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.ram.buspass.R
 import com.ram.buspass.features.login.data.AuthResponse
+import com.ram.buspass.helper.ClientInterceptor
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.userNavigationBar.ScreenList
-import com.ram.buspass.utils.ClientInterceptor
 import com.ram.buspass.utils.NetworkObserver
 import com.ram.buspass.utils.components.ButtonView
 import com.ram.buspass.utils.components.ClickableTextView
@@ -107,7 +109,6 @@ fun LoginViewScreen(
                 role = result.isData.authResponse?.role,
                 id = result.isData.authResponse?.id,
             )
-            Log.e("Loginn" ,"$authentication")
             when (result.isData.authResponse?.role) {
                 "user" -> {
                     navController.navigate(ScreenList.BottomNavMenuUser.route) {
@@ -210,7 +211,7 @@ fun LoginViewScreen(
             ClickableTextView(
                 text = AnnotatedString("Forgot Password?"),
                 style = TextStyle(color = Purple),
-                onClick = { },
+                onClick = {navController.navigate(ScreenList.ForgotScreen.route) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -256,5 +257,10 @@ fun LoginViewScreen(
     }
 }
 
-
+@Preview
+@Composable
+fun LoginViewScreenPreview() {
+    val navController  = rememberNavController()
+    LoginViewScreen(navController)
+}
 

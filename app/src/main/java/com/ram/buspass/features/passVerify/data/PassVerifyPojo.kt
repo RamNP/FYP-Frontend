@@ -7,7 +7,6 @@ data class PassVerifyPojo(
 	val is_success: Boolean? = null,
 	val status: Int? = null
 )
-
 data class UserDetails(
 	val role: String? = null,
 	val address: String? = null,

@@ -1,7 +1,7 @@
 package com.ram.buspass.features.profile.domain
 
-import com.ram.buspass.utils.Resource
 import com.ram.buspass.features.profile.data.ProfilePojo
+import com.ram.buspass.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -13,7 +13,7 @@ class ProfileUseCase(private val profileRepository: ProfileRepository) {
             emit(Resource.Success(data = profileRepository.getUserProfile()))
 
         } catch (e: Exception) {
-            emit(Resource.Error(message = e.message.toString()))
+            emit(Resource.Error(message = "No Fund!"))
         }
 
     }

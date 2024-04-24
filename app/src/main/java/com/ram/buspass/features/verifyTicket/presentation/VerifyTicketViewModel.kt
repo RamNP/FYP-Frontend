@@ -16,9 +16,9 @@ import javax.inject.Inject
 class VerifyTicketViewModel @Inject constructor(private val verifyTicketUseCase: VerifyTicketUseCase) :
     ViewModel() {
 
+    var isRefresh by mutableStateOf(false)
     private var _vTicket by mutableStateOf(VerifyTicketState())
     val vTicket: VerifyTicketState get() = _vTicket
-
     fun getVerifyTick() {
         verifyTicketUseCase().onEach {
             _vTicket = when (it) {
@@ -38,4 +38,26 @@ class VerifyTicketViewModel @Inject constructor(private val verifyTicketUseCase:
         }.launchIn(viewModelScope)
     }
 
+
+    fun loadStuff(){
+        isRefresh = true
+        verifyTicketUseCase.invoke().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    isRefresh = true
+                }
+
+                is Resource.Success -> {
+                    _vTicket = VerifyTicketState(isData = it.data)
+                    isRefresh = false
+                }
+
+                is Resource.Error -> {
+                    _vTicket = VerifyTicketState(isError = it.message.toString())
+                    isRefresh =false
+                }
+
+            }
+        }.launchIn(viewModelScope)
+    }
 }

@@ -5,4 +5,7 @@ import com.ram.buspass.features.passVerify.data.PassVerifyPojo
 interface PassVerifyRepository {
 
     suspend fun getVerifyPass(): PassVerifyPojo?
+
+
+    suspend fun getPassStatusApproved(passId: Int?): PassVerifyPojo?
 }

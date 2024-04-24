@@ -43,13 +43,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.ram.buspass.R
+import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
+import com.ram.buspass.ui.theme.Purple
+import com.ram.buspass.ui.theme.White
 import com.ram.buspass.utils.components.ButtonView
 import com.ram.buspass.utils.components.IconView
 import com.ram.buspass.utils.components.InputTextFieldView
 import com.ram.buspass.utils.components.TextView
-import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
-import com.ram.buspass.ui.theme.Purple
-import com.ram.buspass.ui.theme.White
 
 
 @Composable
@@ -122,8 +122,8 @@ fun EditProfileViewScreen(
             ) {
 
                 Image(
-                    painter = painterResource(id = R.mipmap.ic_profile),
-                    contentDescription = null
+                    painter = painterResource(id = R.mipmap.ic_logo),
+                    contentDescription = null , modifier = Modifier.width(300.dp)
                 )
             }
             //

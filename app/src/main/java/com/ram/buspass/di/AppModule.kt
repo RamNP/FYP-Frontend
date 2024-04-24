@@ -3,8 +3,8 @@ package com.ram.buspass.di
 
 import android.content.Context
 import androidx.room.Room
-import com.ram.buspass.features.bookingDetails.data.BookingDetailsRepositoryImpl
-import com.ram.buspass.features.bookingDetails.domain.BookingDetailsRepository
+import com.ram.buspass.features.bookingTicket.data.BookingDetailsRepositoryImpl
+import com.ram.buspass.features.bookingTicket.domain.BookingDetailsRepository
 import com.ram.buspass.features.chanagePassword.data.ChangePasswordRepoImpl
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
 import com.ram.buspass.features.editProfile.data.EditProfileRepoImpl
@@ -25,11 +25,11 @@ import com.ram.buspass.features.updateBusLocation.data.UpdateBusLocationRepoImpl
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
 import com.ram.buspass.features.verifyTicket.data.VerifyTicketRepoImpl
 import com.ram.buspass.features.verifyTicket.domain.VerifyTicketRepository
+import com.ram.buspass.helper.ClientInterceptor
 import com.ram.buspass.helper.resource.local.AppDatabase
 import com.ram.buspass.helper.resource.local.UserDao
 import com.ram.buspass.helper.resource.remote.api.ApiConstants
 import com.ram.buspass.helper.resource.remote.api.ApiService
-import com.ram.buspass.utils.ClientInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

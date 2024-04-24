@@ -1,8 +1,8 @@
 package com.ram.buspass.di
 
 
-import com.ram.buspass.features.bookingDetails.domain.BookingDetailsRepository
-import com.ram.buspass.features.bookingDetails.domain.BookingDetailsUseCase
+import com.ram.buspass.features.bookingTicket.domain.BookingDetailsRepository
+import com.ram.buspass.features.bookingTicket.domain.BookingDetailsUseCase
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordUseCase
 import com.ram.buspass.features.editProfile.domain.EditProfileRepository

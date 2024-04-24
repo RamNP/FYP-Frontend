@@ -75,8 +75,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.ram.buspass.R
+import com.ram.buspass.ui.theme.Purple
 
 @Composable
 fun TextView(
@@ -97,14 +97,6 @@ fun TextView(
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current
 ) {
-//    Text(
-//        text = text,
-//        modifier = modifier,
-//        color = color,
-//        fontFamily = fontFamily,
-//        fontSize = fontSize,
-//        fontWeight = fontWeight,
-//    )
     Text(
         text = text,
         modifier = modifier,
@@ -187,6 +179,28 @@ fun TextButtonView(
 
 }
 
+
+@Composable
+fun InternetLoading() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextView(
+                text = "No Internet Please Connect The Internet..",
+                style = TextStyle(color = Color.Gray, fontSize = 18.sp),
+            )
+            androidx.compose.material3.CircularProgressIndicator(
+                1f,
+                modifier = Modifier,
+                color = Purple,
+            )
+        }
+    }
+}
+
 @Composable
 fun ClickableTextView(
     text: AnnotatedString,
@@ -265,124 +279,6 @@ fun InputTextFieldView(
 
 
 
-// input text fields
-@Composable
-fun InputTextFieldViewLat(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    enabled: Boolean = true,
-    readOnly: Boolean = false,
-    leadingIcon: @Composable() (() -> Unit)? = null,
-    trailingIcon: @Composable() (() -> Unit)? = null,
-
-    modifier: Modifier ,
-    placeholder: String,
-    textStyle: TextStyle,
-    isEmpty: Boolean = false,
-    isError: Boolean = false,
-    singleLine: Boolean = true,
-
-    maxLines: Int = 1,
-    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-    shape: Shape = ShapeDefaults.Medium,
-    invalidMessage: String,
-    errorColor: Color = Color.Unspecified
-) {
-    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            label = { TextView(text = label, style = textStyle) },
-            placeholder = {
-                TextView(
-                    text = placeholder,
-                    style = TextStyle(
-                        color = Color.Gray,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Normal,
-                        lineHeight = 24.sp
-                    ),
-                    modifier = Modifier
-                )
-            },
-            trailingIcon = trailingIcon,
-            leadingIcon = leadingIcon,
-            enabled = enabled,
-            readOnly = readOnly,
-            keyboardOptions = keyboardOptions,// KeyboardOptions(keyboardType = KeyboardType.Text),
-            singleLine = singleLine,
-            maxLines = maxLines,
-            shape = shape,
-            isError = (isEmpty || isError),
-            modifier = modifier
-        )
-        if (isEmpty) {
-            TextView(text = "Email Text field is Empty!", style = TextStyle(color = errorColor))
-        }
-        if (isError) {
-            TextView(text = invalidMessage, style = TextStyle(color = errorColor))
-        }
-    }
-}
-//Search bar text filed
-
-@Composable
-fun InputTextFieldSearchBar(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    enabled: Boolean = true,
-    readOnly: Boolean = false,
-    trailingIcon: @Composable() (() -> Unit)? = null,
-    modifier: Modifier ,
-    placeholder: String,
-    isEmpty: Boolean = false,
-    textStyle: TextStyle,
-    singleLine: Boolean = true,
-    maxLines: Int = 2,
-    errorColor: Color = Color.Unspecified,
-    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-    shape: Shape = ShapeDefaults.Medium,
-) {
-    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
-
-        var color by remember { mutableStateOf(Color.Gray) }
-        color = if (isEmpty) {
-            errorColor
-        } else {
-            Color.Green
-        }
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            label = { TextView(text = label, style = textStyle) },
-            placeholder = {
-                TextView(
-                    text = placeholder,
-                    style = TextStyle(
-                        color = Color.Gray,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        lineHeight = 24.sp
-                    ),
-                )
-            },
-            leadingIcon = null,
-            enabled = enabled,
-            readOnly = readOnly,
-            keyboardOptions = keyboardOptions,// KeyboardOptions(keyboardType = KeyboardType.Text),
-            singleLine = singleLine,
-            maxLines = maxLines,
-            shape = shape,
-            modifier = modifier ,
-            trailingIcon   = {}
-
-
-        )
-
-    }
-}
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
@@ -652,52 +548,6 @@ fun ButtonAppBarView() {
     )
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ButtonAppBarViewAp(navController: NavHostController) {
-    TopAppBar(
-        title = { },
-        navigationIcon = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .fillMaxHeight(),
-
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.mipmap.ic_register),
-                    contentDescription = "",
-                    Modifier
-                        .padding(start = 10.dp)
-                        .height(40.dp)
-                        .width(40.dp)
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                ) {
-
-                    IconButton(
-                        onClick = {
-//                            navController.navigate(SearchBarItem.SearchBar.route)
-                        }
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.mipmap.ic_downloads),
-                            contentDescription = null,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    }
-                }
-            }
-        },
-        modifier = Modifier
-            .shadow(5.dp)
-    )
-}
 
 
 

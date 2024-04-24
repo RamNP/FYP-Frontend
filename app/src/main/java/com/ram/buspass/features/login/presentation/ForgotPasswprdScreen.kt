@@ -4,14 +4,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,11 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ram.buspass.R
+import com.ram.buspass.ui.theme.Purple
+import com.ram.buspass.userNavigationBar.ScreenList
+import com.ram.buspass.utils.components.ButtonView
 import com.ram.buspass.utils.components.IconView
 import com.ram.buspass.utils.components.InputTextFieldView
 import com.ram.buspass.utils.components.PainterImageView
 import com.ram.buspass.utils.components.TextView
-import com.ram.buspass.userNavigationBar.ScreenList
 
 @Composable
 fun ForgotViewScreen(navController: NavHostController) {
@@ -97,15 +96,14 @@ fun ForgotViewScreen(navController: NavHostController) {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(
+
+
+            ButtonView(
                 onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .height(50.dp)
-                    .width(200.dp),
-                colors = ButtonDefaults.buttonColors()
-            ) {
-                TextView(text = "Reset Password")
-            }
+                btnColor = ButtonDefaults.buttonColors(Purple),
+                text = "Reset Password",
+                textStyle = TextStyle()
+            )
         }
     }
 }
