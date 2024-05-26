@@ -132,7 +132,7 @@ fun PassVerifyViewScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 40.dp, bottom = 40.dp)
+                        .padding(top = 45.dp)
 
                 ) {
                     SearchView(state = textState, placeHolder = "Search here...", modifier = Modifier)
@@ -141,7 +141,7 @@ fun PassVerifyViewScreen(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(16.dp),
+                            .padding(start = 16.dp , end = 16.dp , bottom = 60.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         val filteredTickets = passResults.filter {

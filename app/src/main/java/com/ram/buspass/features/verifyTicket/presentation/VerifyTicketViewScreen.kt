@@ -119,7 +119,7 @@ fun VerifyTicketViewScreen(
             }
             SearchView(state = textState, placeHolder = "Search here...", modifier = Modifier)
 
-            Column(modifier = Modifier.fillMaxWidth().padding(bottom = 30.dp)) {
+            Column(modifier = Modifier.fillMaxWidth()) {
 
 
 //                Box(
@@ -130,9 +130,8 @@ fun VerifyTicketViewScreen(
 //                ) {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxSize().padding(start = 16.dp , end = 16.dp , bottom = 60.dp)
+,                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     val filteredTickets = ticketResults.filter {
                         it?.bus_details?.bus_number?.contains(searchedText, ignoreCase = true) == true

@@ -7,6 +7,8 @@ import com.ram.buspass.features.chanagePassword.domain.ChangePasswordDto
 import com.ram.buspass.features.editProfile.data.EditImagePojo
 import com.ram.buspass.features.editProfile.data.EditProfilePojo
 import com.ram.buspass.features.editProfile.domain.EditModelDto
+import com.ram.buspass.features.forgetPassword.domain.ForgotPasswordDAO
+import com.ram.buspass.features.forgetPassword.domain.ForgotPasswordPoJo
 import com.ram.buspass.features.locationView.data.LocationViewPojo
 import com.ram.buspass.features.login.data.LoginPojo
 import com.ram.buspass.features.login.domain.LoginUserModelDto
@@ -33,56 +35,59 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @POST("api/register/user/") // api/register/user/
+    @POST("api/register/user") // api/register/user/
     suspend fun registerUser(
         @Body userModelDto: UserModelDto
     ): RegisterPojo?
 
-    @POST("api/login/user/")
+    @POST("api/login/user")
     suspend fun loginUser(
         @Body loginUserModelDto: LoginUserModelDto
     ): LoginPojo?
 
-    @GET("/api/user/profile/")
+    @GET("/api/user/profile")
     suspend fun getProfile(): ProfilePojo
-    @PUT("/api/user/profile/edit/")
+    @PUT("/api/user/profile/edit")
     suspend fun editUserProfile(@Body editModelDto: EditModelDto): EditProfilePojo?
 
     @Multipart
-    @PATCH("/api/change/profile_url/")
+    @PATCH("/api/change/profile_url")
     suspend fun editProfileImage(
         @Part("id") id: RequestBody?,
         @Part photo_image: MultipartBody.Part?,
     ):EditImagePojo?
 
-    @PATCH("/api/change/password/")
+    @PATCH("/api/change/password")
     suspend fun getChangePassword(@Body changePasswordDto: ChangePasswordDto): ChangePasswordPojo?
 
-    @GET("api/ticket/bus_details/")
+    @PATCH("/api/update/password")
+    suspend fun getUpdatePassword(@Body ForgotPasswordDAO: ForgotPasswordDAO): ForgotPasswordPoJo?
+
+    @GET("api/ticket/bus_details")
     suspend fun getBookTicket(): TicketBookPojo
 
-    @POST("/api/book/ticket/")
+    @POST("/api/book/ticket")
     suspend fun getBookDetails(
         @Body bookDto: BookDto
     ): TicketBookingPojo
 
-    @GET("api/booking/ticket/")
+    @GET("api/booking/ticket")
     suspend fun getUserBooking(): BookingPojo
 
-    @GET("/api/verify/ticket/")
+    @GET("/api/verify/ticket")
     suspend fun getVerifyTicket(): PassVerifyPojo
 
-    @POST("api/update/bus/location/")
+    @POST("api/update/bus/location")
     suspend fun updateBusLocation(@Body busLocationDto: BusLocationDto): LocationPojo?
 
-    @GET("api/view_bus_location/")
+    @GET("api/view/bus/location")
     suspend fun getLocationView(): LocationViewPojo
 
-    @GET("api/booking/bus/details/")
+    @GET("api/booking/bus/details")
     suspend fun getBookingBus(): BookingBusPojo?
-    @GET("api/pass/verify/")
+    @GET("api/pass/verify")
     suspend fun getPassVerify(): PassVerifyPojo?
-    @PATCH("/api/pass/activate/")
+    @PATCH("/api/pass/activate")
     suspend fun getPassStatus(@Query("pass_id") passId: Int?): PassVerifyPojo
 
 }

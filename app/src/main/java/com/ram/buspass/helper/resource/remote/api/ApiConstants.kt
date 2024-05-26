@@ -1,5 +1,8 @@
 package com.ram.buspass.helper.resource.remote.api
 
 object ApiConstants {
-    const val BASE_URL ="https://eff2-2400-1a00-b040-999e-7186-963d-a9d6-9ad3.ngrok-free.app/"
+
+    const val BASE_URL ="https://b1b6-2405-acc0-1307-3db2-6019-83f7-befe-4f8d.ngrok-free.app/"
+    const val LOCAL_DATABASE_NAME = "BusPassDb"
+
 }

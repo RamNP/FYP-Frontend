@@ -7,6 +7,8 @@ import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordUseCase
 import com.ram.buspass.features.editProfile.domain.EditProfileRepository
 import com.ram.buspass.features.editProfile.domain.EditProfileUseCase
+import com.ram.buspass.features.forgetPassword.domain.ForgotPasswordRepository
+import com.ram.buspass.features.forgetPassword.domain.ForgotPasswordUseCase
 import com.ram.buspass.features.locationView.domain.LocationViewRepository
 import com.ram.buspass.features.locationView.domain.LocationViewUseCase
 import com.ram.buspass.features.login.domain.LoginRepository
@@ -63,6 +65,11 @@ class AppComponent {
         return ChangePasswordUseCase(changePasswordRepository)
     }
 
+    @Provides
+    @Singleton
+    fun provideForgotPasswordUseCase(forgotPasswordRepository: ForgotPasswordRepository): ForgotPasswordUseCase {
+        return ForgotPasswordUseCase(forgotPasswordRepository)
+    }
     @Provides
     @Singleton
     fun provideTicketBookUseCase(ticketBookRepository: TicketBookRepository): TicketBookUseCase {

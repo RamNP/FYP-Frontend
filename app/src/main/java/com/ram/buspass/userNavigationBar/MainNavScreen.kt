@@ -7,8 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.ram.buspass.conductorNavigationBar.ConductorBottomBarWithFabViewScreen
+import com.ram.buspass.features.forgetPassword.presentation.ForgotViewScreen
 import com.ram.buspass.features.introScreen.OnBoardingScreen
-import com.ram.buspass.features.login.presentation.ForgotViewScreen
 import com.ram.buspass.features.login.presentation.LoginViewScreen
 import com.ram.buspass.features.register.presentation.RegisterViewScreen
 import com.ram.buspass.helper.ClientInterceptor

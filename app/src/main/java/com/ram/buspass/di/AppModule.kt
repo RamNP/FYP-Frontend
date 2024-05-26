@@ -2,13 +2,14 @@ package com.ram.buspass.di
 
 
 import android.content.Context
-import androidx.room.Room
 import com.ram.buspass.features.bookingTicket.data.BookingDetailsRepositoryImpl
 import com.ram.buspass.features.bookingTicket.domain.BookingDetailsRepository
 import com.ram.buspass.features.chanagePassword.data.ChangePasswordRepoImpl
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
 import com.ram.buspass.features.editProfile.data.EditProfileRepoImpl
 import com.ram.buspass.features.editProfile.domain.EditProfileRepository
+import com.ram.buspass.features.forgetPassword.data.ForgotPasswordRepositoryImpl
+import com.ram.buspass.features.forgetPassword.domain.ForgotPasswordRepository
 import com.ram.buspass.features.locationView.data.LocationViewRepoImpl
 import com.ram.buspass.features.locationView.domain.LocationViewRepository
 import com.ram.buspass.features.login.data.LoginRepoImpl
@@ -25,50 +26,34 @@ import com.ram.buspass.features.updateBusLocation.data.UpdateBusLocationRepoImpl
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
 import com.ram.buspass.features.verifyTicket.data.VerifyTicketRepoImpl
 import com.ram.buspass.features.verifyTicket.domain.VerifyTicketRepository
-import com.ram.buspass.helper.ClientInterceptor
-import com.ram.buspass.helper.resource.local.AppDatabase
+import com.ram.buspass.helper.resource.local.DatabaseHelper.Companion.getDatabaseInstance
 import com.ram.buspass.helper.resource.local.UserDao
-import com.ram.buspass.helper.resource.remote.api.ApiConstants
 import com.ram.buspass.helper.resource.remote.api.ApiService
+import com.ram.buspass.helper.resource.remote.api.RetrofitInstance.Companion.getRetrofitInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
-    @Singleton
-    fun provideDatabaseInstance(@ApplicationContext context: Context): UserDao {
-        return Room.databaseBuilder(
-            context.applicationContext,
-            AppDatabase::class.java,
-            "User_DB"
-        ).fallbackToDestructiveMigration().build().usersDao()
-    }
 
     // create Retrofit instance
     @Provides
     @Singleton
+    fun provideDatabaseInstance(@ApplicationContext context: Context): UserDao {
+        return getDatabaseInstance(context).userDao()
+    }
+
+     // retrofit instance
+    @Provides
+    @Singleton
     fun provideRetrofit(@ApplicationContext context: Context): ApiService {
-        val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(ClientInterceptor(context))
-            .addInterceptor(httpLoggingInterceptor).build()
-        return Retrofit.Builder()
-            .baseUrl(ApiConstants.BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(ApiService::class.java)
+        return getRetrofitInstance(context).create(ApiService::class.java)
     }
 
 
@@ -102,6 +87,12 @@ object AppModule {
     @Singleton
     fun providePasswordChangeRepoImpl(apiService: ApiService): ChangePasswordRepository {
         return ChangePasswordRepoImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideForgotPasswordRepoImpl(apiService: ApiService): ForgotPasswordRepository {
+        return ForgotPasswordRepositoryImpl(apiService)
     }
 
     @Provides
