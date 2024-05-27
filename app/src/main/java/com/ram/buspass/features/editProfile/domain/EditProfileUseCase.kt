@@ -9,10 +9,10 @@ import java.io.File
 
 class EditProfileUseCase(private val editProfileRepository: EditProfileRepository) {
 
-    operator fun invoke(email: String? = null,username: String? = null, ): Flow<Resource<EditProfilePojo?>> = flow {
+    operator fun invoke(userId: Int? ,username: String? = null, address: String? = null): Flow<Resource<EditProfilePojo?>> = flow {
         emit(Resource.Loading())
         try {
-            emit(Resource.Success(editProfileRepository.getEditUserProfile(email, username, )))
+            emit(Resource.Success(editProfileRepository.getEditUserProfile(userId, username, address)))
         } catch (e: Exception){
             emit(Resource.Error(message = "Not found!"))
         }
@@ -21,6 +21,7 @@ class EditProfileUseCase(private val editProfileRepository: EditProfileRepositor
     operator fun invoke(userId: Int?, imageFile: File?): Flow<Resource<EditImagePojo?>> = flow {
         emit(Resource.Loading())
         try {
+
             val result = editProfileRepository.updateProfileImage(userId, imageFile)
             if (result?.is_success == true){
                 emit(Resource.Success(data = result))

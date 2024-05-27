@@ -3,5 +3,6 @@
     <string name="OnBoardingTitle1">Welcome to bus pass management system</string>
     <string name="OnBoardingTitle2">In Nepal like in many other countries the term "bus track" typically refers to the designated routes or paths that buses follow to transport passengers between various locations</string>
     <string name="OnBoardingTitle3">In Nepal like in many other countries the term "bus track" </string>
+    <string name="title_activity_qrscanner">QRScannerActivity</string>
 
 </resources>

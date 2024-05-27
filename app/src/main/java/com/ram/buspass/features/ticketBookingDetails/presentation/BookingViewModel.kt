@@ -1,11 +1,11 @@
-package com.ram.buspass.features.profile.presentation
+package com.ram.buspass.features.ticketBookingDetails.presentation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ram.buspass.features.profile.domain.ProfileUseCase
+import com.ram.buspass.features.ticketBookingDetails.domain.BookingDetailsUseCase
 import com.ram.buspass.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -13,32 +13,30 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(private val profileUseCase: ProfileUseCase) :
+class BookingViewModel @Inject constructor(private val bookingDetailsUseCase: BookingDetailsUseCase) :
     ViewModel() {
 
-    private var _profile by mutableStateOf(ProfileState())
-    val profile: ProfileState get() = _profile
 
-    fun getUserProfile() {
-        profileUseCase().onEach {
-            _profile = when (it) {
+    private var _booking by mutableStateOf(BookingState())
+    val booking: BookingState get() = _booking
+
+    fun getBooking() {
+        bookingDetailsUseCase().onEach {
+            _booking = when (it) {
                 is Resource.Loading -> {
-                    ProfileState(isLoading = true)
+                    BookingState(isLoading = true)
                 }
 
                 is Resource.Success -> {
-                    ProfileState(isData = it.data)
+                    BookingState(isData = it.data)
                 }
 
                 is Resource.Error -> {
-                    ProfileState(isError = it.message.toString())
+                    BookingState(isError = it.message.toString())
                 }
 
             }
         }.launchIn(viewModelScope)
     }
-
-
-
 
 }

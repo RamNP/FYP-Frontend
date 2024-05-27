@@ -8,6 +8,7 @@ data class ProfilePojo(
 )
 
 data class UserProfile(
+
 	val role: String? = null,
 	val address: String? = null,
 	val is_active: Boolean? = null,

@@ -2,8 +2,7 @@ package com.ram.buspass.di
 
 
 import android.content.Context
-import com.ram.buspass.features.bookingTicket.data.BookingDetailsRepositoryImpl
-import com.ram.buspass.features.bookingTicket.domain.BookingDetailsRepository
+import androidx.room.Room
 import com.ram.buspass.features.chanagePassword.data.ChangePasswordRepoImpl
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
 import com.ram.buspass.features.editProfile.data.EditProfileRepoImpl
@@ -20,14 +19,17 @@ import com.ram.buspass.features.profile.data.ProfileRepoImpl
 import com.ram.buspass.features.profile.domain.ProfileRepository
 import com.ram.buspass.features.register.data.RegisterRepoImpl
 import com.ram.buspass.features.register.domain.RegisterRepository
-import com.ram.buspass.features.ticketBook.data.TicketBookRepositoryImpl
-import com.ram.buspass.features.ticketBook.domain.TicketBookRepository
+import com.ram.buspass.features.ticketBooking.data.TicketBookRepositoryImpl
+import com.ram.buspass.features.ticketBooking.domain.TicketBookRepository
+import com.ram.buspass.features.ticketBookingDetails.data.BookingDetailsRepositoryImpl
+import com.ram.buspass.features.ticketBookingDetails.domain.BookingDetailsRepository
 import com.ram.buspass.features.updateBusLocation.data.UpdateBusLocationRepoImpl
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
 import com.ram.buspass.features.verifyTicket.data.VerifyTicketRepoImpl
 import com.ram.buspass.features.verifyTicket.domain.VerifyTicketRepository
-import com.ram.buspass.helper.resource.local.DatabaseHelper.Companion.getDatabaseInstance
+import com.ram.buspass.helper.resource.local.DatabaseHelper
 import com.ram.buspass.helper.resource.local.UserDao
+import com.ram.buspass.helper.resource.remote.api.ApiConstants
 import com.ram.buspass.helper.resource.remote.api.ApiService
 import com.ram.buspass.helper.resource.remote.api.RetrofitInstance.Companion.getRetrofitInstance
 import dagger.Module
@@ -42,11 +44,14 @@ import javax.inject.Singleton
 object AppModule {
 
 
-    // create Retrofit instance
     @Provides
     @Singleton
     fun provideDatabaseInstance(@ApplicationContext context: Context): UserDao {
-        return getDatabaseInstance(context).userDao()
+        return Room.databaseBuilder(
+            context.applicationContext,
+            DatabaseHelper::class.java,
+            ApiConstants.LOCAL_DATABASE_NAME
+        ).fallbackToDestructiveMigration().build().usersDao()
     }
 
      // retrofit instance
@@ -73,8 +78,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepoImpl(apiService: ApiService): ProfileRepository {
-        return ProfileRepoImpl(apiService)
+    fun provideProfileRepoImpl(apiService: ApiService ): ProfileRepository {
+        return ProfileRepoImpl(apiService )
     }
 
     @Provides

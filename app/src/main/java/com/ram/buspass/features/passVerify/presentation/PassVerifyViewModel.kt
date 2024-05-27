@@ -9,10 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.ram.buspass.features.passVerify.domain.PassVerifyUseCase
 import com.ram.buspass.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -61,13 +59,7 @@ class PassVerifyViewModel @Inject constructor(private val passVerifyUseCase: Pas
 
 
 
-    fun loadStuff(){
-        isRefresh = true
-        viewModelScope.launch {
-            delay(3000L)
-            isRefresh = false
-        }
-    }
+
 
 }
 

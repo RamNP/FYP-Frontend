@@ -1,8 +1,6 @@
 package com.ram.buspass.di
 
 
-import com.ram.buspass.features.bookingTicket.domain.BookingDetailsRepository
-import com.ram.buspass.features.bookingTicket.domain.BookingDetailsUseCase
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordRepository
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordUseCase
 import com.ram.buspass.features.editProfile.domain.EditProfileRepository
@@ -19,8 +17,10 @@ import com.ram.buspass.features.profile.domain.ProfileRepository
 import com.ram.buspass.features.profile.domain.ProfileUseCase
 import com.ram.buspass.features.register.domain.RegisterRepository
 import com.ram.buspass.features.register.domain.RegisterUseCase
-import com.ram.buspass.features.ticketBook.domain.TicketBookRepository
-import com.ram.buspass.features.ticketBook.domain.TicketBookUseCase
+import com.ram.buspass.features.ticketBooking.domain.TicketBookRepository
+import com.ram.buspass.features.ticketBooking.domain.TicketBookUseCase
+import com.ram.buspass.features.ticketBookingDetails.domain.BookingDetailsRepository
+import com.ram.buspass.features.ticketBookingDetails.domain.BookingDetailsUseCase
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationRepository
 import com.ram.buspass.features.updateBusLocation.domain.UpdateBusLocationUseCase
 import com.ram.buspass.features.verifyTicket.domain.VerifyTicketRepository
@@ -58,13 +58,11 @@ class AppComponent {
     fun provideEditProfileUseCase(editProfileRepository: EditProfileRepository): EditProfileUseCase {
         return EditProfileUseCase(editProfileRepository)
     }
-
     @Provides
     @Singleton
     fun provideChangePasswordUseCase(changePasswordRepository: ChangePasswordRepository): ChangePasswordUseCase {
         return ChangePasswordUseCase(changePasswordRepository)
     }
-
     @Provides
     @Singleton
     fun provideForgotPasswordUseCase(forgotPasswordRepository: ForgotPasswordRepository): ForgotPasswordUseCase {
@@ -87,7 +85,6 @@ class AppComponent {
     fun provideBusLocationUseCase(updateBusLocationRepository: UpdateBusLocationRepository): UpdateBusLocationUseCase {
         return UpdateBusLocationUseCase(updateBusLocationRepository)
     }
-
     @Provides
     @Singleton
     fun provideVerifyTicketUseCase(verifyTicketRepository: VerifyTicketRepository): VerifyTicketUseCase {
@@ -99,7 +96,6 @@ class AppComponent {
     fun provideVerifyPassUseCase(passVerifyRepository: PassVerifyRepository): PassVerifyUseCase {
         return PassVerifyUseCase(passVerifyRepository)
     }
-
     @Provides
     @Singleton
     fun provideLocationViewUseCase(locationViewRepository: LocationViewRepository): LocationViewUseCase {

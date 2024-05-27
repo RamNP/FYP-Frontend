@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -65,7 +66,7 @@ fun ProfileViewScreen(
     navController: NavHostController,
     maiNavController: NavHostController,
     profileViewModel: ProfileViewModel = hiltViewModel()
-    ) {
+) {
     val context = LocalContext.current
     val userId = ClientInterceptor(context).getUserId()
     val editor = ClientInterceptor(context).getPreInstEditor()
@@ -90,10 +91,11 @@ fun ProfileViewScreen(
             ) {
                 TextView(
                     text = "Waiting This Page is Opening..",
-                    style = TextStyle( color = Color.Gray , fontSize = 18.sp),
+                    style = TextStyle(color = Color.Gray, fontSize = 18.sp),
                 )
-                CircularProgressIndicator(1f, modifier = Modifier, color = Purple , )
-            }        }
+                CircularProgressIndicator(1f, modifier = Modifier, color = Purple)
+            }
+        }
     }
     if (profileResult.isError != null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -101,171 +103,179 @@ fun ProfileViewScreen(
         }
     }
     profileResult.isData?.user_profile.let { results ->
-   if(isConnected) {
-       Column(
-           modifier = Modifier
-               .fillMaxWidth()
-               .background(Color.White),
-
-           ) {
-           Row(
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .background(White)
-                   .padding(16.dp),
-               horizontalArrangement = Arrangement.Center
-           ) {
-               Text(
-                   text = "Profile",
-                   fontSize = 20.sp,
-                   fontWeight = FontWeight.SemiBold,
-                   color = Color.Black
-               )
-           }
-
-           ProfileCard(
-               personName = results?.username,
-               address = results?.address,
-               email = results?.email,
-               userId = userId,
-               role = results?.role,
-               imageUrl = BASE_URL + results?.photo_image
-
-           )
-
-       }
-       Column(modifier = Modifier
-           .fillMaxWidth()
-           .padding(top = 250.dp)) {
-
-           Card(
-               modifier = Modifier
-                   .padding(16.dp)
-                   .fillMaxWidth(),
-               colors = CardDefaults.cardColors(
-                   White
-               ),
-           ) {
-               Text(
-                   text = "More Options",
-                   style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
-                   modifier = Modifier.padding(top = 16.dp, start = 16.dp)
-               )
-               Column(
-                   modifier = Modifier
-                       .fillMaxWidth()
-                       .padding(16.dp)
-               ) {
-                   Row(
-                       modifier = Modifier
-                           .fillMaxWidth(),
-                       horizontalArrangement = Arrangement.SpaceBetween
-                   ) {
-                       TextView(
-                           text = " Edit Profile",
-                           modifier = Modifier.padding(top = 8.dp),
-                           style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                       )
-                       IconButton(onClick = { navController.navigate("EditProfile") }) {
-                           Icon(imageVector = Icons.Default.Edit, contentDescription = "Icon")
-                       }
-
-                   }
-                   Row(
-                       modifier = Modifier
-                           .fillMaxWidth(),
-                       horizontalArrangement = Arrangement.SpaceBetween
-                   ) {
-                       TextView(
-                           text = "Change Password ",
-                           modifier = Modifier.padding(top = 8.dp),
-                           style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                       )
-                       IconButton(onClick = { navController.navigate("ChangePassword") }) {
-                           Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                       }
-                   }
-
-                   Row(
-                       modifier = Modifier
-                           .fillMaxWidth(),
-                       horizontalArrangement = Arrangement.SpaceBetween
-                   ) {
-                       TextView(
-                           text = "Privacy  Policy",
-                           modifier = Modifier.padding(top = 8.dp),
-                           style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                       )
-                       IconButton(onClick = {}) {
-                           Icon(imageVector = Icons.Default.PrivacyTip, contentDescription = null)
-                       }
 
 
-                   }
+        if (isConnected) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White),
 
-                   Row(
-                       modifier = Modifier
-                           .fillMaxWidth(),
-                       horizontalArrangement = Arrangement.SpaceBetween
-                   ) {
-                       Text(
-                           text = "About",
-                           modifier = Modifier.padding(top = 8.dp),
-                           style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                       )
-                       IconButton(onClick = {}) {
-                           Icon(imageVector = Icons.Default.Info, contentDescription = null)
-                       }
+                ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(White)
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Profile",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
+                }
+
+                ProfileCard(
+                    personName = results?.username,
+                    address = results?.address,
+                    email = results?.email,
+                    userId = userId,
+                    role = results?.role,
+                    imageUrl = BASE_URL + results?.photo_image
+
+                )
+
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 250.dp)
+            ) {
+
+                Card(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        White
+                    ),
+                ) {
+                    Text(
+                        text = "More Options",
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
+                        modifier = Modifier.padding(top = 16.dp, start = 16.dp)
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            TextView(
+                                text = " Edit Profile",
+                                modifier = Modifier.padding(top = 8.dp),
+                                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                            )
+                            IconButton(onClick = { navController.navigate("EditProfile") }) {
+                                Icon(imageVector = Icons.Default.Edit, contentDescription = "Icon")
+                            }
+
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            TextView(
+                                text = "Change Password ",
+                                modifier = Modifier.padding(top = 8.dp),
+                                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                            )
+                            IconButton(onClick = { navController.navigate("ChangePassword") }) {
+                                Icon(imageVector = Icons.Default.Lock, contentDescription = null)
+                            }
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            TextView(
+                                text = "Privacy  Policy",
+                                modifier = Modifier.padding(top = 8.dp),
+                                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium , color = Color.Gray)
+                            )
+                            IconButton(onClick = {}) {
+                                Icon(
+                                    imageVector = Icons.Default.PrivacyTip,
+                                    contentDescription = null , tint = Color.Gray
+                                )
+                            }
 
 
-                   }
-                   Row(
-                       modifier = Modifier
-                           .fillMaxWidth(),
-                       horizontalArrangement = Arrangement.SpaceBetween
-                   ) {
-                       TextView(
-                           text = " Help & Feedback",
-                           modifier = Modifier.padding(top = 8.dp),
-                           style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                       )
-                       IconButton(onClick = {}) {
-                           Icon(imageVector = Icons.Default.Help, contentDescription = null)
-                       }
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "About",
+                                modifier = Modifier.padding(top = 8.dp),
+                                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium , color = Color.Gray)
+                            )
+                            IconButton(onClick = {}) {
+                                Icon(imageVector = Icons.Default.Info, contentDescription = null  , tint = Color.Gray)
+                            }
 
 
-                   }
+                        }
 
-                   Row(
-                       modifier = Modifier
-                           .fillMaxWidth(),
-                       horizontalArrangement = Arrangement.SpaceBetween
-                   ) {
-                       TextView(
-                           text = "Logout",
-                           modifier = Modifier.padding(top = 8.dp),
-                           style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                       )
-                       IconButton(onClick = {
-                           maiNavController.navigate(ScreenList.LoginScreen.route) {
-                               popUpTo(UserScreen.Profile.route) {
-                                   inclusive = true
-                               }
-                               editor.putString("authentication", "")?.apply()
-                               showDialogBox = false
-                               showToast(context, ("Logout is successfully"))
-                           }
-                       }) {
-                           Icon(imageVector = Icons.Default.Logout, contentDescription = null)
-                       }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            TextView(
+                                text = " Help & Feedback",
+                                modifier = Modifier.padding(top = 8.dp),
+                                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium  , color = Color.Gray)
+                            )
+                            IconButton(onClick = {}) {
+                                Icon(imageVector = Icons.Default.Help, contentDescription = null , tint = Color.Gray)
+                            }
 
-                   }
-               }
-           }
-       }
-   }else{
-       Text(text = "No Internet ")
-   }
+
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            TextView(
+                                text = "Logout",
+                                modifier = Modifier.padding(top = 8.dp),
+                                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                            )
+                            IconButton(onClick = {
+                                maiNavController.navigate(ScreenList.LoginScreen.route) {
+                                    popUpTo(UserScreen.Profile.route) {
+                                        inclusive = true
+                                    }
+                                    editor.putString("authentication", "")?.apply()
+                                    showDialogBox = false
+                                    showToast(context, ("Logout is successfully"))
+                                }
+                            }) {
+                                Icon(imageVector = Icons.Default.Logout, contentDescription = null)
+                            }
+
+                        }
+                    }
+                }
+            }
+        } else {
+            Text(text = "No Internet ")
+        }
     }
 
 }
@@ -315,7 +325,8 @@ fun ProfileCard(
                     AsyncImage(
                         model = imageUrl,
                         contentDescription = null,
-                        Modifier
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxWidth()
                     )
 
                 }

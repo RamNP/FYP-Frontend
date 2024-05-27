@@ -1,7 +1,6 @@
 package com.ram.buspass.helper.resource.remote.api
 
 
-import com.ram.buspass.features.bookingTicket.data.BookingPojo
 import com.ram.buspass.features.chanagePassword.data.ChangePasswordPojo
 import com.ram.buspass.features.chanagePassword.domain.ChangePasswordDto
 import com.ram.buspass.features.editProfile.data.EditImagePojo
@@ -16,9 +15,10 @@ import com.ram.buspass.features.passVerify.data.PassVerifyPojo
 import com.ram.buspass.features.profile.data.ProfilePojo
 import com.ram.buspass.features.register.data.RegisterPojo
 import com.ram.buspass.features.register.domain.UserModelDto
-import com.ram.buspass.features.ticketBook.data.TicketBookPojo
-import com.ram.buspass.features.ticketBook.data.TicketBookingPojo
-import com.ram.buspass.features.ticketBook.domain.BookDto
+import com.ram.buspass.features.ticketBooking.data.TicketBookPojo
+import com.ram.buspass.features.ticketBooking.data.TicketBookingPojo
+import com.ram.buspass.features.ticketBooking.domain.BookDto
+import com.ram.buspass.features.ticketBookingDetails.data.BookingPojo
 import com.ram.buspass.features.updateBusLocation.data.BookingBusPojo
 import com.ram.buspass.features.updateBusLocation.data.LocationPojo
 import com.ram.buspass.features.updateBusLocation.domain.BusLocationDto
@@ -51,7 +51,7 @@ interface ApiService {
     suspend fun editUserProfile(@Body editModelDto: EditModelDto): EditProfilePojo?
 
     @Multipart
-    @PATCH("/api/change/profile_url")
+    @PATCH("/api/change/profile/url")
     suspend fun editProfileImage(
         @Part("id") id: RequestBody?,
         @Part photo_image: MultipartBody.Part?,

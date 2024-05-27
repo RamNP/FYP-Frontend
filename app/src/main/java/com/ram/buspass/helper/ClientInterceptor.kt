@@ -41,7 +41,7 @@ class ClientInterceptor(private val context: Context): Interceptor{
     }
 
     fun installApp(): String {
-        return getSharedPreferences.getString("appsInstallation", "") ?: ""
+        return getSharedPreferences.getString("appInstallation", "") ?: ""
     }
 
     fun getToken(): String? {

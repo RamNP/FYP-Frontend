@@ -18,7 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ButtonDefaults
@@ -29,22 +29,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.ram.buspass.helper.ClientInterceptor
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
@@ -59,30 +59,34 @@ import java.io.File
 @Composable
 fun EditProfileViewScreen(
     navController: NavHostController,
-    editProfileLocationViewModel: EditProfileLocationViewModel = hiltViewModel()
+    editProfileViewModel: EditProfileViewModel = hiltViewModel()
 ) {
     val visible by remember { mutableStateOf(true) }
     var userName by remember { mutableStateOf("") }
     val isNameEmpty by remember { mutableStateOf(false) }
-    var email by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
     val isEmailEmpty by remember { mutableStateOf(false) }
-     val editProfileResult = editProfileLocationViewModel.editProfile
-    val editProfileResultImage = editProfileLocationViewModel.editProfileImage
+     val editProfileResult = editProfileViewModel.editProfile
+    val editProfileResultImage = editProfileViewModel.editProfileImage
     var getNewImage by remember { mutableStateOf<Uri?>(null) }
     var imageFiles by remember { mutableStateOf<File?>(null) }
-    var isShowConfirm by remember { mutableStateOf(false) }
-    var userId by remember { mutableIntStateOf(0) }
-
-
-
+    var showDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val userId = ClientInterceptor(context).getUserId()
+    var imageUri by remember { mutableStateOf<String?>(null) }
+
+
+
+
     val galleryImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             getNewImage = uri
             uri?.let {
                 imageFiles = convertUriToFile(context, uri)
-                isShowConfirm = true
+                showDialog = true
+
+
             }
         }
     )
@@ -112,11 +116,11 @@ fun EditProfileViewScreen(
         if (editProfileResult.isData?.is_success == true) {
             showToast(context, "${editProfileResult.isData.message}")
 
+
         }
     })
 
     //edit Profile Image
-
 
     if (editProfileResultImage.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -141,7 +145,7 @@ fun EditProfileViewScreen(
 
     LaunchedEffect(key1 = editProfileResultImage.isData, block = {
         if (editProfileResult.isData?.is_success == true) {
-            editProfileLocationViewModel.updateProfileImage(userId ,imageFiles)
+            editProfileViewModel.updateProfileImage(userId ,imageFiles)
 
         }
     })
@@ -172,10 +176,11 @@ fun EditProfileViewScreen(
                 .fillMaxWidth(), verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-           val userProfileImage = editProfileResultImage.isData?.user_profile?. photo_image
 
-            EditProfileCard(getNewImage = userProfileImage?.toUri() , onClickPickImages = {galleryImageLauncher.launch("image/*")})
+            EditProfileCard(getNewImage = getNewImage , onClickPickImages = {galleryImageLauncher.launch("image/*")})
         }
+
+
         //
         Column(
             modifier = Modifier
@@ -185,21 +190,7 @@ fun EditProfileViewScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            InputTextFieldView(
-                value = email ,
-                onValueChange = { email = it },
-                label = "Email",
-                placeholder = "Enter Email",
-                textStyle = TextStyle(),
-                isEmpty = isEmailEmpty,
-                invalidMessage = "The Email is empty!",
-                errorColor = Color.Red,
-                leadingIcon = { IconView(imageVector = Icons.Default.Email) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
 
-            )
 
             InputTextFieldView(
                 value = userName,
@@ -218,12 +209,34 @@ fun EditProfileViewScreen(
                     .padding(5.dp)
             )
 
+            InputTextFieldView(
+                value = address ,
+                onValueChange = { address = it },
+                label = "Address",
+                placeholder = "Enter Address",
+                textStyle = TextStyle(),
+                isEmpty = isEmailEmpty,
+                invalidMessage = "The Address is empty!",
+                errorColor = Color.Red,
+                leadingIcon = { IconView(imageVector = Icons.Default.LocationOn) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+
+            )
+
 
             ButtonView(
                 onClick = {
+                    editProfileViewModel.getUserEditProfile(userId ,userName ,address)
+                    editProfileViewModel.updateProfileImage(userId ,imageFiles)
+//                    navController.navigate("Profile")
+                    showToast(context ,"Profile updated successfully")
 
-                    editProfileLocationViewModel.getUserEditProfile(email ,userName)
-                    navController.navigate("Profile")
+
+
+
+
 
                 },
 
@@ -239,7 +252,7 @@ fun EditProfileViewScreen(
 @Composable
 fun EditProfileCard(
     onClickPickImages: () -> Unit,
-    getNewImage:Uri?
+    getNewImage: Uri?
 ) {
 
     Card(
@@ -255,7 +268,8 @@ fun EditProfileCard(
         AsyncImage(
             model = getNewImage,
             contentDescription = null,
-            Modifier
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxWidth(),
         )
     }
     TextView(text = "Change Picture" , modifier = Modifier.clickable { onClickPickImages() })

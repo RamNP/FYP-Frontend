@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ram.buspass.interfaceUtils.UserInterfaceUtil.Companion.showToast
 import com.ram.buspass.ui.theme.Purple
 import com.ram.buspass.ui.theme.White
@@ -44,14 +45,15 @@ import com.ram.buspass.utils.NetworkObserver
 import com.ram.buspass.utils.components.SearchView
 import com.ram.buspass.utils.components.TextView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun PassVerifyViewScreen(
     navController: NavHostController,
     passVerifyViewModel: PassVerifyViewModel = hiltViewModel()
 ) {
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = passVerifyViewModel.isRefresh)
     val context = LocalContext.current
     val connection by NetworkObserver.connectivityState()
     val isConnected = connection === NetworkObserver.ConnectionState.Available
@@ -70,21 +72,45 @@ fun PassVerifyViewScreen(
     var userName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var passId by remember { mutableStateOf(0) }
+    var refreshTrigger by remember { mutableStateOf(false) }
+    val refreshScope = rememberCoroutineScope()
+    var refreshing by remember { mutableStateOf(false) }
+
+
+
+    fun refresh() = refreshScope.launch {
+        refreshing = true
+        delay(1000) // Simulate the refresh delay
+        refreshing = false
+    }
 
     val textState = remember {
         mutableStateOf(TextFieldValue(""))
     }
     val searchedText = textState.value.text
 
+    // Function to handle the refresh action
+    val coroutineScope = rememberCoroutineScope()
+
+    // Function to handle the refresh action
+    fun refreshScreen() {
+        coroutineScope.launch {
+            passVerifyViewModel.getVerifyStatus(passId)
+            refresh()
+
+
+        }
+
+
+    }
+
+
+
 
     LaunchedEffect(key1 = Unit, block = {
         passVerifyViewModel.getPassVerify()
     })
-//    SwipeRefresh(
-//        state = swipeRefreshState,
-//        onRefresh = { passVerifyViewModel.loadStuff() }, // Corrected function call
-//
-//    ) {
+
         if (passResult.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Row(
@@ -188,13 +214,17 @@ fun PassVerifyViewScreen(
                                     cost = cost,
                                     date = ticketDate,
                                     time = time,
+
                                     onClickAction = {
                                         if (it.status == "ACTIVE") {
                                             showToast(context, "Pass is already activated")
                                         } else {
-                                            showToast(context, "ID: ${it.id ?: 0}")
-                                            passVerifyViewModel.getVerifyStatus(passId)
-                                            showToast(context, "${passResult.isData.message}")
+//                                            passVerifyViewModel.getVerifyStatus(passId)
+                                            refreshScreen()
+
+
+                                            showToast(context, " This Bus Pass is successfully activated")
+
 
                                         }
                                     }
@@ -233,7 +263,9 @@ fun VerifyPassCard(
     onClickAction: () -> Unit,
 
     ) {
-    val checked = remember { mutableStateOf(false) }
+//    val checked = remember { mutableStateOf(false) }
+    var refreshTrigger by remember { mutableStateOf(0) }
+
 
     Card(
         modifier = Modifier
@@ -379,9 +411,12 @@ fun VerifyPassCard(
                 modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
             )
 
-            Button(onClick = { onClickAction() } , colors = ButtonDefaults.buttonColors(Purple)) {
+            Button(onClick = { onClickAction()  } , colors = ButtonDefaults.buttonColors(Purple)) {
                 Text(text = "Status")
             }
         }
     }
 }
+
+
+

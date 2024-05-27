@@ -12,7 +12,7 @@ class PassVerifyUseCase(private  val passVerifyRepository: PassVerifyRepository)
         try {
             emit(Resource.Success(passVerifyRepository.getVerifyPass()))
         } catch (e: Exception){
-            emit(Resource.Error(message = "Not found!"))
+            emit(Resource.Error(message = ""))
         }
     }
 
@@ -21,7 +21,7 @@ class PassVerifyUseCase(private  val passVerifyRepository: PassVerifyRepository)
         try {
             emit(Resource.Success(data = passVerifyRepository.getPassStatusApproved(passId)))
         } catch (e: Exception) {
-            emit(Resource.Error(message = "Not found!"))
+            emit(Resource.Error(message = ""))
         }
     }
 

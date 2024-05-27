@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.ram.buspass.features.bookingTicket.presentation.BookTicketDetailsViewScreen
 import com.ram.buspass.features.chanagePassword.presentation.ChangePasswordScreen
 import com.ram.buspass.features.editProfile.presentation.EditProfileViewScreen
 import com.ram.buspass.features.locationView.presenation.LocationViewScreen
 import com.ram.buspass.features.profile.presentation.ProfileViewScreen
-import com.ram.buspass.features.ticketBook.presentation.TicketBookViewScreens
+import com.ram.buspass.features.ticketBooking.presentation.TicketBookViewScreens
+import com.ram.buspass.features.ticketBookingDetails.presentation.BookTicketDetailsViewScreen
 
 
 @Composable

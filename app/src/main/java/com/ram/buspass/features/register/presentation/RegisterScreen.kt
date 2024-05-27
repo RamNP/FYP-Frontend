@@ -42,6 +42,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -56,6 +57,7 @@ import com.ram.buspass.userNavigationBar.ScreenList
 import com.ram.buspass.utils.NetworkObserver
 import com.ram.buspass.utils.Validators.isValidEmailAddress
 import com.ram.buspass.utils.components.ButtonView
+import com.ram.buspass.utils.components.ClickableTextView
 import com.ram.buspass.utils.components.IconView
 import com.ram.buspass.utils.components.InputTextFieldView
 import com.ram.buspass.utils.components.PainterImageView
@@ -72,14 +74,13 @@ fun RegisterViewScreen(
     navController: NavHostController,
     registerViewModel: RegisterViewModel = hiltViewModel()
 ) {
-
     val getRegister = registerViewModel.register
     val connection by NetworkObserver.connectivityState()
     val isConnected = connection === NetworkObserver.ConnectionState.Available
     val context = LocalContext.current
     var role by remember { mutableStateOf("") }
     val isRoleEmpty by remember { derivedStateOf { role.isEmpty() } }
-   val scrollState = rememberScrollState()
+    val scrollState = rememberScrollState()
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -89,7 +90,6 @@ fun RegisterViewScreen(
     val users = listOf("user", "conductor")
     var isEmailEmpty by remember { mutableStateOf(false) }
     var roleEmptyValue by remember { mutableStateOf(false) }
-
 
 
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
@@ -115,9 +115,11 @@ fun RegisterViewScreen(
     }
 
     if (getRegister.isLoading) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 10.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 10.dp)
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
@@ -125,9 +127,13 @@ fun RegisterViewScreen(
             ) {
                 TextView(
                     text = "This Page is Waiting ..",
-                    style = TextStyle( color = Color.Gray , fontSize = 18.sp),
+                    style = TextStyle(color = Color.Gray, fontSize = 18.sp),
                 )
-                androidx.compose.material3.CircularProgressIndicator(1f, modifier = Modifier, color = Purple , )
+                androidx.compose.material3.CircularProgressIndicator(
+                    1f,
+                    modifier = Modifier,
+                    color = Purple,
+                )
             }
         }
     }
@@ -135,7 +141,7 @@ fun RegisterViewScreen(
     LaunchedEffect(key1 = getRegister.isError, block = {
         if (getRegister.isError.isNotEmpty()) {
             showToast(context, getRegister.isError)
-            Log.e("isErrorRes:","$getRegister.isError")
+            Log.e("isErrorRes:", "$getRegister.isError")
         }
     })
 
@@ -146,145 +152,165 @@ fun RegisterViewScreen(
         }
     })
 
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+
+    ) {
+        IconButton(onClick = { navController.navigate(ScreenList.LoginScreen.route) }) {
+            IconView(imageVector = Icons.Default.ArrowBackIosNew)
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
-        ) {
-            IconButton(onClick = { navController.navigate(ScreenList.LoginScreen.route) }) {
-                IconView(imageVector = Icons.Default.ArrowBackIosNew)
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(scrollState),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally,
 
-                ) {
-                PainterImageView(
-                    painterResource(id = R.mipmap.ic_register),
-                    modifier = Modifier
-                        .height(280.dp)
-                        .width(300.dp)
-
-                )
-                Spacer(modifier = Modifier.padding(5.dp))
-                TextView(
-                    text = "Create an new account free",
-                    style = TextStyle(fontWeight = FontWeight.Bold, color = Color.Gray),
-                    fontSize = 20.sp,
-                )
-
-
-            }
-
-
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                InputTextFieldView(
-                    value = role,
-                    onValueChange = { role = it },
-                    label = "Role",
-                    trailingIcon = {
-                        Icon(icon, "contentDescription",
-                            Modifier.clickable { mExpanded = !mExpanded })
-                    },
+            PainterImageView(
+                painterResource(id = R.mipmap.ic_register),
+                modifier = Modifier
+                    .height(280.dp)
+                    .width(300.dp)
 
-                    modifier = Modifier
-                        .onGloballyPositioned { coordinates ->
-                            mTextFieldSize = coordinates.size.toSize()
-                        }
-                        .fillMaxWidth(),
-                    placeholder = " Enter Role",
-                    textStyle = TextStyle(),
-                    invalidMessage = "",
-                )
+            )
+            Spacer(modifier = Modifier.padding(5.dp))
+            TextView(
+                text = "Create an new account free",
+                style = TextStyle(fontWeight = FontWeight.Bold, color = Color.Gray),
+                fontSize = 20.sp,
+            )
 
-                DropdownMenu(
-                    expanded = mExpanded,
-                    onDismissRequest = { mExpanded = false },
-                    modifier = Modifier
-                        .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
-                ) {
-                    users.forEach { label ->
-                        DropdownMenuItem(onClick = {
-                            role = label
-                            mExpanded = false
-                        }) {
-                            Text(text = label)
-                        }
+
+        }
+
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            InputTextFieldView(
+                value = role,
+                onValueChange = { role = it },
+                label = "Role",
+                trailingIcon = {
+                    Icon(icon, "contentDescription",
+                        Modifier.clickable { mExpanded = !mExpanded })
+                },
+
+                modifier = Modifier
+                    .onGloballyPositioned { coordinates ->
+                        mTextFieldSize = coordinates.size.toSize()
+                    }
+                    .fillMaxWidth(),
+                placeholder = " Enter Role",
+                textStyle = TextStyle(),
+                invalidMessage = "",
+            )
+
+            DropdownMenu(
+                expanded = mExpanded,
+                onDismissRequest = { mExpanded = false },
+                modifier = Modifier
+                    .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
+            ) {
+                users.forEach { label ->
+                    DropdownMenuItem(onClick = {
+                        role = label
+                        mExpanded = false
+                    }) {
+                        Text(text = label)
                     }
                 }
             }
+        }
 
-            InputTextFieldView(
-                value = username,
-                onValueChange = { username = it },
-                label = "UserName",
-                placeholder = "Enter UserName",
-                textStyle = TextStyle(),
-                isError = isNameEmpty,
-                invalidMessage = "UserName Text field is Empty!",
-                errorColor = Color.Red,
-                leadingIcon = { IconView(imageVector = Icons.Default.Person) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            )
-            InputTextFieldView(
-                value = email,
-                onValueChange = { email = it },
-                label = "Email",
-                placeholder = "Enter Email",
-                textStyle = TextStyle(),
-                isError = isEmailEmpty,
-                invalidMessage = "Enter a valid email.",
-                errorColor = Color.Red,
-                leadingIcon = { IconView(imageVector = Icons.Default.Email) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            )
+        InputTextFieldView(
+            value = username,
+            onValueChange = { username = it },
+            label = "UserName",
+            placeholder = "Enter UserName",
+            textStyle = TextStyle(),
+            isError = isNameEmpty,
+            invalidMessage = "UserName Text field is Empty!",
+            errorColor = Color.Red,
+            leadingIcon = { IconView(imageVector = Icons.Default.Person) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp)
+        )
+        InputTextFieldView(
+            value = email,
+            onValueChange = { email = it },
+            label = "Email",
+            placeholder = "Enter Email",
+            textStyle = TextStyle(),
+            isError = isEmailEmpty,
+            invalidMessage = "Enter a valid email.",
+            errorColor = Color.Red,
+            leadingIcon = { IconView(imageVector = Icons.Default.Email) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp)
+        )
 
-            PasswordTextFieldView(
-                value = password,
-                onValueChange = { password = it },
-                label = "Password",
-                placeholder = "Enter Password",
-                textStyle = TextStyle(),
-                isEmpty = isPasswordEmpty,
-                invalidMessage = "Password Text field is Empty!",
-                errorColor = Color.Red,
-                leadingIcon = { IconView(imageVector = Icons.Default.Lock) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            )
+        PasswordTextFieldView(
+            value = password,
+            onValueChange = { password = it },
+            label = "Password",
+            placeholder = "Enter Password",
+            textStyle = TextStyle(),
+            isEmpty = isPasswordEmpty,
+            invalidMessage = "Password Text field is Empty!",
+            errorColor = Color.Red,
+            leadingIcon = { IconView(imageVector = Icons.Default.Lock) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp)
+        )
 
 
-            ButtonView(
-                onClick = {
-                    isNameEmpty = username.isEmpty() // isNameEmpty // name error message
-                    isEmailEmpty = email.isEmpty()
-                    isPasswordEmpty  = password.isEmpty() // password error message
-                    roleEmptyValue = isRoleEmpty
-                    if (username.isNotEmpty() && !isEmailEmpty && !isPasswordEmpty && !isRoleEmpty) {
-                        onClick()
-                    }
-                },
-                btnColor = ButtonDefaults.buttonColors(Purple),
-                text = "Register now",
-                textStyle = TextStyle(Color.White, fontWeight = FontWeight.Bold),
+        ButtonView(
+            onClick = {
+                isNameEmpty = username.isEmpty() // isNameEmpty // name error message
+                isEmailEmpty = email.isEmpty()
+                isPasswordEmpty = password.isEmpty() // password error message
+                roleEmptyValue = isRoleEmpty
+                if (username.isNotEmpty() && !isEmailEmpty && !isPasswordEmpty && !isRoleEmpty) {
+                    onClick()
+                }
+            },
+            btnColor = ButtonDefaults.buttonColors(Purple),
+            text = "Register now",
+            textStyle = TextStyle(Color.White, fontWeight = FontWeight.Bold),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding( top = 12.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextView(text = "Already have an account?")
+         Spacer(modifier = Modifier.padding( top=3.dp))
+            ClickableTextView(
+                text = AnnotatedString("Login"),
+                style = TextStyle(color = Purple),
+                onClick = { navController.navigate(ScreenList.LoginScreen.route) },
                 modifier = Modifier.fillMaxWidth()
             )
+
         }
+
     }
+}
 
 
 
